@@ -3,7 +3,7 @@
   "info": {
     "title": "NH투자증권 Open API — 국내주식 (Domestic Stock)",
     "version": "v1",
-    "description": "NH투자증권 Open API 중 **국내주식 (Domestic Stock)** 자산군의 REST 및 실시간(WebSocket) API 문서입니다. (기준: API명세서 260721 / 나무 환경 · 필드명은 명세서 C열 기준)\n\n- REST: POST + JSON, 요청 Input_0 / 응답 Output_0(배열) + message.\n- 실시간: WebSocket, 푸시=JSON. x-realtime-channels.protocol 참조.\n- 인증: POST /oauth2/token → REST 는 Authorization/x-client-id/x-client-secret, WS 는 header.token.\n- 환경 제공: 이 자산군 API 는 **모의투자·운영 모두 제공**. (접근토큰발급만 공통에서 운영 전용)"
+    "description": "NH투자증권 Open API 중 **국내주식 (Domestic Stock)** 자산군의 REST 및 실시간(WebSocket) API 문서입니다. (기준: API명세서 260721 / 나무 환경 · 필드명은 명세서 C열 기준)\n\n- REST: POST + JSON, 요청 Input_0 / 응답 Output_0(배열) + message.\n- 실시간: WebSocket, 푸시=JSON. x-realtime-channels.protocol 참조.\n- 🔑 토큰 재사용: access token 은 24시간(expires_in=86400) 유효. 매 호출 재발급 금지 — 공유 캐시에 저장해 재사용(재발급은 보안 알림 유발). 재발급은 401 일 때만, 429 재시도엔 기존 토큰 사용.\n- 인증: POST /oauth2/token → REST 는 Authorization/x-client-id/x-client-secret, WS 는 header.token.\n- 환경 제공: 이 자산군 API 는 **모의투자·운영 모두 제공**. (접근토큰발급만 공통에서 운영 전용)"
   },
   "servers": [
     {
@@ -210,7 +210,7 @@
           "주문 (Order)"
         ],
         "operationId": "krstockOrderCashSell",
-        "summary": "주식주문(현금) 매수",
+        "summary": "주식주문(현금) 매도",
         "description": "국내주식 현금 매도주문 API 입니다.\n\n원본 시트: API_국내_주식_주문_현금매도",
         "requestBody": {
           "required": true,
@@ -520,7 +520,7 @@
           "주문 (Order)"
         ],
         "operationId": "krstockOrderCreditSell",
-        "summary": "주식주문(신용) 매수",
+        "summary": "주식주문(신용) 매도",
         "description": "국내주식 신용 매도주문 API 입니다.\n\n원본 시트: API_국내_주식_주문_신용매도",
         "requestBody": {
           "required": true,
@@ -823,7 +823,7 @@
           "주문 (Order)"
         ],
         "operationId": "krstockOrderCancel",
-        "summary": "주식주문(정정취소) 정정",
+        "summary": "주식주문(정정취소) 취소",
         "description": "국내주식 취소주문 API 입니다.\n\n원본 시트: API_국내_주식_주문_취소",
         "requestBody": {
           "required": true,
@@ -4206,7 +4206,7 @@
           "조회 (Inquiry)"
         ],
         "operationId": "krstockInquiryRightsScheduled",
-        "summary": "기간별계좌권리현황조회보유",
+        "summary": "기간별계좌권리현황조회예정",
         "description": "원본 시트: API_국내_주식_조회_권리예정",
         "requestBody": {
           "required": true,
@@ -8983,7 +8983,7 @@
         }
       },
       {
-        "name": "국내주식 실시간호가KRX",
+        "name": "국내주식 실시간호가통합",
         "sheet": "API_국내_주식_실시간_호가(통합)",
         "tr_cd": "mb",
         "tr_key": {
@@ -9117,7 +9117,7 @@
         }
       },
       {
-        "name": "국내주식 실시간체결가KRX",
+        "name": "국내주식 실시간체결가통합",
         "sheet": "API_국내_주식_실시간_체결가(통합)",
         "tr_cd": "mc",
         "tr_key": {
@@ -9195,7 +9195,7 @@
         }
       },
       {
-        "name": "국내주식 실시간예상체결KRX",
+        "name": "국내주식 실시간예상체결통합",
         "sheet": "API_국내_주식_실시간_예상체결(통합)",
         "tr_cd": "ma",
         "tr_key": {
@@ -9261,7 +9261,7 @@
         }
       },
       {
-        "name": "국내주식 실시간회원사KRX",
+        "name": "국내주식 실시간회원사통합",
         "sheet": "API_국내_주식_실시간_회원사(통합)",
         "tr_cd": "mg",
         "tr_key": {
@@ -9435,7 +9435,7 @@
         }
       },
       {
-        "name": "국내주식 실시간프로그램매매KRX",
+        "name": "국내주식 실시간프로그램매매통합",
         "sheet": "API_국내_주식_실시간_프로그램매매(통합)",
         "tr_cd": "mn",
         "tr_key": {
@@ -9525,7 +9525,7 @@
         }
       },
       {
-        "name": "국내주식 실시간호가KRX",
+        "name": "국내주식 실시간호가NXT",
         "sheet": "API_국내_주식_실시간_호가(NXT)",
         "tr_cd": "nb",
         "tr_key": {
@@ -9653,7 +9653,7 @@
         }
       },
       {
-        "name": "국내주식 실시간체결가KRX",
+        "name": "국내주식 실시간체결가NXT",
         "sheet": "API_국내_주식_실시간_체결가(NXT)",
         "tr_cd": "nc",
         "tr_key": {
@@ -9731,7 +9731,7 @@
         }
       },
       {
-        "name": "국내주식 실시간예상체결KRX",
+        "name": "국내주식 실시간예상체결NXT",
         "sheet": "API_국내_주식_실시간_예상체결(NXT)",
         "tr_cd": "na",
         "tr_key": {
@@ -9792,7 +9792,7 @@
         }
       },
       {
-        "name": "국내주식 실시간회원사KRX",
+        "name": "국내주식 실시간회원사NXT",
         "sheet": "API_국내_주식_실시간_회원사(NXT)",
         "tr_cd": "ng",
         "tr_key": {
@@ -9966,7 +9966,7 @@
         }
       },
       {
-        "name": "국내주식 실시간프로그램매매KRX",
+        "name": "국내주식 실시간프로그램매매NXT",
         "sheet": "API_국내_주식_실시간_프로그램매매(NXT)",
         "tr_cd": "nn",
         "tr_key": {
