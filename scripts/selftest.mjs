@@ -59,7 +59,7 @@ async function main() {
     console.error(`✗ access_token 없음: ${tText.slice(0, 400)}`);
     process.exit(1);
   }
-  console.log(`✓ 토큰 발급 성공 (${String(token).slice(0, 12)}...)`);
+  console.log("✓ 토큰 발급 성공"); // 토큰 값은 일부라도 출력하지 않습니다
 
   // 2) 현재가 조회
   console.log("· 현재가 조회 (005930 삼성전자)...");
@@ -79,8 +79,25 @@ async function main() {
     process.exit(1);
   }
   const data = JSON.parse(pText);
-  const o0 = data.Output_0 || {};
-  console.log(`✓ 현재가 조회 성공: ${o0.iem_nm ?? ""} 현재가 ${o0.stck_prpr ?? "?"}`);
+
+  // HTTP 200 이어도 업무 성공이 아닐 수 있다 — rsp_cd 를 반드시 판정한다.
+  const SUCCESS = new Set(
+    (process.env.NHPLUG_SUCCESS_CODES ?? "00000,00166").split(",").map((c) => c.trim())
+  );
+  const rspCd = data.rsp_cd != null ? String(data.rsp_cd) : undefined;
+  if (rspCd !== undefined && !SUCCESS.has(rspCd)) {
+    console.error(`✗ 업무 오류: rsp_cd=${rspCd} ${data.rsp_msg ?? ""}`);
+    process.exit(1);
+  }
+
+  // 단건 조회 응답이 배열/객체 어느 쪽이든 안전하게 처리
+  const raw = data.Output_0;
+  const o0 = Array.isArray(raw) ? raw[0] : raw;
+  if (!o0 || o0.stck_prpr == null) {
+    console.error(`✗ 현재가 데이터가 비어 있습니다 (rsp_cd=${rspCd ?? "-"}). 응답: ${pText.slice(0, 300)}`);
+    process.exit(1);
+  }
+  console.log(`✓ 현재가 조회 성공: ${o0.iem_nm ?? ""} 현재가 ${o0.stck_prpr}`);
   console.log("\n전체 검증 통과 ✅  MCP 서버를 Claude 에 연결해 사용할 수 있습니다.");
 }
 

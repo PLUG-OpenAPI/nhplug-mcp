@@ -19,6 +19,29 @@ function errorResult(message: string) {
   };
 }
 
+/**
+ * 호출 예외를 구조화 오류로 변환.
+ * 업무 오류(rsp_cd)·유량 초과·인증 실패를 모델이 구분할 수 있도록 category/code 를 함께 싣는다.
+ */
+function toErrorResult(e: unknown) {
+  const d = (e as any)?.detail;
+  const msg = e instanceof Error ? e.message : String(e);
+  if (d) {
+    const info = {
+      error: {
+        category: d.category, code: d.code, message: msg,
+        status: d.status, path: d.path, retryable: d.retryable,
+        retry_after_ms: d.retryAfterMs, environment: d.environment,
+      },
+    };
+    return {
+      content: [{ type: "text" as const, text: `오류: ${msg}\n${JSON.stringify(info, null, 2)}` }],
+      isError: true,
+    };
+  }
+  return errorResult(msg);
+}
+
 export function registerTools(server: McpServer, config: Config): void {
   // ── 메타 도구 1: 사용 가능한 API 목록 ────────────────────────────────
   server.tool(
@@ -127,7 +150,7 @@ export function registerTools(server: McpServer, config: Config): void {
         const res = await callRest(config, op.path, input ?? {}, cts);
         return textResult(res);
       } catch (e) {
-        return errorResult(String(e instanceof Error ? e.message : e));
+        return toErrorResult(e);
       }
     }
   );
@@ -147,7 +170,7 @@ export function registerTools(server: McpServer, config: Config): void {
         });
         return textResult(res);
       } catch (e) {
-        return errorResult(String(e instanceof Error ? e.message : e));
+        return toErrorResult(e);
       }
     }
   );
@@ -175,7 +198,7 @@ export function registerTools(server: McpServer, config: Config): void {
         });
         return textResult(res);
       } catch (e) {
-        return errorResult(String(e instanceof Error ? e.message : e));
+        return toErrorResult(e);
       }
     }
   );
@@ -190,7 +213,7 @@ export function registerTools(server: McpServer, config: Config): void {
         const res = await callRest(config, "/n2/acctinfo", {});
         return textResult(res);
       } catch (e) {
-        return errorResult(String(e instanceof Error ? e.message : e));
+        return toErrorResult(e);
       }
     }
   );
