@@ -3,7 +3,7 @@
   "info": {
     "title": "NH투자증권 Open API — 해외주식 (Global Stock)",
     "version": "v1",
-    "description": "NH투자증권 Open API 중 **해외주식 (Global Stock)** 자산군의 REST 및 실시간(WebSocket) API 문서입니다. (기준: API명세서 260721 / 나무 환경 · 필드명은 명세서 C열 기준)\n\n- REST: POST + JSON, 요청 Input_0 / 응답 Output_0(배열) + message.\n- 실시간: WebSocket, 푸시=JSON. x-realtime-channels.protocol 참조.\n- 🔑 토큰 재사용: access token 은 24시간(expires_in=86400) 유효. 매 호출 재발급 금지 — 공유 캐시에 저장해 재사용(재발급은 보안 알림 유발). 재발급은 401 일 때만, 429 재시도엔 기존 토큰 사용.\n- 인증: POST /oauth2/token → REST 는 Authorization/x-client-id/x-client-secret, WS 는 header.token.\n- 환경 제공: 이 자산군 API 는 **모의투자·운영 모두 제공**. (접근토큰발급만 공통에서 운영 전용)"
+    "description": "NH투자증권 Open API 중 **해외주식 (Global Stock)** 자산군의 REST 및 실시간(WebSocket) API 문서입니다. (기준: API명세서 260730 / 나무 환경 · 필드명은 명세서 C열 기준)\n\n- REST: POST + JSON, 요청 Input_0 / 응답 Output_0(배열) + message.\n- 실시간: WebSocket, 푸시=JSON. x-realtime-channels.protocol 참조.\n- 📄 종목마스터: 전 종목 목록·종목명 조회 REST API 는 없습니다. 정적 종목정보는 https://www.nhplug.com/instruments/<파일명>.mst (CP949 고정길이, 인증 불필요). 상세는 x-instruments 참조.\n- 🏦 계좌 선택: /n2/acctinfo 의 acct_type 이 01(일반)·02(주문대리인) 이면 운영(api.nhplug.com:8443) 전용, 03 이면 모의투자(moapi.nhplug.com:8443) 전용 계좌입니다. 대상 환경과 맞는 계좌를 사용하세요.\n- 🔑 토큰 재사용: access token 은 24시간(expires_in=86400) 유효. 매 호출 재발급 금지 — 공유 캐시에 저장해 재사용(재발급은 보안 알림 유발). 재발급은 401 일 때만, 429 재시도엔 기존 토큰 사용.\n- 인증: POST /oauth2/token → REST 는 Authorization/x-client-id/x-client-secret, WS 는 header.token.\n- 환경 제공: 이 자산군 API 는 **모의투자·운영 모두 제공**. (접근토큰발급만 공통에서 운영 전용)"
   },
   "servers": [
     {
@@ -58,7 +58,7 @@
         ],
         "operationId": "gbstockOrderBuy",
         "summary": "해외주식 주문매수",
-        "description": "원본 시트: API_해외_주식_주문_매수",
+        "description": "해외주식 매수주문 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -71,7 +71,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11 / 계좌번호 입력"
+                        "description": "계좌번호 / 길이 11 / 계좌번호 입력 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "fc_sec_trd_nat_cd": {
                         "type": "string",
@@ -123,19 +123,16 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "amn_tab_cd": {
-                            "type": "string",
-                            "description": "관리팀점코드 / 길이 4"
-                          },
-                          "orr_no": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "주문번호 / 길이 10"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "amn_tab_cd": {
+                          "type": "string",
+                          "description": "관리팀점코드 / 길이 4"
+                        },
+                        "orr_no": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "주문번호 / 길이 10"
                         }
                       }
                     },
@@ -157,7 +154,7 @@
         ],
         "operationId": "gbstockOrderSell",
         "summary": "해외주식 주문매도",
-        "description": "원본 시트: API_해외_주식_주문_매도",
+        "description": "해외주식 매도주문 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -170,7 +167,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11 / 계좌번호 입력"
+                        "description": "계좌번호 / 길이 11 / 계좌번호 입력 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "fc_sec_trd_nat_cd": {
                         "type": "string",
@@ -217,19 +214,16 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "amn_tab_cd": {
-                            "type": "string",
-                            "description": "관리팀점코드 / 길이 4"
-                          },
-                          "orr_no": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "주문번호 / 길이 10"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "amn_tab_cd": {
+                          "type": "string",
+                          "description": "관리팀점코드 / 길이 4"
+                        },
+                        "orr_no": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "주문번호 / 길이 10"
                         }
                       }
                     },
@@ -251,7 +245,7 @@
         ],
         "operationId": "gbstockOrderModify",
         "summary": "해외주식 정정취소주문정정",
-        "description": "원본 시트: API_해외_주식_주문_정정",
+        "description": "해외주식 정정주문 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -264,7 +258,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11 / 계좌번호"
+                        "description": "계좌번호 / 길이 11 / 계좌번호 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "fc_sec_trd_nat_cd": {
                         "type": "string",
@@ -312,19 +306,16 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "amn_tab_cd": {
-                            "type": "string",
-                            "description": "관리팀점코드 / 길이 4"
-                          },
-                          "orr_no": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "주문번호 / 길이 10"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "amn_tab_cd": {
+                          "type": "string",
+                          "description": "관리팀점코드 / 길이 4"
+                        },
+                        "orr_no": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "주문번호 / 길이 10"
                         }
                       }
                     },
@@ -346,7 +337,7 @@
         ],
         "operationId": "gbstockOrderCancel",
         "summary": "해외주식 정정취소주문취소",
-        "description": "원본 시트: API_해외_주식_주문_취소",
+        "description": "해외주식 취소주문 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -359,7 +350,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11 / 계좌번호"
+                        "description": "계좌번호 / 길이 11 / 계좌번호 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "org_orr_no": {
                         "type": "integer",
@@ -406,19 +397,16 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "amn_tab_cd": {
-                            "type": "string",
-                            "description": "관리팀점코드 / 길이 4"
-                          },
-                          "orr_no": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "주문번호 / 길이 10"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "amn_tab_cd": {
+                          "type": "string",
+                          "description": "관리팀점코드 / 길이 4"
+                        },
+                        "orr_no": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "주문번호 / 길이 10"
                         }
                       }
                     },
@@ -440,7 +428,7 @@
         ],
         "operationId": "gbstockOrderReservedSubmit",
         "summary": "해외주식 예약주문접수",
-        "description": "원본 시트: API_해외_주식_주문_예약",
+        "description": "해외주식 예약주문(매수/매도) API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -453,7 +441,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "act_no / 길이 11"
+                        "description": "act_no / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "fc_sec_trd_nat_cd": {
                         "type": "string",
@@ -546,15 +534,12 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "bkg_rtn_orr_no": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "예약접수주문번호 / 길이 10"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "bkg_rtn_orr_no": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "예약접수주문번호 / 길이 10"
                         }
                       }
                     },
@@ -576,7 +561,7 @@
         ],
         "operationId": "gbstockOrderReservedCancel",
         "summary": "해외주식 예약주문접수취소",
-        "description": "원본 시트: API_해외_주식_주문_예약취소",
+        "description": "해외주식 예약취소주문 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -589,7 +574,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11"
+                        "description": "계좌번호 / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "fc_mkt_dit_cd": {
                         "type": "string",
@@ -634,14 +619,11 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "wrk_rlt_cd": {
-                            "type": "string",
-                            "description": "작업결과코드 / 길이 5"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "wrk_rlt_cd": {
+                          "type": "string",
+                          "description": "작업결과코드 / 길이 5"
                         }
                       }
                     },
@@ -662,8 +644,8 @@
           "조회 (Inquiry)"
         ],
         "operationId": "gbstockInquiryBuyableAmount",
-        "summary": "해외주식 매수가능금액조회",
-        "description": "원본 시트: API_해외_주식_조회_매수가능금액",
+        "summary": "해외주식 매수가능금액·수량 / 매도가능수량 조회",
+        "description": "처리구분(pcs_dit)으로 매수·매도를 모두 조회합니다. 1.매수가능금액 2.매수가능수량 3.매도가능수량 4.예약매수금액/수량 5.예약매도수량. (국내주식은 buyableQuantity/sellableQuantity 로 API 가 분리되어 있으나, 해외주식은 이 API 하나로 통합되어 있습니다.)\n\n해외주식 매수/매도 가능 수량/금액 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -676,7 +658,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11"
+                        "description": "계좌번호 / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "pcs_dit": {
                         "type": "string",
@@ -740,109 +722,106 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "fc_dca": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화예수금 / 길이 15.3"
-                          },
-                          "mgg_fc_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "담보외화금액 / 길이 15.3"
-                          },
-                          "csh_wtm": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "현금증거금 / 길이 15.3"
-                          },
-                          "re_use_obj_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "재사용대상금액 / 길이 15.3"
-                          },
-                          "re_use_rtr_use_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "재사용환원사용금액 / 길이 15.3"
-                          },
-                          "ect_use_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "기타사용금액 / 길이 15.3"
-                          },
-                          "orr_pbl_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "주문가능금액 / 길이 15.3"
-                          },
-                          "wtm_cur_cd": {
-                            "type": "string",
-                            "description": "증거금통화코드 / 길이 3"
-                          },
-                          "hld_qty": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "보유수량 / 길이 18"
-                          },
-                          "orr_pbl_qty": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "주문가능수량 / 길이 10"
-                          },
-                          "sll_pbl_qty": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도가능수량 / 길이 18"
-                          },
-                          "sll_pbl_qty1": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도가능수량1 / 길이 18"
-                          },
-                          "byn_cns_qty": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수체결수량 / 길이 18"
-                          },
-                          "sll_cns_qty": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도체결수량 / 길이 18"
-                          },
-                          "sll_orr_qty": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도주문수량 / 길이 18"
-                          },
-                          "dps_rsc_qty": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "처분제한수량 / 길이 18"
-                          },
-                          "byn_pbl_qty": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수가능수량 / 길이 18"
-                          },
-                          "max_pbl_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "최대가능금액 / 길이 15.3"
-                          },
-                          "max_pbl_qty": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "최대가능수량 / 길이 18"
-                          },
-                          "csh_wtm_rt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "현금증거금율 / 길이 8.5"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "fc_dca": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화예수금 / 길이 15.3"
+                        },
+                        "mgg_fc_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "담보외화금액 / 길이 15.3"
+                        },
+                        "csh_wtm": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "현금증거금 / 길이 15.3"
+                        },
+                        "re_use_obj_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "재사용대상금액 / 길이 15.3"
+                        },
+                        "re_use_rtr_use_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "재사용환원사용금액 / 길이 15.3"
+                        },
+                        "ect_use_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "기타사용금액 / 길이 15.3"
+                        },
+                        "orr_pbl_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "주문가능금액 / 길이 15.3"
+                        },
+                        "wtm_cur_cd": {
+                          "type": "string",
+                          "description": "증거금통화코드 / 길이 3"
+                        },
+                        "hld_qty": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "보유수량 / 길이 18"
+                        },
+                        "orr_pbl_qty": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "주문가능수량 / 길이 10"
+                        },
+                        "sll_pbl_qty": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도가능수량 / 길이 18"
+                        },
+                        "sll_pbl_qty1": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도가능수량1 / 길이 18"
+                        },
+                        "byn_cns_qty": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수체결수량 / 길이 18"
+                        },
+                        "sll_cns_qty": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도체결수량 / 길이 18"
+                        },
+                        "sll_orr_qty": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도주문수량 / 길이 18"
+                        },
+                        "dps_rsc_qty": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "처분제한수량 / 길이 18"
+                        },
+                        "byn_pbl_qty": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수가능수량 / 길이 18"
+                        },
+                        "max_pbl_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "최대가능금액 / 길이 15.3"
+                        },
+                        "max_pbl_qty": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "최대가능수량 / 길이 18"
+                        },
+                        "csh_wtm_rt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "현금증거금율 / 길이 8.5"
                         }
                       }
                     },
@@ -869,7 +848,7 @@
         ],
         "operationId": "gbstockInquiryUnexecuted",
         "summary": "해외주식 주문체결내역",
-        "description": "주문별 체결수량·체결가격·미체결주문수량을 포함한 **주문·체결 내역 조회** 입니다. URI 의 `unexecuted` 는 서버 경로일 뿐이며, 실제로는 체결·미체결 내역을 모두 반환합니다. (주문 접수 API 아님, 조회 전용)\n\n원본 시트: API_해외_주식_주문_체결",
+        "description": "주문별 체결수량·체결가격·미체결주문수량을 포함한 **주문·체결 내역 조회** 입니다. URI 의 `unexecuted` 는 서버 경로일 뿐이며, 실제로는 체결·미체결 내역을 모두 반환합니다. (주문 접수 API 아님, 조회 전용)\n\n해외주식 주문체결내역 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -886,7 +865,7 @@
                       },
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11"
+                        "description": "계좌번호 / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "iem_cd": {
                         "type": "string",
@@ -1141,7 +1120,7 @@
         ],
         "operationId": "gbstockInquiryBalance",
         "summary": "해외주식 잔고",
-        "description": "원본 시트: API_해외_주식_조회_잔고",
+        "description": "해외주식 잔고조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1154,7 +1133,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11"
+                        "description": "계좌번호 / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "qut_iqr_dit_cd": {
                         "type": "string",
@@ -1194,90 +1173,95 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
+                      "type": "object",
+                      "properties": {
+                        "abk_amt": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "장부금액 / 길이 18"
+                        },
+                        "eal_amt_sum": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "평가금액합계 / 길이 18"
+                        },
+                        "eal_pls_sum_amt": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "평가손익합계금액 / 길이 18"
+                        },
+                        "krw_pft_rt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "원화수익율 / 길이 15.9"
+                        },
+                        "krw_dca": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "원화예수금 / 길이 18"
+                        },
+                        "krw_ny_stl_xcl_amt": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "원화미결제정산금액 / 길이 18"
+                        },
+                        "tot_aet_amt": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "총자산금액 / 길이 18"
+                        },
+                        "fc_abk_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화장부금액 / 길이 15.3"
+                        },
+                        "fc_eal_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화평가금액 / 길이 15.3"
+                        },
+                        "fc_eal_pls_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화평가손익금액 / 길이 15.3"
+                        },
+                        "pft_rt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "수익율 / 길이 15.9"
+                        },
+                        "fc_dca": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화예수금 / 길이 15.3"
+                        },
+                        "fc_ny_stl_xcl_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화미결제정산금액 / 길이 15.3"
+                        },
+                        "fc_aet_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화자산금액 / 길이 15.3"
+                        },
+                        "ptps_ttn_amt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "PTP과세금액 / 길이 15.3"
+                        },
+                        "ptps_ttn_amt1": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "PTP과세금액1 / 길이 15.3"
+                        }
+                      }
+                    },
+                    "Output_1": {
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "abk_amt": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "장부금액 / 길이 18"
-                          },
-                          "eal_amt_sum": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "평가금액합계 / 길이 18"
-                          },
-                          "eal_pls_sum_amt": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "평가손익합계금액 / 길이 18"
-                          },
-                          "krw_pft_rt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "원화수익율 / 길이 15.9"
-                          },
-                          "krw_dca": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "원화예수금 / 길이 18"
-                          },
-                          "krw_ny_stl_xcl_amt": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "원화미결제정산금액 / 길이 18"
-                          },
-                          "tot_aet_amt": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "총자산금액 / 길이 18"
-                          },
-                          "fc_abk_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화장부금액 / 길이 15.3"
-                          },
-                          "fc_eal_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화평가금액 / 길이 15.3"
-                          },
-                          "fc_eal_pls_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화평가손익금액 / 길이 15.3"
-                          },
-                          "pft_rt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "수익율 / 길이 15.9"
-                          },
-                          "fc_dca": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화예수금 / 길이 15.3"
-                          },
-                          "fc_ny_stl_xcl_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화미결제정산금액 / 길이 15.3"
-                          },
-                          "fc_aet_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화자산금액 / 길이 15.3"
-                          },
-                          "ptps_ttn_amt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "PTP과세금액 / 길이 15.3"
-                          },
-                          "ptps_ttn_amt1": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "PTP과세금액1 / 길이 15.3"
-                          },
                           "fc_sec_trd_nat_cd": {
                             "type": "string",
                             "description": "외화증권거래국가코드 / 길이 3"
@@ -1318,6 +1302,11 @@
                             "format": "int64",
                             "description": "매도가능수량1 / 길이 18"
                           },
+                          "fc_abk_amt": {
+                            "type": "number",
+                            "format": "double",
+                            "description": "외화장부금액 / 길이 15.3"
+                          },
                           "krw_abk_amt1": {
                             "type": "integer",
                             "format": "int64",
@@ -1343,10 +1332,20 @@
                             "format": "int64",
                             "description": "종가 / 길이 15"
                           },
+                          "fc_eal_amt": {
+                            "type": "number",
+                            "format": "double",
+                            "description": "외화평가금액 / 길이 15.3"
+                          },
                           "krw_eal_amt": {
                             "type": "integer",
                             "format": "int64",
                             "description": "원화평가금액 / 길이 18"
+                          },
+                          "fc_eal_pls_amt": {
+                            "type": "number",
+                            "format": "double",
+                            "description": "외화평가손익금액 / 길이 15.3"
                           },
                           "krw_eal_pls_amt": {
                             "type": "integer",
@@ -1499,7 +1498,7 @@
         ],
         "operationId": "gbstockInquiryReservedInquiry",
         "summary": "해외주식 예약주문조회",
-        "description": "원본 시트: API_해외_주식_조회_예약주문",
+        "description": "해외주식 예약주문내역 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1520,7 +1519,7 @@
                       },
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11"
+                        "description": "계좌번호 / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "iem_cd": {
                         "type": "string",
@@ -1748,7 +1747,7 @@
                           },
                           "bkg_orr_tp_cd": {
                             "type": "string",
-                            "description": "예약주문유형코드 / 길이 1 / 1. 일반예약주문 2. 잔량기준기간예약주문 3. 수량기준기간예약주문 4. 증거금징수 예약"
+                            "description": "예약주문유형코드 / 길이 1 / 1.\t일반예약주문\n2.\t잔량기준기간예약주문\n3.\t수량기준기간예약주문\n4.\t증거금징수 예약"
                           },
                           "bkg_orr_tp_cd_nm": {
                             "type": "string",
@@ -1831,7 +1830,7 @@
         ],
         "operationId": "gbstockInquiryDailyTransaction",
         "summary": "해외주식 일별거래내역",
-        "description": "원본 시트: API_해외_주식_조회_일별거래내역",
+        "description": "해외주식 일별거래내역 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1844,7 +1843,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11"
+                        "description": "계좌번호 / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "iqr_sta_dt": {
                         "type": "string",
@@ -2103,40 +2102,45 @@
                           "ral_trd_dt": {
                             "type": "string",
                             "description": "실거래일자 / 길이 8"
-                          },
-                          "cus_fnm": {
-                            "type": "string",
-                            "description": "고객성명 / 길이 40"
-                          },
-                          "rnm_cfm_no": {
-                            "type": "string",
-                            "description": "실명확인번호 / 길이 13"
-                          },
-                          "rpm_tal": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "입금총액 / 길이 18"
-                          },
-                          "drn_tal": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "출금총액 / 길이 18"
-                          },
-                          "amt_sum": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "금액합계 / 길이 18"
-                          },
-                          "tax_sum_amt": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "세금합계금액 / 길이 18"
-                          },
-                          "fee_sum_amt": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "수수료합계금액 / 길이 18"
                           }
+                        }
+                      }
+                    },
+                    "Output_1": {
+                      "type": "object",
+                      "properties": {
+                        "cus_fnm": {
+                          "type": "string",
+                          "description": "고객성명 / 길이 40"
+                        },
+                        "rnm_cfm_no": {
+                          "type": "string",
+                          "description": "실명확인번호 / 길이 13"
+                        },
+                        "rpm_tal": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "입금총액 / 길이 18"
+                        },
+                        "drn_tal": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "출금총액 / 길이 18"
+                        },
+                        "amt_sum": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "금액합계 / 길이 18"
+                        },
+                        "tax_sum_amt": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "세금합계금액 / 길이 18"
+                        },
+                        "fee_sum_amt": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "수수료합계금액 / 길이 18"
                         }
                       }
                     },
@@ -2163,7 +2167,7 @@
         ],
         "operationId": "gbstockInquiryPeriodPnl",
         "summary": "해외주식 기간손익",
-        "description": "원본 시트: API_해외_주식_조회_기간손익",
+        "description": "해외주식 기간별 손익 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2176,7 +2180,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11"
+                        "description": "계좌번호 / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "iqr_dit": {
                         "type": "string",
@@ -2224,59 +2228,64 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
+                      "type": "object",
+                      "properties": {
+                        "act_fnm": {
+                          "type": "string",
+                          "description": "계좌성명 / 길이 40"
+                        },
+                        "byn_qty_sum": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수수량합계 / 길이 15"
+                        },
+                        "fc_byn_amt_sum": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화매수금액합계 / 길이 18.3"
+                        },
+                        "sll_qty_sum": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도수량합계 / 길이 15"
+                        },
+                        "fc_sll_amt_sum": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화매도금액합계 / 길이 18.3"
+                        },
+                        "fc_sby_pls_sum": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화매매손익합계 / 길이 15.3"
+                        },
+                        "fc_sby_pft_rt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화매매수익율 / 길이 15.9"
+                        },
+                        "fc_sdr_xps_sum": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화제비용합계 / 길이 15.3"
+                        },
+                        "fc_rzt_pls_sum": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화실현손익합계 / 길이 15.3"
+                        },
+                        "fc_rzt_pft_rt": {
+                          "type": "number",
+                          "format": "double",
+                          "description": "외화실현수익율 / 길이 15.9"
+                        }
+                      }
+                    },
+                    "Output_1": {
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "act_fnm": {
-                            "type": "string",
-                            "description": "계좌성명 / 길이 40"
-                          },
-                          "byn_qty_sum": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수수량합계 / 길이 15"
-                          },
-                          "fc_byn_amt_sum": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화매수금액합계 / 길이 18.3"
-                          },
-                          "sll_qty_sum": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도수량합계 / 길이 15"
-                          },
-                          "fc_sll_amt_sum": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화매도금액합계 / 길이 18.3"
-                          },
-                          "fc_sby_pls_sum": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화매매손익합계 / 길이 15.3"
-                          },
-                          "fc_sby_pft_rt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화매매수익율 / 길이 15.9"
-                          },
-                          "fc_sdr_xps_sum": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화제비용합계 / 길이 15.3"
-                          },
-                          "fc_rzt_pls_sum": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화실현손익합계 / 길이 15.3"
-                          },
-                          "fc_rzt_pft_rt": {
-                            "type": "number",
-                            "format": "double",
-                            "description": "외화실현수익율 / 길이 15.9"
-                          },
                           "orr_dt": {
                             "type": "string",
                             "description": "주문일자 / 길이 8 / YYYYMMDD"
@@ -2328,6 +2337,11 @@
                             "format": "double",
                             "description": "외화매매손익 / 길이 15.3"
                           },
+                          "fc_sby_pft_rt": {
+                            "type": "number",
+                            "format": "double",
+                            "description": "외화매매수익율 / 길이 15.9"
+                          },
                           "fc_sdr_xps": {
                             "type": "number",
                             "format": "double",
@@ -2337,6 +2351,11 @@
                             "type": "number",
                             "format": "double",
                             "description": "외화실현손익 / 길이 15.3"
+                          },
+                          "fc_rzt_pft_rt": {
+                            "type": "number",
+                            "format": "double",
+                            "description": "외화실현수익율 / 길이 15.9"
                           }
                         }
                       }
@@ -2364,7 +2383,7 @@
         ],
         "operationId": "gbstockInquiryPeriodPnlDetail",
         "summary": "해외주식 기간손익 상세",
-        "description": "원본 시트: API_해외_주식_조회_기간손익상세",
+        "description": "해외주식 기간별 손익 상세조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2377,7 +2396,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11"
+                        "description": "계좌번호 / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       },
                       "iqr_dit": {
                         "type": "string",
@@ -2515,7 +2534,7 @@
         ],
         "operationId": "gbstockInquiryMargin",
         "summary": "해외증거금 통화별조회",
-        "description": "원본 시트: API_해외_주식_조회_증거금",
+        "description": "해외주식 증거금 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2528,7 +2547,7 @@
                     "properties": {
                       "act_no": {
                         "type": "string",
-                        "description": "계좌번호 / 길이 11"
+                        "description": "계좌번호 / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
                       }
                     },
                     "required": [
@@ -2668,7 +2687,7 @@
         ],
         "operationId": "gbstockQuoteCurrent",
         "summary": "해외주식 현재가상세",
-        "description": "원본 시트: API_해외_주식_시세_현재가",
+        "description": "해외주식 현재가 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2702,486 +2721,483 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "iem_cd": {
-                            "type": "string",
-                            "description": "종목코드 / 길이 15"
-                          },
-                          "kor_name": {
-                            "type": "string",
-                            "description": "종목명 / 길이 40"
-                          },
-                          "industry_code": {
-                            "type": "string",
-                            "description": "업종코드 / 길이 4"
-                          },
-                          "industry_name": {
-                            "type": "string",
-                            "description": "업종명 / 길이 100"
-                          },
-                          "trdprc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "현재가 / 길이 17"
-                          },
-                          "netchng_cls": {
-                            "type": "string",
-                            "description": "전일대비구분 / 길이 1 / 1or6.상한가 2or7.상승 3or0.보합 4or8.하한 5or9.하락 그외.보함+리버스(기세)"
-                          },
-                          "netchng": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "전일대비 / 길이 17"
-                          },
-                          "pctchng": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "전일대비율 / 길이 8"
-                          },
-                          "open_prc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "시가 / 길이 17"
-                          },
-                          "high": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "고가 / 길이 17"
-                          },
-                          "low": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "저가 / 길이 17"
-                          },
-                          "acvol": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "거래량 / 길이 15"
-                          },
-                          "uplimit": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "상한가 / 길이 17"
-                          },
-                          "uplimit_rate": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "상한가비율 / 길이 8"
-                          },
-                          "lolimit": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "하한가 / 길이 17"
-                          },
-                          "lolimit_rate": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "하한가비율 / 길이 8"
-                          },
-                          "w52high_prc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "52주최고가 / 길이 17"
-                          },
-                          "w52highprc_netchng": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "52주최고가대비 / 길이 17"
-                          },
-                          "w52high_date": {
-                            "type": "string",
-                            "description": "52주최고일자 / 길이 8"
-                          },
-                          "w52low_prc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "52주최저가 / 길이 17"
-                          },
-                          "w52lowprc_netchng": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "52주최저가대비 / 길이 17"
-                          },
-                          "w52low_date": {
-                            "type": "string",
-                            "description": "52주최저일자 / 길이 8"
-                          },
-                          "quote_time": {
-                            "type": "string",
-                            "description": "호가시간 / 길이 6"
-                          },
-                          "best_ask1": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매도1호가 / 길이 17"
-                          },
-                          "best_bid1": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매수1호가 / 길이 17"
-                          },
-                          "best_asiz1": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도1호가수량 / 길이 15"
-                          },
-                          "best_bsiz1": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수1호가수량 / 길이 15"
-                          },
-                          "best_ask2": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매도2호가 / 길이 17"
-                          },
-                          "best_bid2": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매수2호가 / 길이 17"
-                          },
-                          "best_asiz2": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도2호가수량 / 길이 15"
-                          },
-                          "best_bsiz2": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수2호가수량 / 길이 15"
-                          },
-                          "best_ask3": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매도3호가 / 길이 17"
-                          },
-                          "best_bid3": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매수3호가 / 길이 17"
-                          },
-                          "best_asiz3": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도3호가수량 / 길이 15"
-                          },
-                          "best_bsiz3": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수3호가수량 / 길이 15"
-                          },
-                          "best_ask4": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매도4호가 / 길이 17"
-                          },
-                          "best_bid4": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매수4호가 / 길이 17"
-                          },
-                          "best_asiz4": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도4호가수량 / 길이 15"
-                          },
-                          "best_bsiz4": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수4호가수량 / 길이 15"
-                          },
-                          "best_ask5": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매도5호가 / 길이 17"
-                          },
-                          "best_bid5": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매수5호가 / 길이 17"
-                          },
-                          "best_asiz5": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도5호가수량 / 길이 15"
-                          },
-                          "best_bsiz5": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수5호가수량 / 길이 15"
-                          },
-                          "asksize": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "총매도잔량 / 길이 15"
-                          },
-                          "bidsize": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "총매수잔량 / 길이 15"
-                          },
-                          "cov_pric": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "환산가 / 길이 17"
-                          },
-                          "currency_prc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "환율 / 길이 17"
-                          },
-                          "list_num": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "발행주식수 / 길이 17"
-                          },
-                          "list_amt": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "시가총액 / 길이 17"
-                          },
-                          "list_amt_2": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "시가총액(원화) / 길이 17"
-                          },
-                          "turnover": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "거래대금 / 길이 17"
-                          },
-                          "currency_unit": {
-                            "type": "string",
-                            "description": "거래통화 / 길이 3"
-                          },
-                          "hst_trdprc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "전일종가 / 길이 17"
-                          },
-                          "capital_amt": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "자본금 / 길이 17"
-                          },
-                          "base_prc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "기준가 / 길이 17"
-                          },
-                          "eps_date": {
-                            "type": "string",
-                            "description": "EPS일자 / 길이 8"
-                          },
-                          "eps_prc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "EPS / 길이 17"
-                          },
-                          "per_prc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "PER / 길이 17"
-                          },
-                          "trading_unit": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매매단위 / 길이 17"
-                          },
-                          "hst_acvol": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "전일거래량 / 길이 15"
-                          },
-                          "trade_date": {
-                            "type": "string",
-                            "description": "거래일자 / 길이 8"
-                          },
-                          "exch_id": {
-                            "type": "string",
-                            "description": "거래소ID / 길이 3"
-                          },
-                          "exch_name": {
-                            "type": "string",
-                            "description": "거래소명 / 길이 40"
-                          },
-                          "com_kind": {
-                            "type": "string",
-                            "description": "자산구분코드 / 길이 2"
-                          },
-                          "com_kind_name": {
-                            "type": "string",
-                            "description": "자산구분명 / 길이 40"
-                          },
-                          "pf_jgubun": {
-                            "type": "string",
-                            "description": "(PF)장구분 / 길이 1"
-                          },
-                          "pf_trdprc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "(PF)현재가 / 길이 17"
-                          },
-                          "pf_netchng_cls": {
-                            "type": "string",
-                            "description": "(PF)전일대비구분 / 길이 1"
-                          },
-                          "pf_netchng": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "(PF)전일대비 / 길이 17"
-                          },
-                          "pf_pctchng": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "(PF)전일대비율 / 길이 8"
-                          },
-                          "best_ask6": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매도6호가 / 길이 17"
-                          },
-                          "best_bid6": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매수6호가 / 길이 17"
-                          },
-                          "best_asiz6": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도6호가수량 / 길이 15"
-                          },
-                          "best_bsiz6": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수6호가수량 / 길이 15"
-                          },
-                          "best_ask7": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매도7호가 / 길이 17"
-                          },
-                          "best_bid7": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매수7호가 / 길이 17"
-                          },
-                          "best_asiz7": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도7호가수량 / 길이 15"
-                          },
-                          "best_bsiz7": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수7호가수량 / 길이 15"
-                          },
-                          "best_ask8": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매도8호가 / 길이 17"
-                          },
-                          "best_bid8": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매수8호가 / 길이 17"
-                          },
-                          "best_asiz8": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도8호가수량 / 길이 15"
-                          },
-                          "best_bsiz8": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수8호가수량 / 길이 15"
-                          },
-                          "best_ask9": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매도9호가 / 길이 17"
-                          },
-                          "best_bid9": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매수9호가 / 길이 17"
-                          },
-                          "best_asiz9": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도9호가수량 / 길이 15"
-                          },
-                          "best_bsiz9": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수9호가수량 / 길이 15"
-                          },
-                          "best_ask10": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매도10호가 / 길이 17"
-                          },
-                          "best_bid10": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "매수10호가 / 길이 17"
-                          },
-                          "best_asiz10": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매도10호가수량 / 길이 15"
-                          },
-                          "best_bsiz10": {
-                            "type": "integer",
-                            "format": "int64",
-                            "description": "매수10호가수량 / 길이 15"
-                          },
-                          "marketperiod_cls": {
-                            "type": "string",
-                            "description": "현재시장구분 / 길이 1"
-                          },
-                          "normal_trdprc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "정규장종가 / 길이 17"
-                          },
-                          "normal_netchng_cls": {
-                            "type": "string",
-                            "description": "정규장대비구분 / 길이 1 / 2.상승 3.보합 5.하락"
-                          },
-                          "normal_netchng": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "정규장전일대비 / 길이 17"
-                          },
-                          "normal_pctchng": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "정규장전일대비율 / 길이 8"
-                          },
-                          "normal_acvol": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "정규장누적거래량 / 길이 15"
-                          },
-                          "normal_open_prc": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "정규장시가 / 길이 17"
-                          },
-                          "normal_high": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "정규장고가 / 길이 17"
-                          },
-                          "normal_low": {
-                            "type": "number",
-                            "format": "float",
-                            "description": "정규장저가 / 길이 17"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "iem_cd": {
+                          "type": "string",
+                          "description": "종목코드 / 길이 15"
+                        },
+                        "kor_name": {
+                          "type": "string",
+                          "description": "종목명 / 길이 40"
+                        },
+                        "industry_code": {
+                          "type": "string",
+                          "description": "업종코드 / 길이 4"
+                        },
+                        "industry_name": {
+                          "type": "string",
+                          "description": "업종명 / 길이 100"
+                        },
+                        "trdprc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "현재가 / 길이 17"
+                        },
+                        "netchng_cls": {
+                          "type": "string",
+                          "description": "전일대비구분 / 길이 1 / 1or6.상한가 2or7.상승 3or0.보합 4or8.하한 5or9.하락 그외.보함+리버스(기세)"
+                        },
+                        "netchng": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "전일대비 / 길이 17"
+                        },
+                        "pctchng": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "전일대비율 / 길이 8"
+                        },
+                        "open_prc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "시가 / 길이 17"
+                        },
+                        "high": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "고가 / 길이 17"
+                        },
+                        "low": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "저가 / 길이 17"
+                        },
+                        "acvol": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "거래량 / 길이 15"
+                        },
+                        "uplimit": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "상한가 / 길이 17"
+                        },
+                        "uplimit_rate": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "상한가비율 / 길이 8"
+                        },
+                        "lolimit": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "하한가 / 길이 17"
+                        },
+                        "lolimit_rate": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "하한가비율 / 길이 8"
+                        },
+                        "w52high_prc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "52주최고가 / 길이 17"
+                        },
+                        "w52highprc_netchng": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "52주최고가대비 / 길이 17"
+                        },
+                        "w52high_date": {
+                          "type": "string",
+                          "description": "52주최고일자 / 길이 8"
+                        },
+                        "w52low_prc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "52주최저가 / 길이 17"
+                        },
+                        "w52lowprc_netchng": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "52주최저가대비 / 길이 17"
+                        },
+                        "w52low_date": {
+                          "type": "string",
+                          "description": "52주최저일자 / 길이 8"
+                        },
+                        "quote_time": {
+                          "type": "string",
+                          "description": "호가시간 / 길이 6"
+                        },
+                        "best_ask1": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매도1호가 / 길이 17"
+                        },
+                        "best_bid1": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매수1호가 / 길이 17"
+                        },
+                        "best_asiz1": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도1호가수량 / 길이 15"
+                        },
+                        "best_bsiz1": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수1호가수량 / 길이 15"
+                        },
+                        "best_ask2": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매도2호가 / 길이 17"
+                        },
+                        "best_bid2": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매수2호가 / 길이 17"
+                        },
+                        "best_asiz2": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도2호가수량 / 길이 15"
+                        },
+                        "best_bsiz2": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수2호가수량 / 길이 15"
+                        },
+                        "best_ask3": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매도3호가 / 길이 17"
+                        },
+                        "best_bid3": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매수3호가 / 길이 17"
+                        },
+                        "best_asiz3": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도3호가수량 / 길이 15"
+                        },
+                        "best_bsiz3": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수3호가수량 / 길이 15"
+                        },
+                        "best_ask4": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매도4호가 / 길이 17"
+                        },
+                        "best_bid4": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매수4호가 / 길이 17"
+                        },
+                        "best_asiz4": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도4호가수량 / 길이 15"
+                        },
+                        "best_bsiz4": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수4호가수량 / 길이 15"
+                        },
+                        "best_ask5": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매도5호가 / 길이 17"
+                        },
+                        "best_bid5": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매수5호가 / 길이 17"
+                        },
+                        "best_asiz5": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도5호가수량 / 길이 15"
+                        },
+                        "best_bsiz5": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수5호가수량 / 길이 15"
+                        },
+                        "asksize": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "총매도잔량 / 길이 15"
+                        },
+                        "bidsize": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "총매수잔량 / 길이 15"
+                        },
+                        "cov_pric": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "환산가 / 길이 17"
+                        },
+                        "currency_prc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "환율 / 길이 17"
+                        },
+                        "list_num": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "발행주식수 / 길이 17"
+                        },
+                        "list_amt": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "시가총액 / 길이 17"
+                        },
+                        "list_amt_2": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "시가총액(원화) / 길이 17"
+                        },
+                        "turnover": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "거래대금 / 길이 17"
+                        },
+                        "currency_unit": {
+                          "type": "string",
+                          "description": "거래통화 / 길이 3"
+                        },
+                        "hst_trdprc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "전일종가 / 길이 17"
+                        },
+                        "capital_amt": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "자본금 / 길이 17"
+                        },
+                        "base_prc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "기준가 / 길이 17"
+                        },
+                        "eps_date": {
+                          "type": "string",
+                          "description": "EPS일자 / 길이 8"
+                        },
+                        "eps_prc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "EPS / 길이 17"
+                        },
+                        "per_prc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "PER / 길이 17"
+                        },
+                        "trading_unit": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매매단위 / 길이 17"
+                        },
+                        "hst_acvol": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "전일거래량 / 길이 15"
+                        },
+                        "trade_date": {
+                          "type": "string",
+                          "description": "거래일자 / 길이 8"
+                        },
+                        "exch_id": {
+                          "type": "string",
+                          "description": "거래소ID / 길이 3"
+                        },
+                        "exch_name": {
+                          "type": "string",
+                          "description": "거래소명 / 길이 40"
+                        },
+                        "com_kind": {
+                          "type": "string",
+                          "description": "자산구분코드 / 길이 2"
+                        },
+                        "com_kind_name": {
+                          "type": "string",
+                          "description": "자산구분명 / 길이 40"
+                        },
+                        "pf_jgubun": {
+                          "type": "string",
+                          "description": "(PF)장구분 / 길이 1"
+                        },
+                        "pf_trdprc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "(PF)현재가 / 길이 17"
+                        },
+                        "pf_netchng_cls": {
+                          "type": "string",
+                          "description": "(PF)전일대비구분 / 길이 1"
+                        },
+                        "pf_netchng": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "(PF)전일대비 / 길이 17"
+                        },
+                        "pf_pctchng": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "(PF)전일대비율 / 길이 8"
+                        },
+                        "best_ask6": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매도6호가 / 길이 17"
+                        },
+                        "best_bid6": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매수6호가 / 길이 17"
+                        },
+                        "best_asiz6": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도6호가수량 / 길이 15"
+                        },
+                        "best_bsiz6": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수6호가수량 / 길이 15"
+                        },
+                        "best_ask7": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매도7호가 / 길이 17"
+                        },
+                        "best_bid7": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매수7호가 / 길이 17"
+                        },
+                        "best_asiz7": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도7호가수량 / 길이 15"
+                        },
+                        "best_bsiz7": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수7호가수량 / 길이 15"
+                        },
+                        "best_ask8": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매도8호가 / 길이 17"
+                        },
+                        "best_bid8": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매수8호가 / 길이 17"
+                        },
+                        "best_asiz8": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도8호가수량 / 길이 15"
+                        },
+                        "best_bsiz8": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수8호가수량 / 길이 15"
+                        },
+                        "best_ask9": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매도9호가 / 길이 17"
+                        },
+                        "best_bid9": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매수9호가 / 길이 17"
+                        },
+                        "best_asiz9": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도9호가수량 / 길이 15"
+                        },
+                        "best_bsiz9": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수9호가수량 / 길이 15"
+                        },
+                        "best_ask10": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매도10호가 / 길이 17"
+                        },
+                        "best_bid10": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "매수10호가 / 길이 17"
+                        },
+                        "best_asiz10": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매도10호가수량 / 길이 15"
+                        },
+                        "best_bsiz10": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "매수10호가수량 / 길이 15"
+                        },
+                        "marketperiod_cls": {
+                          "type": "string",
+                          "description": "현재시장구분 / 길이 1"
+                        },
+                        "normal_trdprc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "정규장종가 / 길이 17"
+                        },
+                        "normal_netchng_cls": {
+                          "type": "string",
+                          "description": "정규장대비구분 / 길이 1 / 2.상승 3.보합 5.하락"
+                        },
+                        "normal_netchng": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "정규장전일대비 / 길이 17"
+                        },
+                        "normal_pctchng": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "정규장전일대비율 / 길이 8"
+                        },
+                        "normal_acvol": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "정규장누적거래량 / 길이 15"
+                        },
+                        "normal_open_prc": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "정규장시가 / 길이 17"
+                        },
+                        "normal_high": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "정규장고가 / 길이 17"
+                        },
+                        "normal_low": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "정규장저가 / 길이 17"
                         }
                       }
                     },
@@ -3203,7 +3219,7 @@
         ],
         "operationId": "gbstockQuoteExecutionTrend",
         "summary": "해외주식 체결추이",
-        "description": "원본 시트: API_해외_주식_시세_체결추이",
+        "description": "해외주식 변동거래량 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3356,8 +3372,8 @@
           "시세 (Market Data)"
         ],
         "operationId": "gbstockQuotePeriod",
-        "summary": "해외주식 기간별시세",
-        "description": "원본 시트: API_해외_주식_시세_기간별",
+        "summary": "해외주식 기간별시세(개별종목)",
+        "description": "해외 **개별종목**의 기간별 시세입니다. iem_cd 에 종목코드(예: AAPL, TSLA)를 입력합니다. 조회구분(gubun) 1.틱 2.분 3.일 4.주 5.월 — 틱·분 조회를 지원합니다. 조회건수는 count, 조회단위(xtick)는 일 조회 시 0001(4자리). 지수·환율 조회는 /gbstock/quote/v1/symbolIndexFxPeriod 를 사용하세요.\n\n해외주식 주기별 시세 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3635,7 +3651,15 @@
                             "type": "number",
                             "format": "float",
                             "description": "직전정규장기준가 / 길이 17"
-                          },
+                          }
+                        }
+                      }
+                    },
+                    "Output_1": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
                           "trade_date": {
                             "type": "string",
                             "description": "체결일자 / 길이 8 / YYYYMMDD"
@@ -3644,20 +3668,40 @@
                             "type": "string",
                             "description": "체결시간 / 길이 6 / HHmmSS"
                           },
-                          "close_prc": {
+                          "open_prc": {
                             "type": "number",
                             "format": "float",
+                            "description": "시가 / 길이 17"
+                          },
+                          "high": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "고가 / 길이 17"
+                          },
+                          "low": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "저가 / 길이 17"
+                          },
+                          "close_prc": {
+                            "type": "string",
                             "description": "종가 / 길이 17"
                           },
                           "movolume": {
-                            "type": "integer",
-                            "format": "int64",
+                            "type": "string",
                             "description": "변동거래량 / 길이 15"
                           },
                           "movalue": {
-                            "type": "number",
-                            "format": "float",
+                            "type": "string",
                             "description": "변동거래대금 / 길이 17"
+                          },
+                          "netchng_cls": {
+                            "type": "string",
+                            "description": "등락부호 / 길이 1 / 1or6.상한가 2or7.상승 3or0.보합 4or8.하한 5or9.하락 그외.보함+리버스(기세)"
+                          },
+                          "bsop_date": {
+                            "type": "string",
+                            "description": "영업일 / 길이 8 / YYYYMMDD"
                           }
                         }
                       }
@@ -3679,8 +3723,8 @@
           "시세 (Market Data)"
         ],
         "operationId": "gbstockQuoteSymbolIndexFxPeriod",
-        "summary": "해외주식 기간별시세",
-        "description": "원본 시트: API_해외_주식_시세_종목지수환율",
+        "summary": "해외주식 기간별시세(지수·환율)",
+        "description": "해외 **지수·환율**의 기간별 시세입니다. iem_cd 에 지수코드/환율코드를 입력합니다(개별종목 아님). 조회구분(gubun) 1.일 2.주 3.월 — 틱·분은 지원하지 않습니다. 조회건수는 array_cnt(개별종목 API 의 count 와 필드명이 다름), 조회단위(xtick)는 일 조회 시 001(3자리). 당일조회(today_cls) 의미도 반대입니다(1.당일만조회 0.전체조회). 개별종목 조회는 /gbstock/quote/v1/period 를 사용하세요.\n\n해외주식 종목/지수/환율 주기별 시세조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3747,57 +3791,146 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
+                      "type": "object",
+                      "properties": {
+                        "qry_date": {
+                          "type": "string",
+                          "description": "조회날짜 / 길이 8 / YYYYMMDD"
+                        },
+                        "qry_time": {
+                          "type": "string",
+                          "description": "조회시간 / 길이 6 / HHMMSS"
+                        },
+                        "data_code": {
+                          "type": "string",
+                          "description": "해외종목타입 / 길이 1"
+                        },
+                        "iem_cd": {
+                          "type": "string",
+                          "description": "SYMBOL / 길이 14"
+                        },
+                        "hts_kor_isnm": {
+                          "type": "string",
+                          "description": "종목명 / 길이 40"
+                        },
+                        "ovrs_prpr": {
+                          "type": "string",
+                          "description": "현재가 / 길이 10"
+                        },
+                        "prdy_vrss_sign": {
+                          "type": "string",
+                          "description": "등락부호 / 길이 1 / 1or6.상한가 2or7.상승 3or0.보합 4or8.하한 5or9.하락 그외.보함+리버스(기세)"
+                        },
+                        "prdy_vrss": {
+                          "type": "string",
+                          "description": "대비 / 길이 10"
+                        },
+                        "prdy_ctrt": {
+                          "type": "string",
+                          "description": "대비율 / 길이 10"
+                        },
+                        "acml_vol": {
+                          "type": "string",
+                          "description": "거래량 / 길이 15"
+                        },
+                        "acml_tr_pbmn": {
+                          "type": "string",
+                          "description": "거래대금 / 길이 18"
+                        },
+                        "prdy_clpr": {
+                          "type": "string",
+                          "description": "전일종가 / 길이 10"
+                        },
+                        "ovrs_oprc": {
+                          "type": "string",
+                          "description": "시가 / 길이 10"
+                        },
+                        "ovrs_hgpr": {
+                          "type": "string",
+                          "description": "고가 / 길이 10"
+                        },
+                        "ovrs_lwpr": {
+                          "type": "string",
+                          "description": "저가 / 길이 10"
+                        },
+                        "prdy_oprc": {
+                          "type": "string",
+                          "description": "전일시가 / 길이 10"
+                        },
+                        "prdy_hgpr": {
+                          "type": "string",
+                          "description": "전일고가 / 길이 10"
+                        },
+                        "prdy_lwpr": {
+                          "type": "string",
+                          "description": "전일저가 / 길이 10"
+                        },
+                        "prdy_prpr": {
+                          "type": "string",
+                          "description": "전일종가 / 길이 10"
+                        },
+                        "tdw_ovrs_oprc": {
+                          "type": "string",
+                          "description": "이번주시가 / 길이 10"
+                        },
+                        "tdw_ovrs_hgpr": {
+                          "type": "string",
+                          "description": "이번주고가 / 길이 10"
+                        },
+                        "tdw_ovrs_lwpr": {
+                          "type": "string",
+                          "description": "이번주저가 / 길이 10"
+                        },
+                        "tdm_ovrs_oprc": {
+                          "type": "string",
+                          "description": "이번달시가 / 길이 10"
+                        },
+                        "tdm_ovrs_hgpr": {
+                          "type": "string",
+                          "description": "이번달고가 / 길이 10"
+                        },
+                        "tdm_ovrs_lwpr": {
+                          "type": "string",
+                          "description": "이번달저가 / 길이 10"
+                        },
+                        "localtime": {
+                          "type": "string",
+                          "description": "현지시간 / 길이 14"
+                        },
+                        "bsop_date": {
+                          "type": "string",
+                          "description": "영업일 / 길이 8"
+                        },
+                        "base_ptr": {
+                          "type": "string",
+                          "description": "소수점자리수 / 길이 1"
+                        },
+                        "ctsz30": {
+                          "type": "string",
+                          "description": "이전키 / 길이 30"
+                        },
+                        "lasttickcount": {
+                          "type": "string",
+                          "description": "마지막N틱봉의틱묶음갯수 / 길이 5"
+                        },
+                        "send_cnt": {
+                          "type": "string",
+                          "description": "전송레코드건수 / 길이 7"
+                        }
+                      }
+                    },
+                    "Output_1": {
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "qry_date": {
+                          "bsop_date": {
                             "type": "string",
-                            "description": "조회날짜 / 길이 8 / YYYYMMDD"
+                            "description": "영업일 / 길이 8"
                           },
-                          "qry_time": {
+                          "bsop_time": {
                             "type": "string",
-                            "description": "조회시간 / 길이 6 / HHMMSS"
-                          },
-                          "data_code": {
-                            "type": "string",
-                            "description": "해외종목타입 / 길이 1"
-                          },
-                          "iem_cd": {
-                            "type": "string",
-                            "description": "SYMBOL / 길이 14"
-                          },
-                          "hts_kor_isnm": {
-                            "type": "string",
-                            "description": "종목명 / 길이 40"
-                          },
-                          "ovrs_prpr": {
-                            "type": "string",
-                            "description": "현재가 / 길이 10"
-                          },
-                          "prdy_vrss_sign": {
-                            "type": "string",
-                            "description": "등락부호 / 길이 1 / 1or6.상한가 2or7.상승 3or0.보합 4or8.하한 5or9.하락 그외.보함+리버스(기세)"
-                          },
-                          "prdy_vrss": {
-                            "type": "string",
-                            "description": "대비 / 길이 10"
-                          },
-                          "prdy_ctrt": {
-                            "type": "string",
-                            "description": "대비율 / 길이 10"
-                          },
-                          "acml_vol": {
-                            "type": "string",
-                            "description": "거래량 / 길이 15"
-                          },
-                          "acml_tr_pbmn": {
-                            "type": "string",
-                            "description": "거래대금 / 길이 18"
-                          },
-                          "prdy_clpr": {
-                            "type": "string",
-                            "description": "전일종가 / 길이 10"
+                            "description": "시간 / 길이 6 / HHmmSS"
                           },
                           "ovrs_oprc": {
                             "type": "string",
@@ -3811,73 +3944,9 @@
                             "type": "string",
                             "description": "저가 / 길이 10"
                           },
-                          "prdy_oprc": {
+                          "ovrs_prpr": {
                             "type": "string",
-                            "description": "전일시가 / 길이 10"
-                          },
-                          "prdy_hgpr": {
-                            "type": "string",
-                            "description": "전일고가 / 길이 10"
-                          },
-                          "prdy_lwpr": {
-                            "type": "string",
-                            "description": "전일저가 / 길이 10"
-                          },
-                          "prdy_prpr": {
-                            "type": "string",
-                            "description": "전일종가 / 길이 10"
-                          },
-                          "tdw_ovrs_oprc": {
-                            "type": "string",
-                            "description": "이번주시가 / 길이 10"
-                          },
-                          "tdw_ovrs_hgpr": {
-                            "type": "string",
-                            "description": "이번주고가 / 길이 10"
-                          },
-                          "tdw_ovrs_lwpr": {
-                            "type": "string",
-                            "description": "이번주저가 / 길이 10"
-                          },
-                          "tdm_ovrs_oprc": {
-                            "type": "string",
-                            "description": "이번달시가 / 길이 10"
-                          },
-                          "tdm_ovrs_hgpr": {
-                            "type": "string",
-                            "description": "이번달고가 / 길이 10"
-                          },
-                          "tdm_ovrs_lwpr": {
-                            "type": "string",
-                            "description": "이번달저가 / 길이 10"
-                          },
-                          "localtime": {
-                            "type": "string",
-                            "description": "현지시간 / 길이 14"
-                          },
-                          "bsop_date": {
-                            "type": "string",
-                            "description": "영업일 / 길이 8"
-                          },
-                          "base_ptr": {
-                            "type": "string",
-                            "description": "소수점자리수 / 길이 1"
-                          },
-                          "ctsz30": {
-                            "type": "string",
-                            "description": "이전키 / 길이 30"
-                          },
-                          "lasttickcount": {
-                            "type": "string",
-                            "description": "마지막N틱봉의틱묶음갯수 / 길이 5"
-                          },
-                          "send_cnt": {
-                            "type": "string",
-                            "description": "전송레코드건수 / 길이 7"
-                          },
-                          "bsop_time": {
-                            "type": "string",
-                            "description": "시간 / 길이 6 / HHmmSS"
+                            "description": "현재가 / 길이 10"
                           },
                           "vol": {
                             "type": "string",
@@ -4012,7 +4081,8 @@
             "tr_key": "AAPL"
           }
         },
-        "push_example": "{\n  \"Output_0\": [\n    {\n      \"\": \"\",\n      \"\": \"\"\n    },\n    ....\n  ],\n  \"message\": {\n    \"msg_code\": \"\",\n    \"usr_msg\": \"\",\n    \"msg_lv_code\": \"\",\n    \"dvlp_msg_yn\": \"\",\n    \"svc_nm\": \"\",\n    \"func_nm\": \"\",\n    \"line_no\": \"\",\n    \"dvlp_msg\": \"\"\n  }\n}"
+        "push_example": "{\n  \"Output_0\": [\n    {\n      \"\": \"\",\n      \"\": \"\"\n    },\n    ....\n  ],\n  \"message\": {\n    \"msg_code\": \"\",\n    \"usr_msg\": \"\",\n    \"msg_lv_code\": \"\",\n    \"dvlp_msg_yn\": \"\",\n    \"svc_nm\": \"\",\n    \"func_nm\": \"\",\n    \"line_no\": \"\",\n    \"dvlp_msg\": \"\"\n  }\n}",
+        "description": "유료시세 사용 약정 고객만 이용 가능합니다."
       },
       {
         "name": "해외주식 지연호가(아시아)",
@@ -4142,7 +4212,8 @@
             "best_asiz10z15": "314",
             "best_bsiz10z15": "15"
           }
-        }
+        },
+        "description": "미국, 중국시장만 지연정보가 제공됩니다."
       },
       {
         "name": "해외주식 실시간체결가",
@@ -4200,7 +4271,8 @@
             "tr_key": "<gicz15>"
           }
         },
-        "push_example": "{\n  \"Output_0\": [\n    {\n      \"\": \"\",\n      \"\": \"\"\n    },\n    ....\n  ],\n  \"message\": {\n    \"msg_code\": \"\",\n    \"usr_msg\": \"\",\n    \"msg_lv_code\": \"\",\n    \"dvlp_msg_yn\": \"\",\n    \"svc_nm\": \"\",\n    \"func_nm\": \"\",\n    \"line_no\": \"\",\n    \"dvlp_msg\": \"\"\n  }\n}"
+        "push_example": "{\n  \"Output_0\": [\n    {\n      \"\": \"\",\n      \"\": \"\"\n    },\n    ....\n  ],\n  \"message\": {\n    \"msg_code\": \"\",\n    \"usr_msg\": \"\",\n    \"msg_lv_code\": \"\",\n    \"dvlp_msg_yn\": \"\",\n    \"svc_nm\": \"\",\n    \"func_nm\": \"\",\n    \"line_no\": \"\",\n    \"dvlp_msg\": \"\"\n  }\n}",
+        "description": "유료시세 사용 약정 고객만 이용 가능합니다."
       },
       {
         "name": "해외주식 지연체결가",
@@ -4300,7 +4372,8 @@
             "blkvolumz15": "6755",
             "trdxid_1z3": ""
           }
-        }
+        },
+        "description": "미국, 중국시장만 지연정보가 제공됩니다."
       },
       {
         "name": "해외주식 실시간체결통보",
@@ -4365,7 +4438,8 @@
             "qty_dit_cd": "",
             "dcp_cns_qty": "0.000000"
           }
-        }
+        },
+        "description": "해외주식 주문 체결 시 실시간으로 수신됩니다."
       },
       {
         "name": "해외주식 실시간주문내역통보",
@@ -4438,7 +4512,8 @@
             "qty_dit_cd": "",
             "dcp_cns_qty": "0.000000"
           }
-        }
+        },
+        "description": "해외주식 주문 접수 시 실시간으로 수신됩니다."
       }
     ]
   },
@@ -4503,5 +4578,22 @@
         }
       }
     }
+  },
+  "x-instruments": {
+    "available": true,
+    "note": "이 자산군의 정적 종목정보는 종목마스터 파일(.mst)로 제공됩니다. 전체 정의는 common/openapi.json 의 x-instruments 참조.",
+    "files": [
+      "m_gtsstock.mst (해외주식)"
+    ],
+    "download_url_pattern": "https://www.nhplug.com/instruments/<파일명>.mst",
+    "auth_required": false,
+    "struct_headers": "https://github.com/plug-support/nhplug-sdk/tree/main/instruments/headers",
+    "python_parser": "https://github.com/plug-support/nhplug-sdk/tree/main/instruments",
+    "format_key_points": [
+      "CP949",
+      "고정길이 레코드 + LF(0x0A) 종단",
+      "바이너리 모드(\"rb\") 필수",
+      "파일크기 % 레코드크기 == 0 검증"
+    ]
   }
 }
