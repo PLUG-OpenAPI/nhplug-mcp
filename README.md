@@ -1,15 +1,32 @@
 # NH투자증권 Open API — Local MCP Server
 
-> 🏛️ **NH투자증권 공식 Open API(NHPLUG) 지원 저장소입니다.** &nbsp;·&nbsp; 포털 [www.nhplug.com](https://www.nhplug.com) &nbsp;·&nbsp; 문의 apisupport@nhsec.com
-> 코드로 개발·자동매매하려면 → [`nhplug-sdk`](https://github.com/plug-support/nhplug-sdk) &nbsp;|&nbsp; 대화형 AI로 쓰려면 → 이 저장소(`nhplug-mcp`)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Docs](https://img.shields.io/badge/docs-www.nhplug.com-informational)](https://www.nhplug.com/llms.txt)
+[![PyPI](https://img.shields.io/pypi/v/nhplug?color=0073b7&label=python%20sdk)](https://pypi.org/project/nhplug/)
+
+> 🏛️ **NH투자증권 공식 Open API(NHPLUG) 지원 저장소입니다.** &nbsp;·&nbsp; 포털 [www.nhplug.com](https://www.nhplug.com) &nbsp;·&nbsp; 계정 [@plug-support](https://github.com/plug-support) &nbsp;·&nbsp; 문의 apisupport@nhsec.com
+
+**어떻게 쓰시겠어요?**
+
+| 하고 싶은 일 | 방법 | 시작 |
+|---|---|---|
+| 대화로 시세·잔고 조회 (코딩 불필요) | **이 저장소 (MCP)** | Claude 설정에 `npx` 한 줄 |
+| 내 프로그램에 넣기 (자동매매) | [Python SDK](https://pypi.org/project/nhplug/) | `pip install nhplug` |
+| 예제 보며 배우기 | [nhplug-sdk](https://github.com/plug-support/nhplug-sdk) | `git clone` |
 
 NH투자증권 Open API 를 **Claude Desktop** 등 MCP 클라이언트에서 바로 사용할 수 있게 해주는 로컬 MCP 서버입니다. 국내주식(krstock)·해외주식(gbstock) 자산군의 시세·조회·주문 API 를 Claude 가 도구로 호출합니다.
 
 - 인증 · 토큰 발급 · 헤더 · `Input_0` 봉투 처리를 서버가 자동으로 대신합니다.
-- 131개 엔드포인트를 몇 개의 **메타 도구**로 노출해, 도구가 많아 성능이 떨어지는 문제를 피합니다.
+- **REST 49개 + 실시간 27채널**(국내주식 31·21 / 해외주식 18·6)을 몇 개의 **메타 도구**로 노출해, 도구가 많아 성능이 떨어지는 문제를 피합니다.
 - 주문(거래) API 는 **기본 비활성**이며, 명시적으로 켠 경우에만 사용됩니다.
 
 > 현재 버전은 **국내주식(krstock)·해외주식(gbstock)** 자산군을 포함합니다. 다른 자산군은 `specs/` 폴더에 openapi.json 을 추가하면 확장됩니다(맨 아래 참고).
+
+### AI·에이전트로 개발한다면
+
+1. **명세 정본** — [llms.txt](https://www.nhplug.com/llms.txt) (N2: [n2plug.com/llms.txt](https://www.n2plug.com/llms.txt)) · 전체 문맥은 [llms-full.txt](https://www.nhplug.com/llms-full.txt)
+2. **개발 규칙** — [nhplug-sdk/AGENTS.md](https://github.com/plug-support/nhplug-sdk/blob/main/AGENTS.md) (AI IDE 가 자동 로드)
+3. ⚠️ **호출 식별자 주의** — 이 MCP 는 **operationId**(`krstockQuoteCurrentPrice`), Python SDK 는 **URI 경로**(`/krstock/quote/v1/currentPrice`)를 씁니다. **섞어 쓰면 동작하지 않습니다.**
 
 ---
 
@@ -128,7 +145,7 @@ API·필드는 동일하고 **접속 도메인만 다릅니다.** 위 예시는 
 |---|---|---|
 | `list_apis` | 메타 | 호출 가능한 API 목록. domain/category/keyword 필터. 여기서 operationId 를 찾습니다. |
 | `describe_api` | 메타 | 특정 operationId 의 입력 필드(Input_0) 스키마 조회. |
-| `call_api` | 메타 | operationId + 입력값으로 실제 호출. 131개 엔드포인트 전부 커버. |
+| `call_api` | 메타 | operationId + 입력값으로 실제 호출. 번들에 포함된 엔드포인트 전부 커버. |
 | `get_stock_price` | 단축 | 국내주식 현재가 (종목코드만 입력). |
 | `get_stock_balance` | 단축 | 국내주식 계좌 잔고. |
 | `list_accounts` | 단축 | 보유 계좌 목록 조회 (잔고·주문 전 계좌번호 확보용, `POST /n2/acctinfo`). |
@@ -141,7 +158,7 @@ API·필드는 동일하고 **접속 도메인만 다릅니다.** 위 예시는 
 - "국내주식 시세 관련 API 목록 보여줘" → `list_apis`
 - "krstockQuoteCurrentDaily 는 어떤 입력이 필요해?" → `describe_api`
 - "내 계좌 목록 보여줘" → `list_accounts`
-- "내 계좌 20101036881 잔고 조회해줘" → `get_stock_balance`
+- "내 계좌 20101234567 잔고 조회해줘" → `get_stock_balance`  *(계좌번호는 예시)*
 
 ---
 
@@ -182,7 +199,7 @@ node scripts/selftest.mjs
 | `토큰 발급 요청 실패 (네트워크)` | API 서버에 접근 불가. 사내망/방화벽/URL 확인 |
 | `토큰 발급 실패 (HTTP 401/403)` | 앱키·시크릿 오류 또는 해당 환경 미허용 |
 | `IGW40043 유효하지 않은 token` | 캐시된 토큰 만료·무효. **자동으로 재발급 후 1회 재시도**하므로 대개 그대로 성공. 반복되면 키·환경 확인 |
-| `[business] 00007 …` 같은 오류 | HTTP 는 200 이지만 **업무 오류**입니다. `rsp_cd` 가 `00000`/`00166` 이 아니면 실패로 처리합니다(성공 오판 방지). 성공 코드 확장은 `NHPLUG_SUCCESS_CODES` |
+| `[business] 00007 …` 같은 오류 | HTTP 는 200 이지만 **업무 오류**입니다. 성공 코드는 `00000`·`00166`·`00221`·`13578` (+ `rsp_msg` 에 "완료" 포함 시 성공으로 보는 안전망)이며, 그 외는 실패로 처리합니다(성공 오판 방지). 교체는 `NHPLUG_SUCCESS_CODES` |
 | `[rate_limit] IGW42902 …` | 호출 유량 초과(실측 초당 5회 수준). **자동 재시도하지 않습니다** — 잠시 후 다시 요청하세요 |
 | Claude 에 도구가 안 보임 | 설정 저장 후 Claude Desktop **완전 종료 후 재시작** |
 | 주문 도구가 안 보임 | 의도된 동작. `NHPLUG_ENABLE_TRADING=true` 필요 |
