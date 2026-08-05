@@ -4,7 +4,7 @@
 [![Docs](https://img.shields.io/badge/docs-www.nhplug.com-informational)](https://www.nhplug.com/llms.txt)
 [![PyPI](https://img.shields.io/pypi/v/nhplug?color=0073b7&label=python%20sdk)](https://pypi.org/project/nhplug/)
 
-> 🏛️ **NH투자증권 공식 Open API(NHPLUG) 지원 저장소입니다.** &nbsp;·&nbsp; 포털 [www.nhplug.com](https://www.nhplug.com) &nbsp;·&nbsp; 계정 [@plug-support](https://github.com/plug-support) &nbsp;·&nbsp; 문의 apisupport@nhsec.com
+> 🏛️ **NH투자증권 공식 Open API(NHPLUG) 지원 저장소입니다.** &nbsp;·&nbsp; 포털 [www.nhplug.com](https://www.nhplug.com) &nbsp;·&nbsp; 계정 [@PLUG-OpenAPI](https://github.com/PLUG-OpenAPI) &nbsp;·&nbsp; 문의 apisupport@nhsec.com
 
 **어떻게 쓰시겠어요?**
 
@@ -12,7 +12,7 @@
 |---|---|---|
 | 대화로 시세·잔고 조회 (코딩 불필요) | **이 저장소 (MCP)** | Claude 설정에 `npx` 한 줄 |
 | 내 프로그램에 넣기 (자동매매) | [Python SDK](https://pypi.org/project/nhplug/) | `pip install nhplug` |
-| 예제 보며 배우기 | [nhplug-sdk](https://github.com/plug-support/nhplug-sdk) | `git clone` |
+| 예제 보며 배우기 | [nhplug-sdk](https://github.com/PLUG-OpenAPI/nhplug-sdk) | `git clone` |
 
 NH투자증권 Open API 를 **Claude Desktop** 등 MCP 클라이언트에서 바로 사용할 수 있게 해주는 로컬 MCP 서버입니다. 국내주식(krstock)·해외주식(gbstock) 자산군의 시세·조회·주문 API 를 Claude 가 도구로 호출합니다.
 
@@ -25,7 +25,7 @@ NH투자증권 Open API 를 **Claude Desktop** 등 MCP 클라이언트에서 바
 ### AI·에이전트로 개발한다면
 
 1. **명세 정본** — [llms.txt](https://www.nhplug.com/llms.txt) (N2: [n2plug.com/llms.txt](https://www.n2plug.com/llms.txt)) · 전체 문맥은 [llms-full.txt](https://www.nhplug.com/llms-full.txt)
-2. **개발 규칙** — [nhplug-sdk/AGENTS.md](https://github.com/plug-support/nhplug-sdk/blob/main/AGENTS.md) (AI IDE 가 자동 로드)
+2. **개발 규칙** — [nhplug-sdk/AGENTS.md](https://github.com/PLUG-OpenAPI/nhplug-sdk/blob/main/AGENTS.md) (AI IDE 가 자동 로드)
 3. ⚠️ **호출 식별자 주의** — 이 MCP 는 **operationId**(`krstockQuoteCurrentPrice`), Python SDK 는 **URI 경로**(`/krstock/quote/v1/currentPrice`)를 씁니다. **섞어 쓰면 동작하지 않습니다.**
 
 ---
@@ -47,12 +47,12 @@ NH투자증권 Open API 를 **Claude Desktop** 등 MCP 클라이언트에서 바
 
 ```json
 "command": "npx",
-"args": ["-y", "github:plug-support/nhplug-mcp"]
+"args": ["-y", "github:PLUG-OpenAPI/nhplug-mcp"]
 ```
 
 > **첫 실행 예열(권장):** npx 는 첫 실행 때 GitHub 에서 받아 빌드하느라 1분 정도 걸립니다. Claude 가 기다리다 실패하지 않도록, 터미널에서 한 번 미리 실행해 두면 좋습니다:
 > ```powershell
-> npx -y github:plug-support/nhplug-mcp
+> npx -y github:PLUG-OpenAPI/nhplug-mcp
 > ```
 > `[nhplug-mcp] 시작됨 ...` 로그가 뜨면 `Ctrl + C` 로 종료. 이후 Claude 실행이 빨라집니다.
 >
@@ -61,7 +61,7 @@ NH투자증권 Open API 를 **Claude Desktop** 등 MCP 클라이언트에서 바
 ### 방법 B — git clone 후 로컬 빌드
 
 ```bash
-git clone https://github.com/plug-support/nhplug-mcp.git
+git clone https://github.com/PLUG-OpenAPI/nhplug-mcp.git
 cd nhplug-mcp
 npm install
 npm run build
@@ -85,7 +85,7 @@ Claude Desktop 설정 파일 `claude_desktop_config.json` 을 엽니다.
   "mcpServers": {
     "nhplug": {
       "command": "npx",
-      "args": ["-y", "github:plug-support/nhplug-mcp"],
+      "args": ["-y", "github:PLUG-OpenAPI/nhplug-mcp"],
       "env": {
         "NHPLUG_APP_KEY": "발급받은_APP_KEY",
         "NHPLUG_APP_SECRET": "발급받은_APP_SECRET",
@@ -168,7 +168,7 @@ API·필드는 동일하고 **접속 도메인만 다릅니다.** 위 예시는 
 > Claude 등 AI 어시스턴트는 안전정책상 사용자를 대신해 증권 주문을 실행하지 않습니다. 이는 MCP 설정(`NHPLUG_ENABLE_TRADING`)이나 환경과 무관한 **모델 자체의 동작**이라, 서버에서 끌 수 없습니다.
 >
 > 따라서 이 MCP 는 **시세·계좌 조회, 분석, 주문 파라미터 준비**까지 담당하고, **실제 매수/매도 실행은 코드로** 하세요:
-> - 파이썬 개발·자동매매: [`nhplug-sdk`](https://github.com/plug-support/nhplug-sdk)
+> - 파이썬 개발·자동매매: [`nhplug-sdk`](https://github.com/PLUG-OpenAPI/nhplug-sdk)
 > - 주문 API 단발 테스트(사람이 직접 실행): `node scripts/order_test.mjs --account <계좌> --code 005930 --qty 1 --price 70000 --confirm`
 
 `NHPLUG_ENABLE_TRADING=true` 설정은 주문 API 를 **도구 목록에 노출**만 합니다(설계·검증용). 실행은 위 코드 경로를 사용하세요.

@@ -7,7 +7,7 @@
   "homepage": "https://www.nhplug.com/intro",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/plug-support/nhplug-mcp.git"
+    "url": "git+https://github.com/PLUG-OpenAPI/nhplug-mcp.git"
   },
   "type": "module",
   "bin": {
