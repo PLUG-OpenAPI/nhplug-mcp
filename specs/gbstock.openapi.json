@@ -4587,13 +4587,16 @@
     ],
     "download_url_pattern": "https://www.nhplug.com/instruments/<파일명>.mst",
     "auth_required": false,
-    "struct_headers": "https://github.com/plug-support/nhplug-sdk/tree/main/instruments/headers",
-    "python_parser": "https://github.com/plug-support/nhplug-sdk/tree/main/instruments",
     "format_key_points": [
       "CP949",
       "고정길이 레코드 + LF(0x0A) 종단",
       "바이너리 모드(\"rb\") 필수",
       "파일크기 % 레코드크기 == 0 검증"
+    ],
+    "struct_definition_url_pattern": "https://www.nhplug.com/instruments/<파일명>.h",
+    "struct_definition_note": "마스터 파일(.mst)과 1:1 대응하는 .h 파일에 오프셋·길이·코드값·레코드크기가 정의되어 있습니다. 인증 불필요.",
+    "struct_definition_files": [
+      "m_gtsstock.h"
     ]
   }
 }
