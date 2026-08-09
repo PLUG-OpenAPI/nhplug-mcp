@@ -116,6 +116,11 @@ Claude Desktop 설정 파일 `claude_desktop_config.json` 을 엽니다.
 | `NHPLUG_AUTH_URL` | | 토큰 발급 URL. 기본 `https://api.nhplug.com:8443` (운영 전용 — moapi 미제공). 보통 그대로 둡니다 |
 | `NHPLUG_ENABLE_TRADING` | | `true` 일 때만 주문(거래) 도구 노출. 기본 `false` |
 | `NHPLUG_DEFAULT_ACCOUNT` | | 잔고/주문 단축 도구에서 계좌번호 생략 시 사용 |
+| `NHPLUG_ALLOW_HOSTS` | | 사내 검증 서버 등 **허용 호스트 추가**(쉼표 구분). 보통 설정하지 않습니다 |
+
+> 🔒 `NHPLUG_BASE_URL`·`NHPLUG_AUTH_URL` 은 **허용된 호스트만** 통과합니다
+> (`api`/`moapi` × `nhplug.com`/`n2plug.com` 4종). 한 글자만 틀려도 앱키·시크릿이 그대로 전송되므로,
+> 오타가 있으면 **서버가 기동하지 않고** 무엇이 잘못됐는지 알려줍니다. `http://`(평문)와 경로가 붙은 주소도 막습니다.
 
 ### 접속 환경(Base URL)
 
