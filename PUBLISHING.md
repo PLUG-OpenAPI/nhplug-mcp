@@ -58,13 +58,13 @@ npm publish
 
 ## 방법 B — GitHub에서 직접 실행 (npm 계정 불필요)
 
-고객 명령: `npx github:nhsec/nhplug-mcp`
+고객 명령: `npx github:PLUG-OpenAPI/nhplug-mcp`
 장점: npm 배포 없이 GitHub push 만으로 배포. 당신의 "GitHub 주소" 직감에 가장 가까움.
 단점: 고객 PC에서 매 설치 시 소스를 빌드(`prepare` 스크립트) → 첫 실행이 느리고, 고객에 Node 빌드 환경 필요. 안정성은 A보다 낮음.
 
 ### 준비
 
-GitHub 저장소(`nhsec/nhplug-mcp`)에 이 폴더 내용을 push. (`dist/`·`node_modules`·`.env` 는 `.gitignore` 로 제외됨 — 정상. 고객 쪽에서 `prepare` 로 빌드됩니다.)
+GitHub 저장소(`PLUG-OpenAPI/nhplug-mcp`)에 이 폴더 내용을 push. (`dist/`·`node_modules`·`.env` 는 `.gitignore` 로 제외됨 — 정상. 고객 쪽에서 `prepare` 로 빌드됩니다.)
 
 ### 고객 설정
 
@@ -73,7 +73,7 @@ GitHub 저장소(`nhsec/nhplug-mcp`)에 이 폴더 내용을 push. (`dist/`·`no
   "mcpServers": {
     "nhplug": {
       "command": "npx",
-      "args": ["-y", "github:nhsec/nhplug-mcp"],
+      "args": ["-y", "github:PLUG-OpenAPI/nhplug-mcp"],
       "env": {
         "NHPLUG_APP_KEY": "고객_APP_KEY",
         "NHPLUG_APP_SECRET": "고객_APP_SECRET",
@@ -91,7 +91,7 @@ GitHub 저장소(`nhsec/nhplug-mcp`)에 이 폴더 내용을 push. (`dist/`·`no
 - 방법 A: GitHub = 소스 공개·이슈·문서. npm = 실제 배포.
 - 방법 B: GitHub = 소스 겸 배포처.
 
-### GitHub 최초 push (apisupport@nhsec.com 계정)
+### GitHub 최초 push (조직 PLUG-OpenAPI)
 
 ```bash
 cd nhplug-mcp
@@ -99,7 +99,7 @@ git init
 git add .
 git commit -m "NH Open API local MCP server v0.1.0"
 git branch -M main
-git remote add origin https://github.com/nhsec/nhplug-mcp.git
+git remote add origin https://github.com/PLUG-OpenAPI/nhplug-mcp.git
 git push -u origin main
 ```
 
