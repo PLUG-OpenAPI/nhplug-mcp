@@ -237,6 +237,29 @@ specs/
 
 ---
 
+## 저장소 구성
+
+**알고 싶은 것부터 찾아가세요.** 아래는 전부 클릭되는 링크입니다.
+
+| 파일 | 무엇이 들어 있나 |
+|---|---|
+| [`src/index.ts`](src/index.ts) | MCP 서버 진입점 — 도구 등록·요청 처리 |
+| [`src/tools.ts`](src/tools.ts) | 제공 도구 정의(`list_apis`·`describe_api`·`call_api` 등) |
+| [`src/client.ts`](src/client.ts) | REST 호출 · `Input_0` 봉투 · `rsp_cd` 판정 |
+| [`src/auth.ts`](src/auth.ts) | 토큰 발급·캐시(24h) |
+| [`src/config.ts`](src/config.ts) | 환경변수 로드 · **호스트 가드**(오타 차단) |
+| [`src/spec.ts`](src/spec.ts) | 번들 `openapi.json` 파싱 |
+| [`scripts/selftest.mjs`](scripts/selftest.mjs) | 연결 검증 |
+| [`scripts/sync_specs.mjs`](scripts/sync_specs.mjs) | 도메인에서 명세 재동기화(`npm run sync:specs`) |
+| [`.env.example`](.env.example) | 설정 양식 |
+
+> `specs/` 에는 자산군 `openapi.json` 이 번들돼 있습니다(도메인 명세의 사본). **정본은 도메인**입니다 —
+> [llms.txt](https://www.nhplug.com/llms.txt) (N2: [n2plug.com/llms.txt](https://www.n2plug.com/llms.txt))
+
+**파이썬으로 개발하시려면** → [nhplug-sdk](https://github.com/PLUG-OpenAPI/nhplug-sdk) ·
+[AI 개발 규칙(AGENTS.md)](https://github.com/PLUG-OpenAPI/nhplug-sdk/blob/main/AGENTS.md) ·
+[실시간 채널 27종](https://github.com/PLUG-OpenAPI/nhplug-sdk/blob/main/docs/realtime_channels.md)
+
 ## 라이선스
 
 MIT. 문의: apisupport@nhsec.com
