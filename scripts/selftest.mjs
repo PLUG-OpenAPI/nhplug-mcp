@@ -81,7 +81,7 @@ async function main() {
   const data = JSON.parse(pText);
 
   // HTTP 200 이어도 업무 성공이 아닐 수 있다 — rsp_cd 를 반드시 판정한다.
-  // allowlist(라이브 확인분) + "완료" 메시지 안전망. src/client.ts 의 isSuccess 와 동일 규칙.
+  // 1차 판정 — src/client.ts 의 isSuccess 와 동일 규칙. rsp_cd 는 전수가 아니며 rsp_msg 가 우선이다.
   const SUCCESS = new Set(
     (process.env.NHPLUG_SUCCESS_CODES ?? "00000,00166,00221,13578").split(",").map((c) => c.trim())
   );

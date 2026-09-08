@@ -2,10 +2,10 @@ import type { Config } from "./config.js";
 import { getAccessToken, clearTokenCache } from "./auth.js";
 
 /**
- * 업무 성공으로 확인된 rsp_cd (라이브 검증 기준).
+ * 라이브에서 **정상 응답으로 관찰된** rsp_cd — 판정 기준이 아니라 참고용 표본이다.
  *   00000 현재가·계좌목록 / 00166 잔고·자산현황·손익 / 00221 매수가능수량 / 13578 조회 내역 없음(빈 결과)
- * NH 가 정상코드 전체 목록을 공식 문서화하지 않아, 아래 목록 + "완료" 메시지 안전망으로 판정한다.
- * NHPLUG_SUCCESS_CODES 로 완전히 대체 가능.
+ * ⚠️ 같은 코드가 다른 API 에서는 오류를 뜻할 수 있다. 전수 목록이 아니며 앞으로도 될 수 없다.
+ * NHPLUG_SUCCESS_CODES 로 1차 판정 기준을 바꿀 수 있다.
  */
 export function successCodes(): Set<string> {
   const env = process.env.NHPLUG_SUCCESS_CODES;
@@ -14,8 +14,10 @@ export function successCodes(): Set<string> {
 }
 
 /**
- * 업무 성공 여부. allowlist 우선, 없으면 메시지에 "완료"가 있으면 성공으로 본다.
- * (NH 성공 응답은 일관되게 "…완료되었습니다" 형태 — 미지의 정상코드 오판 방지)
+ * 업무 성공 **1차 판정**. 관찰된 코드 목록에 있거나 메시지에 "완료"가 있으면 성공으로 본다.
+ *
+ * 🔴 전수 판정이 아니다. rsp_cd 는 API 마다 의미가 달라 단독 기준이 될 수 없고,
+ *    정확한 판정은 rsp_msg 내용을 봐야 한다(규약 정본: 도메인 llms.txt).
  */
 export function isSuccess(rspCd?: string, rspMsg?: string): boolean {
   if (rspCd === undefined) return true; // rsp_cd 없는 응답은 판정 대상 아님
@@ -57,7 +59,7 @@ export class NhplugApiError extends Error {
  * NH Open API REST 호출 공통 래퍼.
  *   - 토큰 자동 발급/캐시, 무효(401/IGW40043)면 재발급 후 1회 재시도
  *   - 429(유량 초과)는 자동 재시도하지 않고 rate_limit 오류로 올림(토큰 재발급 안 함)
- *   - **HTTP 200 이어도 rsp_cd 가 성공 코드가 아니면 업무 오류로 예외 발생**
+ *   - **HTTP 200 이어도 업무 오류면 예외 발생** (isSuccess 1차 판정 — 전수가 아니다)
  */
 export async function callRest(
   config: Config,
