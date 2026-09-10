@@ -21,7 +21,10 @@ function errorResult(message: string) {
 
 /**
  * 호출 예외를 구조화 오류로 변환.
- * 업무 오류(rsp_cd)·유량 초과·인증 실패를 모델이 구분할 수 있도록 category/code 를 함께 싣는다.
+ * 유량 초과·인증 실패·네트워크 오류를 모델이 구분할 수 있도록 category/code 를 함께 싣는다.
+ *
+ * 🔴 여기로 오는 것은 **HTTP 200 이 아닌 응답**뿐이다. HTTP 200 이면 업무 결과와 무관하게
+ *    본문이 textResult() 로 그대로 전달된다 — rsp_cd·rsp_msg 를 우리가 판정하지 않는다.
  */
 function toErrorResult(e: unknown) {
   const d = (e as any)?.detail;

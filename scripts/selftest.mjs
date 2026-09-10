@@ -80,24 +80,19 @@ async function main() {
   }
   const data = JSON.parse(pText);
 
-  // HTTP 200 이어도 업무 성공이 아닐 수 있다 — rsp_cd 를 반드시 판정한다.
-  // 1차 판정 — src/client.ts 의 isSuccess 와 동일 규칙. rsp_cd 는 전수가 아니며 rsp_msg 가 우선이다.
-  const SUCCESS = new Set(
-    (process.env.NHPLUG_SUCCESS_CODES ?? "00000,00166,00221,13578").split(",").map((c) => c.trim())
-  );
+  // 🔴 업무 판정은 하지 않는다 — 같은 rsp_cd 가 API 마다 정상/오류로 갈린다.
+  //    서버가 보낸 rsp_cd·rsp_msg 를 그대로 보여주고, 이 자가진단은 **기대한 값이
+  //    실제로 왔는지**(stck_prpr)로만 성공을 판정한다. 이건 이 테스트의 기대치일 뿐
+  //    업무 판정 규칙이 아니다.
   const rspCd = data.rsp_cd != null ? String(data.rsp_cd) : undefined;
-  const okBiz =
-    rspCd === undefined || SUCCESS.has(rspCd) || String(data.rsp_msg ?? "").includes("완료");
-  if (!okBiz) {
-    console.error(`✗ 업무 오류: rsp_cd=${rspCd} ${data.rsp_msg ?? ""}`);
-    process.exit(1);
-  }
+  console.log(`  서버 응답: rsp_cd=${rspCd ?? "-"} rsp_msg=${data.rsp_msg ?? "-"}`);
 
   // 단건 조회 응답이 배열/객체 어느 쪽이든 안전하게 처리
   const raw = data.Output_0;
   const o0 = Array.isArray(raw) ? raw[0] : raw;
   if (!o0 || o0.stck_prpr == null) {
-    console.error(`✗ 현재가 데이터가 비어 있습니다 (rsp_cd=${rspCd ?? "-"}). 응답: ${pText.slice(0, 300)}`);
+    console.error(`✗ 현재가(stck_prpr)가 응답에 없습니다. 위 rsp_msg 를 확인하세요.`);
+    console.error(`   응답: ${pText.slice(0, 300)}`);
     process.exit(1);
   }
   console.log(`✓ 현재가 조회 성공: ${o0.iem_nm ?? ""} 현재가 ${o0.stck_prpr}`);
