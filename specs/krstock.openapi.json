@@ -3,7 +3,7 @@
   "info": {
     "title": "NH투자증권 Open API — 국내주식 (Domestic Stock)",
     "version": "v1",
-    "description": "NH투자증권 Open API 중 **국내주식 (Domestic Stock)** 자산군의 REST 및 실시간(WebSocket) API 문서입니다. (기준: API명세서 260730 / 나무 환경 · 필드명은 명세서 C열 기준)\n\n- REST: POST + JSON, 요청 Input_0 / 응답 Output_0(배열) + message.\n- 실시간: WebSocket, 푸시=JSON. x-realtime-channels.protocol 참조.\n- 📄 종목마스터: 전 종목 목록·종목명 조회 REST API 는 없습니다. 정적 종목정보는 https://www.nhplug.com/instruments/<파일명>.mst (CP949 고정길이, 인증 불필요). 상세는 x-instruments 참조.\n- 🏦 계좌 선택: /n2/acctinfo 의 acct_type 이 01(일반)·02(주문대리인) 이면 운영(api.nhplug.com:8443) 전용, 03 이면 모의투자(moapi.nhplug.com:8443) 전용 계좌입니다. 대상 환경과 맞는 계좌를 사용하세요.\n- 🔑 토큰 재사용: access token 은 24시간(expires_in=86400) 유효. 매 호출 재발급 금지 — 공유 캐시에 저장해 재사용(재발급은 보안 알림 유발). 재발급은 401 일 때만, 429 재시도엔 기존 토큰 사용.\n- 인증: POST /oauth2/token → REST 는 Authorization/x-client-id/x-client-secret, WS 는 header.token.\n- 환경 제공: 이 자산군 API 는 **모의투자·운영 모두 제공**. (접근토큰발급만 공통에서 운영 전용)"
+    "description": "NH투자증권 Open API 중 **국내주식 (Domestic Stock)** 자산군의 REST 및 실시간(WebSocket) API 문서입니다. (기준: API명세서 260911 / 나무 환경 · 필드명은 명세서 C열 기준)\n\n- REST: POST + JSON, 요청 Input_0 / 응답 Output_0(+Output_1·Output_2 …) + message. 응답 블록의 타입은 API 마다 다릅니다(객체=집계 / 배열=목록). 블록은 데이터가 있을 때만 내려옵니다.\n- 실시간: WebSocket, 푸시=JSON. x-realtime-channels.protocol 참조.\n- 📄 종목마스터: 전 종목 목록·종목명 조회 REST API 는 없습니다. 정적 종목정보는 https://www.nhplug.com/instruments/<파일명>.mst (CP949 고정길이, 인증 불필요). 상세는 x-instruments 참조.\n- 🏦 계좌 선택: /n2/acctinfo 의 acct_type 이 01(일반)·02(주문대리인) 이면 운영(api.nhplug.com:8443) 전용, 03 이면 모의투자(moapi.nhplug.com:8443) 전용 계좌입니다. 대상 환경과 맞는 계좌를 사용하세요.\n- 🔑 토큰 재사용: access token 은 24시간(expires_in=86400) 유효. 매 호출 재발급 금지 — 공유 캐시에 저장해 재사용(재발급은 보안 알림 유발). 재발급은 401 일 때만, 429 재시도엔 기존 토큰 사용.\n- 인증: POST /oauth2/token → REST 는 Authorization/x-client-id/x-client-secret, WS 는 header.token.\n- 환경 제공: 이 자산군 API 는 **모의투자·운영 모두 제공**. (접근토큰발급만 공통에서 운영 전용)"
   },
   "servers": [
     {
@@ -17,9 +17,7 @@
   ],
   "security": [
     {
-      "BearerAuth": [],
-      "ClientId": [],
-      "ClientSecret": []
+      "BearerAuth": []
     }
   ],
   "x-environments": {
@@ -94,11 +92,11 @@
                       },
                       "nmn_pr_tp_cd": {
                         "type": "string",
-                        "description": "호가유형코드 / 길이 2 / 01.보통가 05.시장가 06.조건부지정가 09.자기주식 10.S-OPTION자기주식 11.금전신탁자기주식 12.최유리지정가 13.최우선지정가 16.스톱지정가 17.중간가 61.장전시간외 71.장후시간외 81.시간외단일가 91.장전시간외경쟁대량 92.장중경쟁대량"
+                        "description": "호가유형코드 / 길이 2 / 01.보통가 05.시장가 06.조건부지정가 09.자기주식 10.S-OPTION자기주식 11.금전신탁자기주식 12.최유리지정가 13.최우선지정가 16.스톱지정가 17.중간가 61.장전시간외 71.장후시간외 91.장전시간외경쟁대량 92.장중경쟁대량"
                       },
                       "orr_cnd_dit_cd": {
                         "type": "string",
-                        "description": "주문조건구분코드 / 길이 2 / 00.없음 01.IOC 02.FOK"
+                        "description": "주문조건구분코드 / 길이 2 / 00.없음 01.IOC 02.FOK 05.GTP"
                       },
                       "ssl_nmn_pr_dit_cd": {
                         "type": "string",
@@ -198,7 +196,11 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "mock",
+          "live"
+        ]
       }
     },
     "/krstock/order/v1/cashSell": {
@@ -248,7 +250,7 @@
                       },
                       "orr_cnd_dit_cd": {
                         "type": "string",
-                        "description": "주문조건구분코드 / 길이 2 / 00.없음 01.IOC 02.FOK"
+                        "description": "주문조건구분코드 / 길이 2 / 00.없음 01.IOC 02.FOK 05.GTP"
                       },
                       "ssl_nmn_pr_dit_cd": {
                         "type": "string",
@@ -348,7 +350,11 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "mock",
+          "live"
+        ]
       }
     },
     "/krstock/order/v1/creditBuy": {
@@ -398,7 +404,7 @@
                       },
                       "orr_cnd_dit_cd": {
                         "type": "string",
-                        "description": "주문조건구분코드 / 길이 2 / 00.없음 01.IOC 02.FOK"
+                        "description": "주문조건구분코드 / 길이 2 / 00.없음 01.IOC 02.FOK 05.GTP"
                       },
                       "cfd_lon_cd": {
                         "type": "string",
@@ -502,7 +508,11 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "mock",
+          "live"
+        ]
       }
     },
     "/krstock/order/v1/creditSell": {
@@ -552,7 +562,7 @@
                       },
                       "orr_cnd_dit_cd": {
                         "type": "string",
-                        "description": "주문조건구분코드 / 길이 2 / 00.없음 01.IOC 02.FOK"
+                        "description": "주문조건구분코드 / 길이 2 / 00.없음 01.IOC 02.FOK 05.GTP"
                       },
                       "cfd_lon_cd": {
                         "type": "string",
@@ -656,7 +666,11 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "mock",
+          "live"
+        ]
       }
     },
     "/krstock/order/v1/modify": {
@@ -772,22 +786,22 @@
                         "can_orr_qty1": {
                           "type": "integer",
                           "format": "int64",
-                          "description": "취소주문수량1 / 길이 18 / KRX 주문수량"
+                          "description": "취소주문수량1 / 길이 18 / KRX 주문수량 → 우회주문에 대한 정정시, KRX or NXT 주문수량"
                         },
                         "can_orr_qty2": {
                           "type": "integer",
                           "format": "int64",
-                          "description": "취소주문수량2 / 길이 18 / NXT 주문수량"
+                          "description": "취소주문수량2 / 길이 18 / NXT 주문수량 → 우회주문에 대한 정정시, NXT or KRX 주문수량"
                         },
                         "can_cld_mkt_orr_no1": {
                           "type": "integer",
                           "format": "int64",
-                          "description": "취소자시장주문번호1 / 길이 10 / KRX 시장주문번호"
+                          "description": "취소자시장주문번호1 / 길이 10 / KRX 시장주문번호 → 우회주문에 대한 정정시, KRX or NXT 시장주문번호"
                         },
                         "can_cld_mkt_orr_no2": {
                           "type": "integer",
                           "format": "int64",
-                          "description": "취소자시장주문번호2 / 길이 10 / NXT 시장주문번호"
+                          "description": "취소자시장주문번호2 / 길이 10 / NXT 시장주문번호 → 우회주문에 대한 정정시, KRX or NXT 시장주문번호"
                         }
                       }
                     },
@@ -799,7 +813,11 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "mock",
+          "live"
+        ]
       }
     },
     "/krstock/order/v1/cancel": {
@@ -892,22 +910,22 @@
                         "can_orr_qty1": {
                           "type": "integer",
                           "format": "int64",
-                          "description": "취소주문수량1 / 길이 18 / KRX 주문수량"
+                          "description": "취소주문수량1 / 길이 18 / KRX 주문수량 → 우회주문에 대한 정정시, KRX or NXT 주문수량"
                         },
                         "can_orr_qty2": {
                           "type": "integer",
                           "format": "int64",
-                          "description": "취소주문수량2 / 길이 18 / NXT 주문수량"
+                          "description": "취소주문수량2 / 길이 18 / NXT 주문수량 → 우회주문에 대한 정정시, NXT or KRX 주문수량"
                         },
                         "can_cld_mkt_orr_no1": {
                           "type": "integer",
                           "format": "int64",
-                          "description": "취소자시장주문번호1 / 길이 10 / KRX 시장주문번호"
+                          "description": "취소자시장주문번호1 / 길이 10 / KRX 시장주문번호 → 우회주문에 대한 정정시, KRX or NXT 시장주문번호"
                         },
                         "can_cld_mkt_orr_no2": {
                           "type": "integer",
                           "format": "int64",
-                          "description": "취소자시장주문번호2 / 길이 10 / NXT 시장주문번호"
+                          "description": "취소자시장주문번호2 / 길이 10 / NXT 시장주문번호 → 우회주문에 대한 정정시, KRX or NXT 시장주문번호"
                         }
                       }
                     },
@@ -919,7 +937,11 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "mock",
+          "live"
+        ]
       }
     },
     "/krstock/order/v1/reservedOrder": {
@@ -1022,7 +1044,6 @@
                       "nmn_pr_tp_cd",
                       "cfd_lon_cd",
                       "orr_qty",
-                      "orr_uit_pr",
                       "bkg_orr_tp_cd",
                       "bkg_orr_enf_tp_cd",
                       "rmt_mkt_cd"
@@ -1131,7 +1152,11 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "mock",
+          "live"
+        ]
       }
     },
     "/krstock/order/v1/reservedCancel": {
@@ -1242,7 +1267,11 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "mock",
+          "live"
+        ]
       }
     },
     "/krstock/inquiry/v1/dailyOrderExecution": {
@@ -1252,7 +1281,7 @@
         ],
         "operationId": "krstockInquiryDailyOrderExecution",
         "summary": "주식일별주문체결조회",
-        "description": "국내주식 체결내역 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.\n\n⚠️ **명세 검증 필요**: `Output_0` 는 명세상 **Object** 로 선언되어 있으나 예시 응답은 **Array** 입니다. 실제 응답 타입을 확인 후 사용하세요.",
+        "description": "국내주식 체결내역 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1282,13 +1311,14 @@
                       },
                       "ost_cns_dit": {
                         "type": "string",
-                        "description": "체결구분 / 길이 1 / 0.전체 1.미체결 2.체결"
+                        "description": "미체결구분 / 길이 1 / 0.전체 1.체결 2.미체결"
                       }
                     },
                     "required": [
                       "orr_dt",
                       "act_no",
-                      "ost_cns_dit"
+                      "ost_cns_dit",
+                      "orr_mkt_cd"
                     ]
                   }
                 }
@@ -1305,11 +1335,14 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
-                      "type": "object",
-                      "properties": {
-                        "cus_fnm": {
-                          "type": "string",
-                          "description": "고객성명 / 길이 40"
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "cus_fnm": {
+                            "type": "string",
+                            "description": "고객성명 / 길이 40"
+                          }
                         }
                       }
                     },
@@ -1473,12 +1506,9 @@
             "$ref": "#/components/parameters/CtsHeader"
           }
         ],
-        "x-schema-warning": [
-          {
-            "block": "Output_0",
-            "declared": "Object",
-            "sample": "Array"
-          }
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -1519,6 +1549,10 @@
                       "qut_dit_cd": {
                         "type": "string",
                         "description": "시세구분코드 / 길이 3 / UNT/KRX/NXT 중 하나를 반드시 입력 (UNT=통합시세, KRX=KRX시세, NXT=NXT시세)"
+                      },
+                      "aly_qut_cd": {
+                        "type": "string",
+                        "description": "적용시세코드 / 길이 1 / 1.정규장\n2.전체장(정규장,정규장외)"
                       }
                     },
                     "required": [
@@ -1526,7 +1560,8 @@
                       "bnc_bse_cd",
                       "ltg_aot_dit_cd",
                       "aet_bse",
-                      "qut_dit_cd"
+                      "qut_dit_cd",
+                      "aly_qut_cd"
                     ]
                   }
                 }
@@ -1839,6 +1874,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -2123,6 +2162,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -2265,6 +2308,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -2512,6 +2559,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -2548,13 +2599,18 @@
                       "qut_dit_cd": {
                         "type": "string",
                         "description": "시세구분코드 / 길이 3 / UNT/KRX/NXT 중 하나를 반드시 입력 (UNT=통합시세, KRX=KRX시세, NXT=NXT시세)"
+                      },
+                      "aly_qut_cd": {
+                        "type": "string",
+                        "description": "적용시세코드 / 길이 1 / 1.정규장\n2.전체장(정규장,정규장외)"
                       }
                     },
                     "required": [
                       "act_no",
                       "iqr_dit_cd1",
                       "fee_dit_cd",
-                      "qut_dit_cd"
+                      "qut_dit_cd",
+                      "aly_qut_cd"
                     ]
                   }
                 }
@@ -2944,6 +3000,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -2980,13 +3040,18 @@
                       "qut_dit_cd": {
                         "type": "string",
                         "description": "시세구분코드 / 길이 3 / UNT/KRX/NXT 중 하나를 반드시 입력 (UNT=통합시세, KRX=KRX시세, NXT=NXT시세)"
+                      },
+                      "aly_qut_cd": {
+                        "type": "string",
+                        "description": "적용시세코드 / 길이 1 / 1.정규장\n2.전체장(정규장,정규장외)"
                       }
                     },
                     "required": [
                       "act_no",
                       "eal_aly_cd",
                       "aet_bse",
-                      "qut_dit_cd"
+                      "qut_dit_cd",
+                      "aly_qut_cd"
                     ]
                   }
                 }
@@ -3329,6 +3394,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -3492,6 +3561,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -3733,6 +3806,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -3900,6 +3977,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -4079,6 +4160,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -4190,6 +4275,10 @@
           {
             "$ref": "#/components/parameters/CtsHeader"
           }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
         ]
       }
     },
@@ -4200,7 +4289,7 @@
         ],
         "operationId": "krstockQuoteCurrentPrice",
         "summary": "주식현재가 시세",
-        "description": "국내주식 현재가 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.\n\n⚠️ **명세 검증 필요**: `Output_2` 는 명세상 **Array** 로 선언되어 있으나 예시 응답은 **Object** 입니다. 실제 응답 타입을 확인 후 사용하세요.",
+        "description": "국내주식 현재가 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -5084,6 +5173,44 @@
                         "marg_grad_cls_code": {
                           "type": "string",
                           "description": "증거금등급구분코드 / 길이 1"
+                        },
+                        "main_cls_prpr": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "정규장마감종가 / 길이 10 / KRX PRE/AFTER"
+                        },
+                        "main_cls_vrss_sign": {
+                          "type": "string",
+                          "description": "정규장마감등락부호 / 길이 1 / KRX PRE/AFTER"
+                        },
+                        "main_cls_vrss": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "정규장마감등락폭 / 길이 10 / KRX PRE/AFTER"
+                        },
+                        "main_cls_ctrt": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "정규장마감등락률 / 길이 5.2 / KRX PRE/AFTER"
+                        },
+                        "market_status": {
+                          "type": "string",
+                          "description": "장상태구분코드 / 길이 1 / KRX PRE/AFTER"
+                        },
+                        "nxt_vi_antc_sdpr": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "NXT_VI기준가 / 길이 10 / UNT 조회 시"
+                        },
+                        "nxt_vi_antc_mxpr": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "NXT_VI상승발동가 / 길이 10 / UNT 조회 시"
+                        },
+                        "nxt_vi_antc_llam": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "NXT_VI하락발동가 / 길이 10 / UNT 조회 시"
                         }
                       }
                     },
@@ -5133,78 +5260,75 @@
                       }
                     },
                     "Output_2": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "cncc_aspr_code": {
-                            "type": "string",
-                            "description": "동시호가구분 / 길이 1 / 1.동시호가\n이외 정규시장"
-                          },
-                          "antc_cnpr": {
-                            "type": "string",
-                            "description": "예상체결가 / 길이 10"
-                          },
-                          "antc_cntg_sign": {
-                            "type": "string",
-                            "description": "예상체결부호 / 길이 1 / 1or6.상한가\n2or7.상승\n3or0.보합\n4or8.하한\n5or9.하락\n그외.보함+리버스(기세)"
-                          },
-                          "antc_cntg_vrss": {
-                            "type": "string",
-                            "description": "예상체결등락폭 / 길이 10"
-                          },
-                          "antc_prdy_ctrt": {
-                            "type": "string",
-                            "description": "예상체결등락률 / 길이 5.2"
-                          },
-                          "antc_vol": {
-                            "type": "string",
-                            "description": "예상체결수량 / 길이 12"
-                          },
-                          "chkdata": {
-                            "type": "string",
-                            "description": "ECN정보유무구분 / 길이 1"
-                          },
-                          "ovtm_untp_prpr": {
-                            "type": "string",
-                            "description": "ECN전일종가 / 길이 10"
-                          },
-                          "ovtm_untp_sign": {
-                            "type": "string",
-                            "description": "ECN부호 / 길이 1"
-                          },
-                          "ovtm_untp_vrss": {
-                            "type": "string",
-                            "description": "ECN등락폭 / 길이 10"
-                          },
-                          "ovtm_untp_ctrt": {
-                            "type": "string",
-                            "description": "ECN등락률 / 길이 5.2"
-                          },
-                          "ovtm_untp_vol": {
-                            "type": "string",
-                            "description": "ECN체결수량 / 길이 12"
-                          },
-                          "ovtm_antc_sign": {
-                            "type": "string",
-                            "description": "ECN대비예상체결부호 / 길이 1 / 1or6.상한가\n2or7.상승\n3or0.보합\n4or8.하한\n5or9.하락\n그외.보함+리버스(기세)"
-                          },
-                          "ovtm_antc_vrss": {
-                            "type": "string",
-                            "description": "ECN대비예상체결등락폭 / 길이 10"
-                          },
-                          "ovtm_antc_ctrt": {
-                            "type": "string",
-                            "description": "ECN대비예상체결등락률 / 길이 5.2"
-                          },
-                          "scoring": {
-                            "type": "string",
-                            "description": "종합스코어링 / 길이 6.2"
-                          },
-                          "vi_type_code": {
-                            "type": "string",
-                            "description": "VI거래중지여부 / 길이 1 / 1.VI발동\nN.그외"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "cncc_aspr_code": {
+                          "type": "string",
+                          "description": "동시호가구분 / 길이 1 / 1.동시호가\n이외 정규시장"
+                        },
+                        "antc_cnpr": {
+                          "type": "string",
+                          "description": "예상체결가 / 길이 10"
+                        },
+                        "antc_cntg_sign": {
+                          "type": "string",
+                          "description": "예상체결부호 / 길이 1 / 1or6.상한가\n2or7.상승\n3or0.보합\n4or8.하한\n5or9.하락\n그외.보합+리버스(기세)"
+                        },
+                        "antc_cntg_vrss": {
+                          "type": "string",
+                          "description": "예상체결등락폭 / 길이 10"
+                        },
+                        "antc_prdy_ctrt": {
+                          "type": "string",
+                          "description": "예상체결등락률 / 길이 5.2"
+                        },
+                        "antc_vol": {
+                          "type": "string",
+                          "description": "예상체결수량 / 길이 12"
+                        },
+                        "chkdata": {
+                          "type": "string",
+                          "description": "ECN정보유무구분 / 길이 1"
+                        },
+                        "ovtm_untp_prpr": {
+                          "type": "string",
+                          "description": "ECN전일종가 / 길이 10"
+                        },
+                        "ovtm_untp_sign": {
+                          "type": "string",
+                          "description": "ECN부호 / 길이 1"
+                        },
+                        "ovtm_untp_vrss": {
+                          "type": "string",
+                          "description": "ECN등락폭 / 길이 10"
+                        },
+                        "ovtm_untp_ctrt": {
+                          "type": "string",
+                          "description": "ECN등락률 / 길이 5.2"
+                        },
+                        "ovtm_untp_vol": {
+                          "type": "string",
+                          "description": "ECN체결수량 / 길이 12"
+                        },
+                        "ovtm_antc_sign": {
+                          "type": "string",
+                          "description": "ECN대비예상체결부호 / 길이 1 / 1or6.상한가\n2or7.상승\n3or0.보합\n4or8.하한\n5or9.하락\n그외.보합+리버스(기세)"
+                        },
+                        "ovtm_antc_vrss": {
+                          "type": "string",
+                          "description": "ECN대비예상체결등락폭 / 길이 10"
+                        },
+                        "ovtm_antc_ctrt": {
+                          "type": "string",
+                          "description": "ECN대비예상체결등락률 / 길이 5.2"
+                        },
+                        "scoring": {
+                          "type": "string",
+                          "description": "종합스코어링 / 길이 6.2"
+                        },
+                        "vi_type_code": {
+                          "type": "string",
+                          "description": "VI거래중지여부 / 길이 1 / UNT 조회 시에만 (정규, 애프더)\n1or2.VI발동\n그외 정보없음\n*KRX/NXT 조회 시 정보없음\n(코드값: 0.정상 1.VI발동(KRX) 2.VI발동(NXT))"
                         }
                       }
                     },
@@ -5217,11 +5341,13 @@
             }
           }
         },
-        "x-schema-warning": [
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
           {
-            "block": "Output_2",
-            "declared": "Array",
-            "sample": "Object"
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
           }
         ]
       }
@@ -5232,7 +5358,7 @@
           "시세 (Market Data)"
         ],
         "operationId": "krstockQuoteCurrentExecution",
-        "summary": "주식현재가 체결",
+        "summary": "주식현재가 당일시간대별체결",
         "description": "국내주식 변동거래량 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
@@ -5255,11 +5381,16 @@
                       "array_cnt": {
                         "type": "string",
                         "description": "읽을갯수 / 길이 4"
+                      },
+                      "view_main_yn": {
+                        "type": "string",
+                        "description": "정규장시세보기여부 / 길이 1 / Y.정규장\nN.전체장(정규장,정규장외)"
                       }
                     },
                     "required": [
                       "market_cd",
-                      "iem_cd"
+                      "iem_cd",
+                      "view_main_yn"
                     ]
                   }
                 }
@@ -5476,7 +5607,16 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
+          {
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
+          }
+        ]
       }
     },
     "/krstock/quote/v1/currentDaily": {
@@ -5508,11 +5648,16 @@
                       "array_cnt": {
                         "type": "string",
                         "description": "읽을갯수 / 길이 3"
+                      },
+                      "view_main_yn": {
+                        "type": "string",
+                        "description": "정규장시세보기여부 / 길이 1 / Y.정규장\nN.전체장(정규장,정규장외)"
                       }
                     },
                     "required": [
                       "market_cd",
-                      "iem_cd"
+                      "iem_cd",
+                      "view_main_yn"
                     ]
                   }
                 }
@@ -5612,7 +5757,16 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
+          {
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
+          }
+        ]
       }
     },
     "/krstock/quote/v1/currentInvestor": {
@@ -5756,7 +5910,16 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
+          {
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
+          }
+        ]
       }
     },
     "/krstock/quote/v1/period": {
@@ -5766,7 +5929,7 @@
         ],
         "operationId": "krstockQuotePeriod",
         "summary": "국내주식기간별시세(일/주/월/년)",
-        "description": "국내주식 주기별 시세 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.\n\n⚠️ **명세 검증 필요**: `Output_0` 는 명세상 **Array** 로 선언되어 있으나 예시 응답은 **Object** 입니다. 실제 응답 타입을 확인 후 사용하세요.",
+        "description": "국내주식 주기별 시세 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -5836,11 +5999,16 @@
                       "out2_scale_change": {
                         "type": "string",
                         "description": "Out2단위변경 / 길이 1 / Out2기준단위 0.변경안함 1.거래량천단위,거래대금백만단위 2.거래량단주,거래대금만백만단위"
+                      },
+                      "view_main_yn": {
+                        "type": "string",
+                        "description": "정규장시세보기여부 / 길이 1 / Y.정규장\nN.전체장(정규장,정규장외)"
                       }
                     },
                     "required": [
                       "market_cd",
-                      "iem_cd"
+                      "iem_cd",
+                      "view_main_yn"
                     ]
                   }
                 }
@@ -5857,254 +6025,251 @@
                   "type": "object",
                   "properties": {
                     "Output_0": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "qry_date": {
-                            "type": "string",
-                            "description": "조회날짜 / 길이 8 / YYYYMMDD"
-                          },
-                          "qry_time": {
-                            "type": "string",
-                            "description": "조회시간 / 길이 6 / HHmmSS"
-                          },
-                          "iem_cd": {
-                            "type": "string",
-                            "description": "단축종목코드 / 길이 9"
-                          },
-                          "iem_nm": {
-                            "type": "string",
-                            "description": "한글종목명 / 길이 41"
-                          },
-                          "stck_prpr": {
-                            "type": "string",
-                            "description": "현재가 / 길이 10"
-                          },
-                          "prdy_vrss_sign": {
-                            "type": "string",
-                            "description": "전일대비부호 / 길이 1 / 1or6.상한가 2or7.상승 3or0.보합 4or8.하한 5or9.하락 그외.보합+리버스(기세)"
-                          },
-                          "prdy_vrss": {
-                            "type": "string",
-                            "description": "전일대비 / 길이 10"
-                          },
-                          "prdy_ctrt": {
-                            "type": "string",
-                            "description": "전일대비율 / 길이 5 / float 5.2"
-                          },
-                          "acml_vol": {
-                            "type": "string",
-                            "description": "누적거래량 / 길이 12"
-                          },
-                          "acml_tr_pbmn": {
-                            "type": "string",
-                            "description": "누적거래대금 / 길이 18"
-                          },
-                          "prdy_vol": {
-                            "type": "string",
-                            "description": "전일거래량 / 길이 12"
-                          },
-                          "prdy_vol_rate": {
-                            "type": "string",
-                            "description": "거래량전일비 / 길이 15 / float 15.2"
-                          },
-                          "vol_rate": {
-                            "type": "string",
-                            "description": "거래량회전율 / 길이 10 / float 10.5"
-                          },
-                          "cttr": {
-                            "type": "string",
-                            "description": "체결강도 / 길이 6 / float 6.2"
-                          },
-                          "prdy_cttr": {
-                            "type": "string",
-                            "description": "전일체결강도 / 길이 6 / float 6.2"
-                          },
-                          "askp": {
-                            "type": "string",
-                            "description": "매도호가 / 길이 10"
-                          },
-                          "bidp": {
-                            "type": "string",
-                            "description": "매수호가 / 길이 10"
-                          },
-                          "askp_rsqn1": {
-                            "type": "string",
-                            "description": "매도1호가잔량 / 길이 12"
-                          },
-                          "bidp_rsqn1": {
-                            "type": "string",
-                            "description": "매수1호가잔량 / 길이 12"
-                          },
-                          "stck_mxpr": {
-                            "type": "string",
-                            "description": "상한가 / 길이 10"
-                          },
-                          "stck_llam": {
-                            "type": "string",
-                            "description": "하한가 / 길이 10"
-                          },
-                          "stck_oprc": {
-                            "type": "string",
-                            "description": "시가 / 길이 10"
-                          },
-                          "stck_hgpr": {
-                            "type": "string",
-                            "description": "고가 / 길이 10"
-                          },
-                          "stck_lwpr": {
-                            "type": "string",
-                            "description": "저가 / 길이 10"
-                          },
-                          "lstn_stcn": {
-                            "type": "string",
-                            "description": "상장주수 / 길이 12"
-                          },
-                          "hts_avls": {
-                            "type": "string",
-                            "description": "시가총액 / 길이 10 / 억단위"
-                          },
-                          "dae_rate": {
-                            "type": "string",
-                            "description": "대주주지분율 / 길이 5 / float 5.2"
-                          },
-                          "per": {
-                            "type": "string",
-                            "description": "PER / 길이 5 / float 5.2"
-                          },
-                          "pbr": {
-                            "type": "string",
-                            "description": "PBR / 길이 5 / float 5.2"
-                          },
-                          "eps": {
-                            "type": "string",
-                            "description": "EPS / 길이 9"
-                          },
-                          "bps": {
-                            "type": "string",
-                            "description": "BPS / 길이 10"
-                          },
-                          "prdy_oprc": {
-                            "type": "string",
-                            "description": "전일시가 / 길이 10"
-                          },
-                          "prdy_high": {
-                            "type": "string",
-                            "description": "전일고가 / 길이 10"
-                          },
-                          "prdy_low": {
-                            "type": "string",
-                            "description": "전일저가 / 길이 10"
-                          },
-                          "prdy_clpr": {
-                            "type": "string",
-                            "description": "전일종가 / 길이 10"
-                          },
-                          "tdw_oprc": {
-                            "type": "string",
-                            "description": "이번주시가 / 길이 10"
-                          },
-                          "tdw_high": {
-                            "type": "string",
-                            "description": "이번주고가 / 길이 10"
-                          },
-                          "tdw_low": {
-                            "type": "string",
-                            "description": "이번주저가 / 길이 10"
-                          },
-                          "tdm_oprc": {
-                            "type": "string",
-                            "description": "이번달시가 / 길이 10"
-                          },
-                          "tdm_high": {
-                            "type": "string",
-                            "description": "이번달고가 / 길이 10"
-                          },
-                          "tdm_low": {
-                            "type": "string",
-                            "description": "이번달저가 / 길이 10"
-                          },
-                          "vi_sttc_mxpr": {
-                            "type": "string",
-                            "description": "VI정적발동상승 / 길이 10"
-                          },
-                          "vi_sttc_llam": {
-                            "type": "string",
-                            "description": "VI정적발동하락 / 길이 10"
-                          },
-                          "start_time": {
-                            "type": "string",
-                            "description": "장시작시간 / 길이 6 / HHmmSS"
-                          },
-                          "end_time": {
-                            "type": "string",
-                            "description": "장마감시간 / 길이 6 / HHmmSS"
-                          },
-                          "bsop_date": {
-                            "type": "string",
-                            "description": "영업일 / 길이 8"
-                          },
-                          "stck_sdpr": {
-                            "type": "string",
-                            "description": "주식기준가 / 길이 10"
-                          },
-                          "stck_fcam": {
-                            "type": "string",
-                            "description": "주식액면가 / 길이 10"
-                          },
-                          "bstp_kor_isnm": {
-                            "type": "string",
-                            "description": "업종한글명 / 길이 40"
-                          },
-                          "bstp_cls_code": {
-                            "type": "string",
-                            "description": "업종코드 / 길이 6"
-                          },
-                          "exchange_prpr": {
-                            "type": "string",
-                            "description": "달러환율 / 길이 8"
-                          },
-                          "ctsz30": {
-                            "type": "string",
-                            "description": "연속조회키 / 길이 30"
-                          },
-                          "lasttickcount": {
-                            "type": "string",
-                            "description": "마지막N틱봉의틱묶음갯수 / 길이 5 / 최근봉마지막틱갯수"
-                          },
-                          "send_cnt": {
-                            "type": "string",
-                            "description": "전송레코드건수 / 길이 5"
-                          },
-                          "pre_tr_sta_hour": {
-                            "type": "string",
-                            "description": "프리마켓시작시간 / 길이 6 / NXT/UNT프리마켓시작시간"
-                          },
-                          "pre_tr_fin_hour": {
-                            "type": "string",
-                            "description": "프리마켓종료시간 / 길이 6 / NXT/UNT프리마켓종료시간"
-                          },
-                          "main_tr_sta_hour": {
-                            "type": "string",
-                            "description": "메인마겟시작시간 / 길이 6 / NXT/UNT메인마켓시작시간"
-                          },
-                          "main_tr_fin_hour": {
-                            "type": "string",
-                            "description": "메인마겟종료시간 / 길이 6 / NXT/UNT메인마켓종료시간"
-                          },
-                          "aft_tr_sta_hour": {
-                            "type": "string",
-                            "description": "에프터마겟시작시간 / 길이 6 / NXT/UNT에프터마켓시작시간"
-                          },
-                          "aft_tr_fin_hour": {
-                            "type": "string",
-                            "description": "에프터마겟종료시간 / 길이 6 / NXT/UNT에프터마켓종료시간"
-                          },
-                          "cncc_aspr_sta_hour": {
-                            "type": "string",
-                            "description": "정규장마감전동시호가 / 길이 6 / KRX/UNT종료전동시호가시작시간"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "qry_date": {
+                          "type": "string",
+                          "description": "조회날짜 / 길이 8 / YYYYMMDD"
+                        },
+                        "qry_time": {
+                          "type": "string",
+                          "description": "조회시간 / 길이 6 / HHmmSS"
+                        },
+                        "iem_cd": {
+                          "type": "string",
+                          "description": "단축종목코드 / 길이 9"
+                        },
+                        "iem_nm": {
+                          "type": "string",
+                          "description": "한글종목명 / 길이 41"
+                        },
+                        "stck_prpr": {
+                          "type": "string",
+                          "description": "현재가 / 길이 10"
+                        },
+                        "prdy_vrss_sign": {
+                          "type": "string",
+                          "description": "전일대비부호 / 길이 1 / 1or6.상한가 2or7.상승 3or0.보합 4or8.하한 5or9.하락 그외.보합+리버스(기세)"
+                        },
+                        "prdy_vrss": {
+                          "type": "string",
+                          "description": "전일대비 / 길이 10"
+                        },
+                        "prdy_ctrt": {
+                          "type": "string",
+                          "description": "전일대비율 / 길이 5 / float 5.2"
+                        },
+                        "acml_vol": {
+                          "type": "string",
+                          "description": "누적거래량 / 길이 12"
+                        },
+                        "acml_tr_pbmn": {
+                          "type": "string",
+                          "description": "누적거래대금 / 길이 18"
+                        },
+                        "prdy_vol": {
+                          "type": "string",
+                          "description": "전일거래량 / 길이 12"
+                        },
+                        "prdy_vol_rate": {
+                          "type": "string",
+                          "description": "거래량전일비 / 길이 15 / float 15.2"
+                        },
+                        "vol_rate": {
+                          "type": "string",
+                          "description": "거래량회전율 / 길이 10 / float 10.5"
+                        },
+                        "cttr": {
+                          "type": "string",
+                          "description": "체결강도 / 길이 6 / float 6.2"
+                        },
+                        "prdy_cttr": {
+                          "type": "string",
+                          "description": "전일체결강도 / 길이 6 / float 6.2"
+                        },
+                        "askp": {
+                          "type": "string",
+                          "description": "매도호가 / 길이 10"
+                        },
+                        "bidp": {
+                          "type": "string",
+                          "description": "매수호가 / 길이 10"
+                        },
+                        "askp_rsqn1": {
+                          "type": "string",
+                          "description": "매도1호가잔량 / 길이 12"
+                        },
+                        "bidp_rsqn1": {
+                          "type": "string",
+                          "description": "매수1호가잔량 / 길이 12"
+                        },
+                        "stck_mxpr": {
+                          "type": "string",
+                          "description": "상한가 / 길이 10"
+                        },
+                        "stck_llam": {
+                          "type": "string",
+                          "description": "하한가 / 길이 10"
+                        },
+                        "stck_oprc": {
+                          "type": "string",
+                          "description": "시가 / 길이 10"
+                        },
+                        "stck_hgpr": {
+                          "type": "string",
+                          "description": "고가 / 길이 10"
+                        },
+                        "stck_lwpr": {
+                          "type": "string",
+                          "description": "저가 / 길이 10"
+                        },
+                        "lstn_stcn": {
+                          "type": "string",
+                          "description": "상장주수 / 길이 12"
+                        },
+                        "hts_avls": {
+                          "type": "string",
+                          "description": "시가총액 / 길이 10 / 억단위"
+                        },
+                        "dae_rate": {
+                          "type": "string",
+                          "description": "대주주지분율 / 길이 5 / float 5.2"
+                        },
+                        "per": {
+                          "type": "string",
+                          "description": "PER / 길이 5 / float 5.2"
+                        },
+                        "pbr": {
+                          "type": "string",
+                          "description": "PBR / 길이 5 / float 5.2"
+                        },
+                        "eps": {
+                          "type": "string",
+                          "description": "EPS / 길이 9"
+                        },
+                        "bps": {
+                          "type": "string",
+                          "description": "BPS / 길이 10"
+                        },
+                        "prdy_oprc": {
+                          "type": "string",
+                          "description": "전일시가 / 길이 10"
+                        },
+                        "prdy_high": {
+                          "type": "string",
+                          "description": "전일고가 / 길이 10"
+                        },
+                        "prdy_low": {
+                          "type": "string",
+                          "description": "전일저가 / 길이 10"
+                        },
+                        "prdy_clpr": {
+                          "type": "string",
+                          "description": "전일종가 / 길이 10"
+                        },
+                        "tdw_oprc": {
+                          "type": "string",
+                          "description": "이번주시가 / 길이 10"
+                        },
+                        "tdw_high": {
+                          "type": "string",
+                          "description": "이번주고가 / 길이 10"
+                        },
+                        "tdw_low": {
+                          "type": "string",
+                          "description": "이번주저가 / 길이 10"
+                        },
+                        "tdm_oprc": {
+                          "type": "string",
+                          "description": "이번달시가 / 길이 10"
+                        },
+                        "tdm_high": {
+                          "type": "string",
+                          "description": "이번달고가 / 길이 10"
+                        },
+                        "tdm_low": {
+                          "type": "string",
+                          "description": "이번달저가 / 길이 10"
+                        },
+                        "vi_sttc_mxpr": {
+                          "type": "string",
+                          "description": "VI정적발동상승 / 길이 10"
+                        },
+                        "vi_sttc_llam": {
+                          "type": "string",
+                          "description": "VI정적발동하락 / 길이 10"
+                        },
+                        "start_time": {
+                          "type": "string",
+                          "description": "장시작시간 / 길이 6 / HHmmSS"
+                        },
+                        "end_time": {
+                          "type": "string",
+                          "description": "장마감시간 / 길이 6 / HHmmSS"
+                        },
+                        "bsop_date": {
+                          "type": "string",
+                          "description": "영업일 / 길이 8"
+                        },
+                        "stck_sdpr": {
+                          "type": "string",
+                          "description": "주식기준가 / 길이 10"
+                        },
+                        "stck_fcam": {
+                          "type": "string",
+                          "description": "주식액면가 / 길이 10"
+                        },
+                        "bstp_kor_isnm": {
+                          "type": "string",
+                          "description": "업종한글명 / 길이 40"
+                        },
+                        "bstp_cls_code": {
+                          "type": "string",
+                          "description": "업종코드 / 길이 6"
+                        },
+                        "exchange_prpr": {
+                          "type": "string",
+                          "description": "달러환율 / 길이 8"
+                        },
+                        "ctsz30": {
+                          "type": "string",
+                          "description": "연속조회키 / 길이 30"
+                        },
+                        "lasttickcount": {
+                          "type": "string",
+                          "description": "마지막N틱봉의틱묶음갯수 / 길이 5 / 최근봉마지막틱갯수"
+                        },
+                        "send_cnt": {
+                          "type": "string",
+                          "description": "전송레코드건수 / 길이 5"
+                        },
+                        "pre_tr_sta_hour": {
+                          "type": "string",
+                          "description": "프리마켓시작시간 / 길이 6 / NXT/UNT프리마켓시작시간"
+                        },
+                        "pre_tr_fin_hour": {
+                          "type": "string",
+                          "description": "프리마켓종료시간 / 길이 6 / NXT/UNT프리마켓종료시간"
+                        },
+                        "main_tr_sta_hour": {
+                          "type": "string",
+                          "description": "메인마겟시작시간 / 길이 6 / NXT/UNT메인마켓시작시간"
+                        },
+                        "main_tr_fin_hour": {
+                          "type": "string",
+                          "description": "메인마겟종료시간 / 길이 6 / NXT/UNT메인마켓종료시간"
+                        },
+                        "aft_tr_sta_hour": {
+                          "type": "string",
+                          "description": "에프터마겟시작시간 / 길이 6 / NXT/UNT에프터마켓시작시간"
+                        },
+                        "aft_tr_fin_hour": {
+                          "type": "string",
+                          "description": "에프터마겟종료시간 / 길이 6 / NXT/UNT에프터마켓종료시간"
+                        },
+                        "cncc_aspr_sta_hour": {
+                          "type": "string",
+                          "description": "정규장마감전동시호가 / 길이 6 / KRX/UNT종료전동시호가시작시간"
                         }
                       }
                     },
@@ -6185,11 +6350,13 @@
             }
           }
         },
-        "x-schema-warning": [
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
           {
-            "block": "Output_0",
-            "declared": "Array",
-            "sample": "Object"
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
           }
         ]
       }
@@ -6736,7 +6903,16 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
+          {
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
+          }
+        ]
       }
     },
     "/krstock/quote/v1/currentAfterHoursDaily": {
@@ -6863,7 +7039,16 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
+          {
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
+          }
+        ]
       }
     },
     "/krstock/quote/v1/currentAfterHoursExecution": {
@@ -6993,7 +7178,16 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
+          {
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
+          }
+        ]
       }
     },
     "/krstock/quote/v1/afterHoursExpected": {
@@ -7108,7 +7302,16 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
+          {
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
+          }
+        ]
       }
     },
     "/krstock/quote/v1/etfCurrent": {
@@ -8059,12 +8262,13 @@
             }
           }
         },
-        "x-schema-warning": [
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
           {
-            "missing_blocks": [
-              "Output_3",
-              "Output_4"
-            ]
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
           }
         ]
       }
@@ -8176,19 +8380,29 @@
               }
             }
           }
-        }
+        },
+        "x-available-env": [
+          "live"
+        ],
+        "servers": [
+          {
+            "url": "https://api.nhplug.com:8443",
+            "description": "🔴 운영 (Live) — 모의투자 미제공"
+          }
+        ]
       }
     }
   },
   "x-realtime-channels": {
-    "endpoint": "wss://api.nhplug.com:7070",
+    "endpoint": "wss://api.nhplug.com:7070/websocket",
     "endpoints": {
-      "live": "wss://api.nhplug.com:7070",
-      "mock": "wss://moapi.nhplug.com:17070"
+      "live_quote": "wss://api.nhplug.com:7070/websocket",
+      "live_notification": "wss://api.nhplug.com:7070/websocket",
+      "mock": "wss://moapi.nhplug.com:17070/websocket"
     },
     "protocol": {
       "transport": "WebSocket",
-      "connection": "wss 접속(국내 :7070 / 해외 :7080, 모의투자 :17070) 후 구독 메시지 전송. URI 는 /websocket.",
+      "connection": "wss://{host}:{port}/websocket 로 접속 후 구독 메시지 전송. 경로 /websocket 은 필수(호스트:포트만으로는 연결되지 않음).",
       "auth": "메시지 header 의 token 필드에 access token(POST /oauth2/token) 전달. REST 와 달리 Authorization/x-client-id/x-client-secret 헤더는 미사용.",
       "subscribe_message": {
         "header": {
@@ -8219,7 +8433,15 @@
         }
       },
       "heartbeat": "불필요 — 연결 유지 신호(ping/pong) 없음",
-      "encryption": "없음 — 체결/주문 통보 포함 모두 평문 JSON"
+      "encryption": "없음 — 체결/주문 통보 포함 모두 평문 JSON",
+      "ports": {
+        "국내 시세": "7070",
+        "해외 시세": "7080",
+        "체결·주문내역 통보(국내·해외 전부)": "7070",
+        "모의투자(국내·해외 공용)": "17070",
+        "note": "포트는 국내/해외가 아니라 시세/통보로 갈립니다. 통보 채널(d0 d1 d2 d3 de dj dk dv dn)은 국내·해외 모두 7070 입니다. 통보를 7080 으로 보내면 rsp_cd=WSS10006 \"허용되지 않는 tr_cd 입니다.\" 가 반환됩니다."
+      },
+      "tls": "실거래 WebSocket(:7070·:7080)은 서버가 중간 CA 를 보내지 않아 Python OpenSSL 기본 검증이 실패합니다(curl·Windows schannel 은 자동 보완되어 성공). 해결: pip install truststore 후 truststore.SSLContext 사용(OS 신뢰 저장소 활용)."
     },
     "note": "실시간 시세·통보는 WebSocket. 구독=protocol.subscribe_message, 서버 푸시=JSON {header,body}. 채널별 실제 예시는 channels[].subscribe_example / push_example.",
     "channels": [
@@ -8385,7 +8607,12 @@
           "bidvolall",
           "offvolall",
           "kospigb",
-          "value_won"
+          "value_won",
+          "marketgb",
+          "main_close",
+          "market_sign",
+          "market_change",
+          "market_chrate"
         ],
         "subscribe_example": {
           "header": {
@@ -8456,7 +8683,8 @@
           "mid_prc",
           "mid_offerrem",
           "mid_bidrem",
-          "kospigb"
+          "kospigb",
+          "vi_exch_code"
         ],
         "subscribe_example": {
           "header": {
@@ -9177,7 +9405,12 @@
           "bidvolall",
           "offvolall",
           "kospigb",
-          "value_won"
+          "value_won",
+          "marketgb",
+          "main_close",
+          "market_sign",
+          "market_change",
+          "market_chrate"
         ],
         "subscribe_example": {
           "header": {
@@ -9251,7 +9484,8 @@
           "nxt_mid_prc",
           "nxt_mid_offerrem",
           "nxt_mid_bidrem",
-          "kospigb"
+          "kospigb",
+          "vi_exch_code"
         ],
         "subscribe_example": {
           "header": {
@@ -9718,7 +9952,12 @@
           "bidvolall",
           "offvolall",
           "kospigb",
-          "value_won"
+          "value_won",
+          "marketgb",
+          "main_close",
+          "market_sign",
+          "market_change",
+          "market_chrate"
         ],
         "subscribe_example": {
           "header": {
@@ -9789,7 +10028,8 @@
           "mid_prc",
           "mid_offerrem",
           "mid_bidrem",
-          "kospigb"
+          "kospigb",
+          "vi_exch_code"
         ],
         "subscribe_example": {
           "header": {
@@ -10162,7 +10402,8 @@
             "stop_efforn_gb": ""
           }
         },
-        "description": "국내주식 주문 체결 시 실시간으로 수신됩니다."
+        "description": "국내주식 주문 체결 시 실시간으로 수신됩니다. 통보 채널 — 국내·해외 모두 포트 7070 사용(7080 사용 시 WSS10006).",
+        "endpoint": "wss://api.nhplug.com:7070/websocket"
       },
       {
         "name": "국내주식 실시간주문내역통보",
@@ -10240,7 +10481,8 @@
             "mkt_order_qty": "0000000010"
           }
         },
-        "description": "국내주식 주문 접수 시 실시간으로 수신됩니다."
+        "description": "국내주식 주문 접수 시 실시간으로 수신됩니다. 통보 채널 — 국내·해외 모두 포트 7070 사용(7080 사용 시 WSS10006).",
+        "endpoint": "wss://api.nhplug.com:7070/websocket"
       },
       {
         "name": "채권지수 실시간 체결가",
@@ -10345,24 +10587,15 @@
         },
         "description": "채권지수 실시간 체결가 서비스 입니다."
       }
-    ]
+    ],
+    "path": "/websocket"
   },
   "components": {
     "securitySchemes": {
       "BearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "POST /oauth2/token 으로 발급받은 access token"
-      },
-      "ClientId": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "x-client-id"
-      },
-      "ClientSecret": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "x-client-secret"
+        "description": "Authorization: Bearer {access_token} — REST 호출에 필요한 유일한 인증 헤더 (x-client-id·x-client-secret 불필요)"
       }
     },
     "parameters": {
@@ -10428,5 +10661,13 @@
     "struct_definition_files": [
       "m_new_stock.h"
     ]
+  },
+  "x-response-status": {
+    "note": "업무 성공 판정: HTTP 200 이어도 업무 오류일 수 있습니다. rsp_cd(응답코드)·rsp_msg(응답메시지)를 함께 확인하세요. rsp_cd 를 단일 코드(예: 00000)와 비교해 판정하지 마세요 — 정상 응답코드는 한 가지가 아니며 API 마다 다릅니다. ① 기대한 응답 블록(Output_N)에 값이 있는지 확인 → ② rsp_msg 문구가 완료를 뜻하는지 확인 → ③ rsp_cd 는 로그·문의용으로 보관. 조회 결과 0건과 오류는 다르므로 rsp_msg 로 구분하세요."
+  },
+  "x-rate-limits": {
+    "rest": "초당 5회 수준. 초과 시 오류 응답이 반환됩니다.",
+    "on_exceed": "즉시 재시도하지 말고 호출 간격을 늘리세요(예: 0.2초 이상). 유량 초과는 토큰 문제가 아니므로 토큰을 재발급하지 마세요(재발급은 401 일 때만).",
+    "websocket": "동시 2개 채널까지 허용, 채널당 최대 30건 구독."
   }
 }
