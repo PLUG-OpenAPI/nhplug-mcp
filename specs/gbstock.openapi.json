@@ -123,10 +123,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "amn_tab_cd": {
-                          "type": "string",
-                          "description": "관리팀점코드 / 길이 4"
-                        },
                         "orr_no": {
                           "type": "integer",
                           "format": "int64",
@@ -218,10 +214,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "amn_tab_cd": {
-                          "type": "string",
-                          "description": "관리팀점코드 / 길이 4"
-                        },
                         "orr_no": {
                           "type": "integer",
                           "format": "int64",
@@ -314,10 +306,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "amn_tab_cd": {
-                          "type": "string",
-                          "description": "관리팀점코드 / 길이 4"
-                        },
                         "orr_no": {
                           "type": "integer",
                           "format": "int64",
@@ -409,10 +397,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "amn_tab_cd": {
-                          "type": "string",
-                          "description": "관리팀점코드 / 길이 4"
-                        },
                         "orr_no": {
                           "type": "integer",
                           "format": "int64",
@@ -945,18 +929,6 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "rgs_tm": {
-                            "type": "string",
-                            "description": "등록시각 / 길이 8"
-                          },
-                          "oss_orr_knd_cd": {
-                            "type": "string",
-                            "description": "해외증권주문종류코드 / 길이 1"
-                          },
-                          "orr_knd_nm": {
-                            "type": "string",
-                            "description": "주문종류명 / 길이 10"
-                          },
                           "orr_no": {
                             "type": "integer",
                             "format": "int64",
@@ -1054,37 +1026,9 @@
                             "type": "string",
                             "description": "투자국가거래소구분코드 / 길이 4"
                           },
-                          "fix_sgy_tgt_sgy_nm": {
-                            "type": "string",
-                            "description": "FIX전략타겟전략명 / 길이 10"
-                          },
-                          "fix_orr_pcs_mtd_cd": {
-                            "type": "string",
-                            "description": "FIX주문처리방법코드 / 길이 1"
-                          },
                           "orr_pcs_mtd_cd_nm": {
                             "type": "string",
                             "description": "주문처리방법코드명 / 길이 40"
-                          },
-                          "rut_orr_krx_cd": {
-                            "type": "string",
-                            "description": "로이터주문거래소코드 / 길이 3"
-                          },
-                          "hts_usr_id": {
-                            "type": "string",
-                            "description": "HTS사용자ID / 길이 8"
-                          },
-                          "usr_ip_adr": {
-                            "type": "string",
-                            "description": "사용자IP주소 / 길이 32"
-                          },
-                          "cuc_mdi_cd": {
-                            "type": "string",
-                            "description": "통신매체코드 / 길이 2"
-                          },
-                          "cuc_mdi_cd_nm": {
-                            "type": "string",
-                            "description": "통신매체코드명 / 길이 50"
                           },
                           "ahi_nmn_pr_tp_cd": {
                             "type": "string",
@@ -1307,10 +1251,6 @@
                           "iem_cd": {
                             "type": "string",
                             "description": "종목코드 / 길이 12"
-                          },
-                          "oss_iem_eng_nm": {
-                            "type": "string",
-                            "description": "해외증권종목영문명 / 길이 60"
                           },
                           "iem_nm": {
                             "type": "string",
@@ -1621,14 +1561,6 @@
                             "type": "string",
                             "description": "예약주문일자 / 길이 8 / YYYYMMDD"
                           },
-                          "act_no": {
-                            "type": "string",
-                            "description": "계좌번호 / 길이 11"
-                          },
-                          "cus_fnm": {
-                            "type": "string",
-                            "description": "고객성명 / 길이 40"
-                          },
                           "iem_cd": {
                             "type": "string",
                             "description": "티커종목코드 / 길이 12"
@@ -1685,18 +1617,6 @@
                             "type": "string",
                             "description": "예약주문접수시각 / 길이 8"
                           },
-                          "rgs_tab_cd": {
-                            "type": "string",
-                            "description": "등록팀점코드 / 길이 4"
-                          },
-                          "rgs_emp_no": {
-                            "type": "string",
-                            "description": "등록사원번호 / 길이 6"
-                          },
-                          "rgs_emp_fnm": {
-                            "type": "string",
-                            "description": "등록사원성명 / 길이 40"
-                          },
                           "cct_dt": {
                             "type": "string",
                             "description": "해지일자 / 길이 8 / YYYYMMDD"
@@ -1704,14 +1624,6 @@
                           "cct_tm": {
                             "type": "string",
                             "description": "해지시각 / 길이 8"
-                          },
-                          "cct_emp_no": {
-                            "type": "string",
-                            "description": "해지사원번호 / 길이 6"
-                          },
-                          "cct_emp_fnm": {
-                            "type": "string",
-                            "description": "해지사원성명 / 길이 40"
                           },
                           "bkg_rtn_orr_no": {
                             "type": "integer",
@@ -1722,10 +1634,6 @@
                             "type": "integer",
                             "format": "int64",
                             "description": "주문일련번호 / 길이 10"
-                          },
-                          "ost_orr_mdi": {
-                            "type": "string",
-                            "description": "주문매체 / 길이 2"
                           },
                           "orr_cpl_yn": {
                             "type": "string",
@@ -1738,10 +1646,6 @@
                           "pcs_msg_cts": {
                             "type": "string",
                             "description": "처리메시지내용 / 길이 300"
-                          },
-                          "aca_tel_no": {
-                            "type": "string",
-                            "description": "연락처전화번호 / 길이 20"
                           },
                           "ahi_nmn_pr_tp_cd": {
                             "type": "string",
@@ -2048,22 +1952,6 @@
                             "format": "double",
                             "description": "주민세 / 길이 18.2"
                           },
-                          "rgs_cuc_mdi_cd_nm": {
-                            "type": "string",
-                            "description": "등록통신매체코드명 / 길이 40"
-                          },
-                          "rgs_tm": {
-                            "type": "string",
-                            "description": "등록시각 / 길이 8"
-                          },
-                          "rgs_tab_cd": {
-                            "type": "string",
-                            "description": "등록팀점코드 / 길이 4"
-                          },
-                          "rgs_emp_no": {
-                            "type": "string",
-                            "description": "등록사원번호 / 길이 6"
-                          },
                           "oss_iem_cd": {
                             "type": "string",
                             "description": "해외증권종목코드 / 길이 12"
@@ -2151,14 +2039,6 @@
                     "Output_1": {
                       "type": "object",
                       "properties": {
-                        "cus_fnm": {
-                          "type": "string",
-                          "description": "고객성명 / 길이 40"
-                        },
-                        "rnm_cfm_no": {
-                          "type": "string",
-                          "description": "실명확인번호 / 길이 13"
-                        },
                         "rpm_tal": {
                           "type": "integer",
                           "format": "int64",
@@ -2276,10 +2156,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "act_fnm": {
-                          "type": "string",
-                          "description": "계좌성명 / 길이 40"
-                        },
                         "byn_qty_sum": {
                           "type": "integer",
                           "format": "int64",
@@ -3410,14 +3286,6 @@
                             "type": "number",
                             "format": "float",
                             "description": "당일체결강도 / 길이 8"
-                          },
-                          "nextbutton": {
-                            "type": "string",
-                            "description": "NEXTBUTTON / 길이 1"
-                          },
-                          "ctsz18": {
-                            "type": "string",
-                            "description": "CTSz18 / 길이 18"
                           }
                         }
                       }
@@ -3707,10 +3575,6 @@
                             "format": "float",
                             "description": "기준가 / 길이 17"
                           },
-                          "ctsz16": {
-                            "type": "string",
-                            "description": "검색키 / 길이 16"
-                          },
                           "tick_cnt": {
                             "type": "string",
                             "description": "마지막틱봉갯수 / 길이 5"
@@ -3977,26 +3841,6 @@
                         "tdm_ovrs_lwpr": {
                           "type": "string",
                           "description": "이번달저가 / 길이 10"
-                        },
-                        "localtime": {
-                          "type": "string",
-                          "description": "현지시간 / 길이 14"
-                        },
-                        "bsop_date": {
-                          "type": "string",
-                          "description": "영업일 / 길이 8"
-                        },
-                        "base_ptr": {
-                          "type": "string",
-                          "description": "소수점자리수 / 길이 1"
-                        },
-                        "ctsz30": {
-                          "type": "string",
-                          "description": "이전키 / 길이 30"
-                        },
-                        "lasttickcount": {
-                          "type": "string",
-                          "description": "마지막N틱봉의틱묶음갯수 / 길이 5"
                         },
                         "send_cnt": {
                           "type": "string",

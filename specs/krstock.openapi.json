@@ -143,18 +143,10 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "orr_gno_tab_cd": {
-                          "type": "string",
-                          "description": "주문채번팀점코드 / 길이 4"
-                        },
                         "mkt_orr_no": {
                           "type": "integer",
                           "format": "int64",
                           "description": "시장주문번호 / 길이 10 / 정정/취소시 필요한 주문번호"
-                        },
-                        "sor_fle_id": {
-                          "type": "string",
-                          "description": "SOR파일ID / 길이 20 / SOR 증적파일ID  ＊요청시장코드 SOR 경우에만 세팅"
                         },
                         "sor_ant_rt1": {
                           "type": "number",
@@ -297,18 +289,10 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "orr_gno_tab_cd": {
-                          "type": "string",
-                          "description": "주문채번팀점코드 / 길이 4"
-                        },
                         "mkt_orr_no": {
                           "type": "integer",
                           "format": "int64",
                           "description": "시장주문번호 / 길이 10 / 정정/취소시 필요한 주문번호"
-                        },
-                        "sor_fle_id": {
-                          "type": "string",
-                          "description": "SOR파일ID / 길이 20 / SOR 증적파일ID  ＊요청시장코드 SOR 경우에만 세팅"
                         },
                         "sor_ant_rt1": {
                           "type": "number",
@@ -455,18 +439,10 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "orr_gno_tab_cd": {
-                          "type": "string",
-                          "description": "주문채번팀점코드 / 길이 4"
-                        },
                         "mkt_orr_no": {
                           "type": "integer",
                           "format": "int64",
                           "description": "시장주문번호 / 길이 10 / 정정/취소시 필요한 주문번호"
-                        },
-                        "sor_fle_id": {
-                          "type": "string",
-                          "description": "SOR파일ID / 길이 20 / SOR 증적파일ID  ＊요청시장코드 SOR 경우에만 세팅"
                         },
                         "sor_ant_rt1": {
                           "type": "number",
@@ -613,18 +589,10 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "orr_gno_tab_cd": {
-                          "type": "string",
-                          "description": "주문채번팀점코드 / 길이 4"
-                        },
                         "mkt_orr_no": {
                           "type": "integer",
                           "format": "int64",
                           "description": "시장주문번호 / 길이 10 / 정정/취소시 필요한 주문번호"
-                        },
-                        "sor_fle_id": {
-                          "type": "string",
-                          "description": "SOR파일ID / 길이 20 / SOR 증적파일ID  ＊요청시장코드 SOR 경우에만 세팅"
                         },
                         "sor_ant_rt1": {
                           "type": "number",
@@ -760,18 +728,10 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "orr_gno_tab_cd": {
-                          "type": "string",
-                          "description": "주문채번팀점코드 / 길이 4"
-                        },
                         "mkt_orr_no": {
                           "type": "integer",
                           "format": "int64",
                           "description": "시장주문번호 / 길이 10 / 정정/취소시 필요한 주문번호"
-                        },
-                        "sor_fle_id": {
-                          "type": "string",
-                          "description": "SOR파일ID / 길이 20 / SOR 증적파일ID  ＊요청시장코드 SOR 경우에만 세팅"
                         },
                         "can_sor_ant_rt1": {
                           "type": "number",
@@ -884,18 +844,10 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "orr_gno_tab_cd": {
-                          "type": "string",
-                          "description": "주문채번팀점코드 / 길이 4"
-                        },
                         "mkt_orr_no": {
                           "type": "integer",
                           "format": "int64",
                           "description": "시장주문번호 / 길이 10 / 정정/취소시 필요한 주문번호"
-                        },
-                        "sor_fle_id": {
-                          "type": "string",
-                          "description": "SOR파일ID / 길이 20 / SOR 증적파일ID  ＊요청시장코드 SOR 경우에만 세팅"
                         },
                         "can_sor_ant_rt1": {
                           "type": "number",
@@ -1069,78 +1021,6 @@
                           "type": "integer",
                           "format": "int64",
                           "description": "예약주문번호 / 길이 10 / 예약 접수된 번호"
-                        },
-                        "act_no": {
-                          "type": "string",
-                          "description": "계좌번호 / 길이 11 / 입력값 표시"
-                        },
-                        "iem_cd": {
-                          "type": "string",
-                          "description": "종목코드 / 길이 12 / 입력값 표시"
-                        },
-                        "sby_dit_cd": {
-                          "type": "string",
-                          "description": "매매구분코드 / 길이 1 / 입력값 표시"
-                        },
-                        "frs_sba_orr_yn": {
-                          "type": "string",
-                          "description": "선물대용주문여부 / 길이 1 / 입력값 표시"
-                        },
-                        "nmn_pr_tp_cd": {
-                          "type": "string",
-                          "description": "호가유형코드 / 길이 2 / 입력값 표시"
-                        },
-                        "cfd_lon_cd": {
-                          "type": "string",
-                          "description": "신용대출코드 / 길이 2 / 입력값 표시"
-                        },
-                        "lon_dt": {
-                          "type": "string",
-                          "description": "대출일자 / 길이 8 / 입력값 표시"
-                        },
-                        "orr_qty": {
-                          "type": "string",
-                          "description": "주문수량 / 길이 18 / 입력값 표시"
-                        },
-                        "orr_uit_pr": {
-                          "type": "string",
-                          "description": "주문단가 / 길이 18 / 입력값 표시"
-                        },
-                        "aca_tel_no": {
-                          "type": "string",
-                          "description": "연락처전화번호 / 길이 20 / 입력값 표시"
-                        },
-                        "bkg_orr_tp_cd": {
-                          "type": "string",
-                          "description": "예약주문유형코드 / 길이 1 / 입력값 표시"
-                        },
-                        "bkg_orr_sta_dt": {
-                          "type": "string",
-                          "description": "예약주문시작일자 / 길이 8 / 입력값 표시"
-                        },
-                        "bkg_orr_end_dt": {
-                          "type": "string",
-                          "description": "예약주문종료일자 / 길이 8 / 입력값 표시"
-                        },
-                        "bkg_orr_enf_tp_cd": {
-                          "type": "string",
-                          "description": "예약주문집행유형코드 / 길이 1 / 입력값 표시"
-                        },
-                        "end_pr_cmp_ftw_amt": {
-                          "type": "string",
-                          "description": "종가대비등락폭금액 / 길이 18 / 입력값 표시"
-                        },
-                        "orr_pr_rge_hlm_pr": {
-                          "type": "string",
-                          "description": "주문가격범위상한가 / 길이 18 / 입력값 표시"
-                        },
-                        "orr_pr_rge_llm_pr": {
-                          "type": "string",
-                          "description": "주문가격범위하한가 / 길이 18 / 입력값 표시"
-                        },
-                        "pwd": {
-                          "type": "string",
-                          "description": "비밀번호 / 길이 8 / 입력값 표시"
                         }
                       }
                     },
@@ -1232,10 +1112,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "act_no": {
-                          "type": "string",
-                          "description": "계좌번호 / 길이 11 / 입력값 표시"
-                        },
                         "sby_dit_cd": {
                           "type": "string",
                           "description": "매매구분코드 / 길이 1 / 입력값 표시"
@@ -1339,18 +1215,6 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "cus_fnm": {
-                            "type": "string",
-                            "description": "고객성명 / 길이 40"
-                          }
-                        }
-                      }
-                    },
-                    "Output_1": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
                           "itg_orr_no": {
                             "type": "integer",
                             "format": "int64",
@@ -1359,10 +1223,6 @@
                           "orr_mkt_cd_nm": {
                             "type": "string",
                             "description": "주문시장코드명 / 길이 50"
-                          },
-                          "mo_itg_orr_no": {
-                            "type": "string",
-                            "description": "모통합주문번호 / 길이 11"
                           },
                           "org_itg_orr_no": {
                             "type": "integer",
@@ -1380,10 +1240,6 @@
                           "sby_dit_cd_nm": {
                             "type": "string",
                             "description": "매매구분코드명 / 길이 50"
-                          },
-                          "cor_can_dit_cd_nm": {
-                            "type": "string",
-                            "description": "정정취소구분코드명 / 길이 4"
                           },
                           "lon_dt": {
                             "type": "string",
@@ -1436,38 +1292,18 @@
                             "format": "int64",
                             "description": "미체결수량 / 길이 23"
                           },
-                          "cor_qty": {
-                            "type": "string",
-                            "description": "정정수량 / 길이 19"
-                          },
                           "can_qty": {
                             "type": "integer",
                             "format": "int64",
                             "description": "취소수량 / 길이 19"
                           },
-                          "orr_tm": {
-                            "type": "string",
-                            "description": "주문시각 / 길이 9"
-                          },
                           "orr_mdi": {
                             "type": "string",
                             "description": "주문매체 / 길이 20"
                           },
-                          "bnd_byn_dt": {
-                            "type": "string",
-                            "description": "채권매수일자 / 길이 8"
-                          },
-                          "syn_ttn_dit_cd_nm": {
-                            "type": "string",
-                            "description": "종합과세구분코드명 / 길이 50"
-                          },
                           "orr_rjt_rsn_cd_nm": {
                             "type": "string",
                             "description": "주문거부사유코드명 / 길이 4"
-                          },
-                          "pcs_emp_no": {
-                            "type": "string",
-                            "description": "처리사원번호 / 길이 6"
                           },
                           "rmt_mkt_cd": {
                             "type": "string",
@@ -1476,18 +1312,6 @@
                           "sor_mkt_sli_yn": {
                             "type": "string",
                             "description": "SOR시장분할여부 / 길이 1 / Y.분할 N.미분할"
-                          },
-                          "krx_lnt_opi_sec_co_cd": {
-                            "type": "string",
-                            "description": "거래소대량상대증권회사코드 / 길이 5"
-                          },
-                          "krx_lnt_opi_act_no": {
-                            "type": "string",
-                            "description": "거래소대량상대계좌번호 / 길이 12"
-                          },
-                          "krx_lnt_cnf_cpl_hur": {
-                            "type": "string",
-                            "description": "거래소대량협의완료시간 / 길이 9"
                           }
                         }
                       }
@@ -1595,39 +1419,15 @@
                           "format": "int64",
                           "description": "익익일예수금 / 길이 18 / D+2 예수금"
                         },
-                        "fc_dca": {
-                          "type": "string",
-                          "description": "외화예수금 / 길이 18"
-                        },
-                        "fc_mgg_amt": {
-                          "type": "string",
-                          "description": "외화담보금액 / 길이 18"
-                        },
-                        "fc_orr_pbl_amt": {
-                          "type": "string",
-                          "description": "외화주문가능금액 / 길이 18"
-                        },
                         "drn_pbl_amt": {
                           "type": "integer",
                           "format": "int64",
                           "description": "출금가능금액 / 길이 18"
                         },
-                        "fnn_amt": {
-                          "type": "string",
-                          "description": "융자금액 / 길이 18"
-                        },
                         "mgg_rt": {
                           "type": "number",
                           "format": "double",
                           "description": "담보비율 / 길이 11.8"
-                        },
-                        "rit_eal_amt": {
-                          "type": "string",
-                          "description": "권리평가금액 / 길이 18"
-                        },
-                        "orr_pbl_amt": {
-                          "type": "string",
-                          "description": "주문가능금액 / 길이 18"
                         },
                         "nas_amt": {
                           "type": "integer",
@@ -1689,10 +1489,6 @@
                           "format": "int64",
                           "description": "대용금액 / 길이 18"
                         },
-                        "orr_pbl_amt1": {
-                          "type": "string",
-                          "description": "주문가능금액1 / 길이 18 / 20%주문가능금액"
-                        },
                         "orr_pbl_amt2": {
                           "type": "integer",
                           "format": "int64",
@@ -1735,10 +1531,6 @@
                         "act_atv_tp_dtl_cd": {
                           "type": "string",
                           "description": "계좌활동유형세부코드 / 길이 3 / 101: 활동 102: 휴면 401: 고객요청폐쇄"
-                        },
-                        "act_no": {
-                          "type": "string",
-                          "description": "계좌번호 / 길이 11"
                         }
                       }
                     },
@@ -1747,10 +1539,6 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "pdt_tp_nm": {
-                            "type": "string",
-                            "description": "상품유형명 / 길이 50"
-                          },
                           "iem_nm": {
                             "type": "string",
                             "description": "종목명 / 길이 60"
@@ -1788,10 +1576,6 @@
                             "format": "int64",
                             "description": "현재가격 / 길이 18"
                           },
-                          "byn_amt": {
-                            "type": "string",
-                            "description": "매수금액 / 길이 18"
-                          },
                           "eal_amt": {
                             "type": "integer",
                             "format": "int64",
@@ -1817,22 +1601,6 @@
                             "format": "double",
                             "description": "수익율 / 길이 15.9"
                           },
-                          "syn_ttn_dit_cd": {
-                            "type": "string",
-                            "description": "종합과세구분코드 / 길이 1"
-                          },
-                          "syn_ttn_dit_cd_nm": {
-                            "type": "string",
-                            "description": "종합과세구분코드명 / 길이 20"
-                          },
-                          "crm_aet_cfc_cd": {
-                            "type": "string",
-                            "description": "CRM자산분류코드 / 길이 2"
-                          },
-                          "ctc_int_rt": {
-                            "type": "string",
-                            "description": "약정이자율 / 길이 11.8"
-                          },
                           "lon_byn_dt": {
                             "type": "string",
                             "description": "대출매수일자 / 길이 8"
@@ -1849,14 +1617,6 @@
                             "type": "integer",
                             "format": "int64",
                             "description": "대출잔고금액 / 길이 18"
-                          },
-                          "iem_mlf_cd": {
-                            "type": "string",
-                            "description": "종목중분류코드 / 길이 5"
-                          },
-                          "itg_bnc_tp_cd": {
-                            "type": "string",
-                            "description": "통합잔고유형코드 / 길이 3"
                           }
                         }
                       }
@@ -1952,34 +1712,10 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "sll_ctc_amt1": {
-                          "type": "string",
-                          "description": "매도약정금액1 / 길이 18 / 전일 매도 약정금액"
-                        },
-                        "byn_ctc_amt1": {
-                          "type": "string",
-                          "description": "매수약정금액1 / 길이 18 / 전일 매수 약정금액"
-                        },
-                        "sdr_xps1": {
-                          "type": "string",
-                          "description": "제비용1 / 길이 18 / 전일 제비용"
-                        },
                         "dca": {
                           "type": "integer",
                           "format": "int64",
                           "description": "예수금 / 길이 18 / 당일 예수금"
-                        },
-                        "sll_ctc_amt": {
-                          "type": "string",
-                          "description": "매도약정금액 / 길이 18 / 당일 매도 약정금액"
-                        },
-                        "ost_byn_ctc_amt": {
-                          "type": "string",
-                          "description": "매수약정금액 / 길이 18 / 당일 매수 약정금액"
-                        },
-                        "sdr_xps": {
-                          "type": "string",
-                          "description": "제비용 / 길이 18 / 당일 제비용"
                         },
                         "nxt_dd_dca": {
                           "type": "integer",
@@ -1990,10 +1726,6 @@
                           "type": "integer",
                           "format": "int64",
                           "description": "익익일예수금 / 길이 18 / D+2 예수금"
-                        },
-                        "byn_ny_cns_orr_amt": {
-                          "type": "string",
-                          "description": "매수미체결주문금액 / 길이 18 / D+2 매수미체결 주문금액"
                         },
                         "ost_fee": {
                           "type": "integer",
@@ -2134,18 +1866,6 @@
                           "type": "number",
                           "format": "double",
                           "description": "이자율 / 길이 11.8 / 이자율"
-                        },
-                        "orr_pr": {
-                          "type": "string",
-                          "description": "주문가격 / 길이 18"
-                        },
-                        "rp_eal_amt": {
-                          "type": "string",
-                          "description": "RP평가금액 / 길이 18 / CMA 평가금"
-                        },
-                        "ny_stl_qty": {
-                          "type": "string",
-                          "description": "미결제수량 / 길이 21.6"
                         }
                       }
                     },
@@ -2226,14 +1946,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "cus_fnm": {
-                          "type": "string",
-                          "description": "고객성명 / 길이 40"
-                        },
-                        "ost_dit_cd": {
-                          "type": "string",
-                          "description": "구분코드 / 길이 1 / 1.현금 또는 신용\n2.대출"
-                        },
                         "dit_nm": {
                           "type": "string",
                           "description": "구분명 / 길이 20"
@@ -2250,34 +1962,10 @@
                           "type": "string",
                           "description": "대출일자 / 길이 8"
                         },
-                        "cfd_lon_cd": {
-                          "type": "string",
-                          "description": "신용대출코드 / 길이 2 / 00.현금\n01.유통융자\n02.자기융자\n03.유통대주\n04.자기대주\n10.매입자금대출\n11.매도담보대출\n12.주식담보대출\n13.채권담보대출\n14.ELS/DLS담보대출\n15.수익증권대출\n16.수익환매대출\n17.청약자금대출\n18.ELS/DLS환매담보대출\n19.해외주식담보대출\n20.해외주식매도담보대출\n99.종합담보대출\n_.해당사항없음"
-                        },
-                        "cfd_lon_cd_nm": {
-                          "type": "string",
-                          "description": "신용대출코드명 / 길이 40"
-                        },
-                        "ttn_tp_cd": {
-                          "type": "string",
-                          "description": "과세유형코드 / 길이 2 / 01.일반과세\n02.비과세\n03.세금우대\n04.소액부징수\n_.해당사항없음"
-                        },
-                        "ttn_tp_cd_nm": {
-                          "type": "string",
-                          "description": "과세유형코드명 / 길이 40"
-                        },
                         "bnc_qty": {
                           "type": "integer",
                           "format": "int64",
                           "description": "잔고수량 / 길이 18"
-                        },
-                        "sll_ny_stl_qty": {
-                          "type": "string",
-                          "description": "매도미결제수량 / 길이 18.0"
-                        },
-                        "byn_ny_stl_qty": {
-                          "type": "string",
-                          "description": "매수미결제수량 / 길이 18.0"
                         },
                         "tdt_sll_ny_cns_qty": {
                           "type": "number",
@@ -2288,10 +1976,6 @@
                           "type": "number",
                           "format": "double",
                           "description": "매도가능수량 / 길이 18.0 / 장중(08:00-15:00)까지는 수량단위미만 절사"
-                        },
-                        "phs_uit_pr": {
-                          "type": "string",
-                          "description": "매입단가 / 길이 18.0"
                         }
                       }
                     },
@@ -2384,10 +2068,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "tab_nm": {
-                          "type": "string",
-                          "description": "팀점명 / 길이 50"
-                        },
                         "bkg_orr_rtn_dt": {
                           "type": "string",
                           "description": "예약주문접수일자 / 길이 8"
@@ -2399,22 +2079,6 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "act_no": {
-                            "type": "string",
-                            "description": "계좌번호 / 길이 11"
-                          },
-                          "cus_fnm": {
-                            "type": "string",
-                            "description": "고객성명 / 길이 40"
-                          },
-                          "amn_tab_nm": {
-                            "type": "string",
-                            "description": "관리팀점명 / 길이 50"
-                          },
-                          "act_pdt_nm": {
-                            "type": "string",
-                            "description": "계좌상품명 / 길이 60"
-                          },
                           "iem_cd": {
                             "type": "string",
                             "description": "종목코드 / 길이 12"
@@ -2501,10 +2165,6 @@
                             "type": "string",
                             "description": "등록시각 / 길이 8"
                           },
-                          "rgs_emp_no": {
-                            "type": "string",
-                            "description": "등록사원번호 / 길이 6"
-                          },
                           "can_dt": {
                             "type": "string",
                             "description": "취소일자 / 길이 8"
@@ -2512,10 +2172,6 @@
                           "can_tm": {
                             "type": "string",
                             "description": "취소시각 / 길이 8"
-                          },
-                          "can_emp_no": {
-                            "type": "string",
-                            "description": "취소사원번호 / 길이 6"
                           },
                           "bkg_orr_rtn_dt": {
                             "type": "string",
@@ -2629,26 +2285,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "cus_fnm": {
-                          "type": "string",
-                          "description": "고객성명 / 길이 40"
-                        },
-                        "rnm_cfm_no": {
-                          "type": "string",
-                          "description": "실명확인번호 / 길이 13"
-                        },
-                        "act_atv_tp_dtl_cd": {
-                          "type": "string",
-                          "description": "계좌활동유형세부코드 / 길이 3"
-                        },
-                        "act_amn_tab_cd": {
-                          "type": "string",
-                          "description": "계좌관리팀점코드 / 길이 4"
-                        },
-                        "act_pdt_llf_cd": {
-                          "type": "string",
-                          "description": "계좌상품대분류코드 / 길이 2"
-                        },
                         "tdy_dca": {
                           "type": "integer",
                           "format": "int64",
@@ -3070,30 +2706,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "cus_fnm": {
-                          "type": "string",
-                          "description": "고객성명 / 길이 40"
-                        },
-                        "rnm_cfm_no": {
-                          "type": "string",
-                          "description": "실명확인번호 / 길이 13"
-                        },
-                        "ctc_tp_cd_nm": {
-                          "type": "string",
-                          "description": "약정유형코드명 / 길이 20"
-                        },
-                        "act_amn_tab_cd": {
-                          "type": "string",
-                          "description": "계좌관리팀점코드 / 길이 4"
-                        },
-                        "act_pdt_llf_cd": {
-                          "type": "string",
-                          "description": "계좌상품대분류코드 / 길이 2"
-                        },
-                        "amn_emp_fnm": {
-                          "type": "string",
-                          "description": "관리사원성명 / 길이 40"
-                        },
                         "dca": {
                           "type": "integer",
                           "format": "int64",
@@ -3322,22 +2934,6 @@
                             "type": "string",
                             "description": "대출만기일자 / 길이 8"
                           },
-                          "syn_ttn_dit_cd": {
-                            "type": "string",
-                            "description": "종합과세구분코드 / 길이 1"
-                          },
-                          "syn_ttn_dit_cd_nm": {
-                            "type": "string",
-                            "description": "종합과세구분코드명 / 길이 50"
-                          },
-                          "crm_aet_cfc_cd": {
-                            "type": "string",
-                            "description": "CRM자산분류코드 / 길이 2"
-                          },
-                          "iem_mlf_cd": {
-                            "type": "string",
-                            "description": "종목중분류코드 / 길이 5"
-                          },
                           "byn_cim_qty": {
                             "type": "integer",
                             "format": "int64",
@@ -3362,17 +2958,9 @@
                             "type": "string",
                             "description": "통화코드 / 길이 3"
                           },
-                          "fc_sec_trd_nat_cd": {
-                            "type": "string",
-                            "description": "외화증권거래국가코드 / 길이 3"
-                          },
                           "nat_cd_nm": {
                             "type": "string",
                             "description": "국가코드명 / 길이 40"
-                          },
-                          "itg_bnc_tp_cd": {
-                            "type": "string",
-                            "description": "통합잔고유형코드 / 길이 3"
                           },
                           "tck_iem_cd": {
                             "type": "string",
@@ -3458,10 +3046,6 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "act_fnm": {
-                          "type": "string",
-                          "description": "계좌성명 / 길이 40"
-                        },
                         "byn_cst_sum": {
                           "type": "string",
                           "description": "매수대금합계1 / 길이 18"
@@ -3540,10 +3124,6 @@
                             "type": "number",
                             "format": "double",
                             "description": "수익율 / 길이 15.9"
-                          },
-                          "iem_mlf_cd": {
-                            "type": "string",
-                            "description": "종목중분류코드 / 길이 5 / 01001.주식\n01002.DR\n01003.투자회사\n01004.신주인수권증권\n01005.상장REITS\n01006.신주인수권증서\n01007.ETF\n01008.상장수익증권"
                           }
                         }
                       }
@@ -3621,19 +3201,10 @@
                     "Output_0": {
                       "type": "object",
                       "properties": {
-                        "iem_cd": {
-                          "type": "string",
-                          "description": "종목코드 / 길이 12"
-                        },
                         "byn_qty": {
                           "type": "number",
                           "format": "double",
                           "description": "매수수량 / 길이 18.6"
-                        },
-                        "byn_uit_pr": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "매수단가 / 길이 15.3"
                         },
                         "byn_fee": {
                           "type": "integer",
@@ -3654,11 +3225,6 @@
                           "type": "number",
                           "format": "double",
                           "description": "매도수량 / 길이 18.6"
-                        },
-                        "sll_uit_pr": {
-                          "type": "number",
-                          "format": "double",
-                          "description": "매도단가 / 길이 15.3"
                         },
                         "sll_tax_sum": {
                           "type": "integer",
@@ -3689,14 +3255,6 @@
                           "type": "number",
                           "format": "double",
                           "description": "수익율 / 길이 15.9"
-                        },
-                        "fee_sum": {
-                          "type": "string",
-                          "description": "수수료합계 / 길이 18"
-                        },
-                        "tax_sum": {
-                          "type": "string",
-                          "description": "세금합계 / 길이 18"
                         }
                       }
                     },
@@ -3777,18 +3335,6 @@
                             "type": "number",
                             "format": "double",
                             "description": "수익율 / 길이 15.9"
-                          },
-                          "fee_sum": {
-                            "type": "string",
-                            "description": "수수료합계 / 길이 18"
-                          },
-                          "tax_sum": {
-                            "type": "string",
-                            "description": "세금합계 / 길이 18"
-                          },
-                          "iem_mlf_cd": {
-                            "type": "string",
-                            "description": "종목중분류코드 / 길이 5 / 01001.주식\n01002.DR\n01003.투자회사\n01004.신주인수권증권\n01005.상장REITS\n01006.신주인수권증서\n01007.ETF\n01008.상장수익증권"
                           }
                         }
                       }
@@ -4957,10 +4503,6 @@
                           "type": "string",
                           "description": "대주주지분일자 / 길이 6"
                         },
-                        "filler": {
-                          "type": "string",
-                          "description": "FILLER / 길이 1"
-                        },
                         "deposit_gb": {
                           "type": "string",
                           "description": "증거금율 / 길이 1"
@@ -5488,10 +5030,6 @@
                             "type": "integer",
                             "format": "int64",
                             "description": "전체거래량 / 길이 12"
-                          },
-                          "filler": {
-                            "type": "string",
-                            "description": "filler / 길이 30"
                           }
                         }
                       }
@@ -5584,18 +5122,6 @@
                         "stck_prdy_clpr": {
                           "type": "string",
                           "description": "전일종가 / 길이 8 / 기준가 혹은 전일종가\n기준가 우선 셋팅"
-                        },
-                        "filler": {
-                          "type": "string",
-                          "description": "filler / 길이 30"
-                        },
-                        "ctsz20": {
-                          "type": "string",
-                          "description": "CTSz20 / 길이 20"
-                        },
-                        "nextbutton": {
-                          "type": "string",
-                          "description": "NEXTBUTTON / 길이 1"
                         }
                       }
                     },
@@ -5718,14 +5244,6 @@
                             "type": "string",
                             "description": "거래대금 / 길이 18"
                           },
-                          "high_date": {
-                            "type": "string",
-                            "description": "고가일 / 길이 8"
-                          },
-                          "low_date": {
-                            "type": "string",
-                            "description": "저가일 / 길이 8"
-                          },
                           "vol_prdy_rt": {
                             "type": "string",
                             "description": "거래량전일비 / 길이 6.2"
@@ -5733,18 +5251,6 @@
                           "cttr": {
                             "type": "string",
                             "description": "체결강도 / 길이 6.2"
-                          },
-                          "filler": {
-                            "type": "string",
-                            "description": "FILLER / 길이 43"
-                          },
-                          "next_key": {
-                            "type": "string",
-                            "description": "NEXT_KEY / 길이 12"
-                          },
-                          "nextbutton": {
-                            "type": "string",
-                            "description": "NEXTBUTTON / 길이 1"
                           }
                         }
                       }
@@ -5890,14 +5396,6 @@
                             "type": "number",
                             "format": "double",
                             "description": "프로그램 / 길이 10"
-                          },
-                          "jasaz10": {
-                            "type": "string",
-                            "description": "자사주 / 길이 10"
-                          },
-                          "filler": {
-                            "type": "string",
-                            "description": "FILLER / 길이 30"
                           }
                         }
                       }
@@ -6231,10 +5729,6 @@
                           "type": "string",
                           "description": "달러환율 / 길이 8"
                         },
-                        "ctsz30": {
-                          "type": "string",
-                          "description": "연속조회키 / 길이 30"
-                        },
                         "lasttickcount": {
                           "type": "string",
                           "description": "마지막N틱봉의틱묶음갯수 / 길이 5 / 최근봉마지막틱갯수"
@@ -6333,10 +5827,6 @@
                           "fcam_mod_cls_code": {
                             "type": "string",
                             "description": "액면가변경구분코드 / 길이 2 / 00.해당없음\n01.액면분할\n02.액면병합\n03.주식분할\n04.주식병합\n99.기타"
-                          },
-                          "vol_prtt_rate": {
-                            "type": "string",
-                            "description": "거래량수정비율 / 길이 2"
                           }
                         }
                       }
@@ -6999,10 +6489,6 @@
                           "stck_prpr": {
                             "type": "string",
                             "description": "락구분 / 길이 10"
-                          },
-                          "prdy_vrss_sign": {
-                            "type": "string",
-                            "description": "Filler / 길이 1"
                           }
                         }
                       }
@@ -7023,10 +6509,6 @@
                           "acml_tr_pbmn": {
                             "type": "string",
                             "description": "거래대금 / 길이 18"
-                          },
-                          "prdy_vol": {
-                            "type": "string",
-                            "description": "Filler / 길이 12"
                           }
                         }
                       }
@@ -7162,10 +6644,6 @@
                             "type": "integer",
                             "format": "int64",
                             "description": "매수호가 / 길이 9"
-                          },
-                          "filler": {
-                            "type": "string",
-                            "description": "Filler / 길이 30"
                           }
                         }
                       }
@@ -7286,10 +6764,6 @@
                             "type": "number",
                             "format": "double",
                             "description": "매수잔량 / 길이 10"
-                          },
-                          "filler": {
-                            "type": "string",
-                            "description": "Filler / 길이 30"
                           }
                         }
                       }
@@ -7321,7 +6795,7 @@
         ],
         "operationId": "krstockQuoteEtfCurrent",
         "summary": "ETF/ETN 현재가",
-        "description": "국내주식 ETF 현재가 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.\n\n⚠️ **명세 검증 필요**: 예시 응답에는 명세에 없는 블록(Output_3, Output_4)이 포함되어 있습니다.",
+        "description": "국내주식 ETF 현재가 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
         "requestBody": {
           "required": true,
           "content": {
@@ -8364,10 +7838,6 @@
                             "type": "number",
                             "format": "double",
                             "description": "평가금액 / 길이 18.0"
-                          },
-                          "filler": {
-                            "type": "string",
-                            "description": "Filler / 길이 30"
                           }
                         }
                       }
