@@ -93,8 +93,6 @@ async function main() {
   const oRes = await fetch(`${baseUrl}/krstock/order/v1/cashBuy`, {
     method: "POST",
     headers: {
-      "x-client-id": appKey,
-      "x-client-secret": appSecret,
       authorization: `Bearer ${token}`,
       "content-type": "application/json; charset=UTF-8",
     },

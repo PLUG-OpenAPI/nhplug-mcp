@@ -78,9 +78,8 @@ export async function callRest(
 
   for (let attempt = 0; attempt < 2; attempt++) {
     const token = await getAccessToken(config, forceToken);
+    // 인증 헤더는 Bearer 하나뿐 (x-client-id·x-client-secret 불필요 — 명세 260908)
     const headers: Record<string, string> = {
-      "x-client-id": config.appKey,
-      "x-client-secret": config.appSecret,
       authorization: `Bearer ${token}`,
       "content-type": "application/json; charset=UTF-8",
     };
