@@ -3,7 +3,7 @@
   "info": {
     "title": "NH투자증권 Open API — 해외주식 (Global Stock)",
     "version": "v1",
-    "description": "NH투자증권 Open API 중 **해외주식 (Global Stock)** 자산군의 REST 및 실시간(WebSocket) API 문서입니다. (기준: API명세서 260911 / 나무 환경 · 필드명은 명세서 C열 기준)\n\n- REST: POST + JSON, 요청 Input_0 / 응답 Output_0(+Output_1·Output_2 …) + message. 응답 블록의 타입은 API 마다 다릅니다(객체=집계 / 배열=목록). 블록은 데이터가 있을 때만 내려옵니다.\n- 실시간: WebSocket, 푸시=JSON. x-realtime-channels.protocol 참조.\n- 📄 종목마스터: 전 종목 목록·종목명 조회 REST API 는 없습니다. 정적 종목정보는 https://www.nhplug.com/instruments/<파일명>.mst (CP949 고정길이, 인증 불필요). 상세는 x-instruments 참조.\n- 🏦 계좌 선택: /n2/acctinfo 의 acct_type 이 01(일반)·02(주문대리인) 이면 운영(api.nhplug.com:8443) 전용, 03 이면 모의투자(moapi.nhplug.com:8443) 전용 계좌입니다. 대상 환경과 맞는 계좌를 사용하세요.\n- 🔑 토큰 재사용: access token 은 24시간(expires_in=86400) 유효. 매 호출 재발급 금지 — 공유 캐시에 저장해 재사용(재발급은 보안 알림 유발). 재발급은 401 일 때만, 429 재시도엔 기존 토큰 사용.\n- 인증: POST /oauth2/token → REST 는 Authorization/x-client-id/x-client-secret, WS 는 header.token.\n- 환경 제공: 이 자산군 API 는 **모의투자·운영 모두 제공**. (접근토큰발급만 공통에서 운영 전용)"
+    "description": "NH투자증권 Open API 중 **해외주식 (Global Stock)** 자산군의 REST 및 실시간(WebSocket) API 문서입니다. (기준: API명세서 261015 / 나무 환경 · 필드명은 명세서 C열 기준)\n\n- REST: POST + JSON, 요청 Input_0 / 응답 Output_0(+Output_1·Output_2 …) + rsp_cd·rsp_msg. 응답 블록의 타입은 API 마다 다릅니다(객체=집계 / 배열=목록). 블록은 데이터가 있을 때만 내려옵니다.\n- 실시간: WebSocket, 푸시=JSON. x-realtime-channels.protocol 참조.\n- 📄 종목마스터: 전 종목 목록·종목명 조회 REST API 는 없습니다. 정적 종목정보는 https://www.nhplug.com/instruments/<파일명>.mst (CP949 고정길이, 인증 불필요). 상세는 x-instruments 참조.\n- 🏦 계좌 선택: /n2/acctinfo 의 acct_type 이 01(일반)·02(주문대리인) 이면 운영(api.nhplug.com:8443) 전용, 03 이면 모의투자(moapi.nhplug.com:8443) 전용 계좌입니다. 대상 환경과 맞는 계좌를 사용하세요.\n- 🔑 토큰 재사용: access token 은 24시간(expires_in=86400) 유효. 매 호출 재발급 금지 — 공유 캐시에 저장해 재사용(재발급은 보안 알림 유발). 재발급은 401 일 때만, 429 재시도엔 기존 토큰 사용.\n- 인증: POST /oauth2/token → REST 는 Authorization, WS 는 header.token.\n- 환경 제공: API별 환경 표기 참조."
   },
   "servers": [
     {
@@ -22,16 +22,16 @@
   ],
   "x-environments": {
     "portal": "https://www.nhplug.com",
-    "note": "기본 환경은 **운영(live)** 입니다. 운영은 주문이 실제로 체결됩니다. 테스트·검증은 모의투자(mock)를 사용하세요. 나무(Namuh) 기준(N2 추후).",
+    "note": "기본 환경은 **운영(live)** 입니다. 운영은 주문이 실제로 체결됩니다. 테스트·검증은 모의투자(mock)를 사용하세요.",
     "mock": {
       "desc": "모의투자 — 교육이수·개발검증",
       "rest": "https://moapi.nhplug.com:8443",
-      "websocket": "wss://moapi.nhplug.com:17070"
+      "websocket": "wss://moapi.nhplug.com:17070/websocket"
     },
     "live": {
       "desc": "운영 — 실제 주문 체결",
       "rest": "https://api.nhplug.com:8443",
-      "websocket": "wss://api.nhplug.com:7080"
+      "websocket": "wss://api.nhplug.com:{7070|7080}/websocket"
     }
   },
   "tags": [
@@ -130,8 +130,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -221,8 +224,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -313,8 +319,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -404,8 +413,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -541,8 +553,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -629,8 +644,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -831,8 +849,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -879,7 +900,7 @@
                       },
                       "iem_cd": {
                         "type": "string",
-                        "description": "티커종목코드 / 길이 12 / 예시> 미국주식 APPLE인 경우, AAPL"
+                        "description": "종목코드 / 길이 12 / 예시> 미국주식 APPLE인 경우, AAPL"
                       },
                       "oss_sby_dit_cd": {
                         "type": "string",
@@ -1008,7 +1029,7 @@
                           },
                           "oss_ato_orr_sts_cd": {
                             "type": "string",
-                            "description": "해외증권자동주문상태코드 / 길이 1"
+                            "description": "해외증권자동주문상태코드 / 길이 1 / 0.전송\n1.접수\n2.거부\n3.확인"
                           },
                           "orr_sts_nm": {
                             "type": "string",
@@ -1049,7 +1070,7 @@
                           },
                           "orr_dt": {
                             "type": "string",
-                            "description": "주문일자 / 길이 8"
+                            "description": "주문일자 / 길이 8 / YYYYMMDD"
                           },
                           "csh_wtm_rt": {
                             "type": "number",
@@ -1066,13 +1087,16 @@
                           },
                           "lon_dt": {
                             "type": "string",
-                            "description": "대출일자 / 길이 8"
+                            "description": "대출일자 / 길이 8 / YYYYMMDD"
                           }
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -1449,8 +1473,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -1749,8 +1776,206 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CtsHeader"
+          }
+        ],
+        "x-available-env": [
+          "mock",
+          "live"
+        ]
+      }
+    },
+    "/gbstock/inquiry/v1/stopReservedInquiry": {
+      "post": {
+        "tags": [
+          "조회 (Inquiry)"
+        ],
+        "operationId": "gbstockInquiryStopReservedInquiry",
+        "summary": "해외주식 STOP예약주문조회",
+        "description": "해외주식 STOP 예약주문내역 조회 API 입니다.\n\n응답 블록은 **데이터가 있을 때만 내려옵니다.** 블록이 없을 수 있으니 존재 여부를 먼저 확인하세요.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Input_0": {
+                    "type": "object",
+                    "properties": {
+                      "bkg_orr_dt": {
+                        "type": "string",
+                        "description": "예약주문일자 / 길이 8 / YYYYMMDD"
+                      },
+                      "act_no": {
+                        "type": "string",
+                        "description": "계좌번호 / 길이 11 / /n2/acctinfo 의 acct_no 사용 (운영은 acct_type=01·02, 모의투자는 03 계좌만 유효)"
+                      },
+                      "cns_dit_cd": {
+                        "type": "string",
+                        "description": "체결구분코드_IO / 길이 1 / 0.전체\n1.체결\n2.미체결"
+                      },
+                      "bkg_orr_can_yn": {
+                        "type": "string",
+                        "description": "예약주문취소여부 / 길이 1 / 0.전체\n1.접수\n2.취소\n3.주문전송\n4.주문확인\n5.실행거부\n6.실행거부(현지)\n7.완료"
+                      },
+                      "nmn_pr_tp_cd": {
+                        "type": "string",
+                        "description": "호가유형코드 / 길이 1 / 0.전체\n1.STOP\n2.STOP LIMIT\n3.지정가"
+                      }
+                    },
+                    "required": [
+                      "bkg_orr_dt",
+                      "act_no",
+                      "cns_dit_cd",
+                      "bkg_orr_can_yn",
+                      "nmn_pr_tp_cd"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Output_0": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "bkg_orr_dt": {
+                            "type": "string",
+                            "description": "예약주문일자 / 길이 8 / YYYYMMDD"
+                          },
+                          "bkg_rtn_orr_no": {
+                            "type": "integer",
+                            "format": "int64",
+                            "description": "예약접수주문번호 / 길이 10"
+                          },
+                          "orr_enf_sta_dt": {
+                            "type": "string",
+                            "description": "주문집행시작일자 / 길이 8 / YYYYMMDD"
+                          },
+                          "orr_enf_end_dt": {
+                            "type": "string",
+                            "description": "주문집행종료일자 / 길이 8 / YYYYMMDD"
+                          },
+                          "sby_dit_cd": {
+                            "type": "string",
+                            "description": "매매구분코드 / 길이 1"
+                          },
+                          "sby_dit_nm": {
+                            "type": "string",
+                            "description": "매매구분명_IO / 길이 4"
+                          },
+                          "iem_cd": {
+                            "type": "string",
+                            "description": "티커종목코드 / 길이 12"
+                          },
+                          "iem_nm": {
+                            "type": "string",
+                            "description": "종목명 / 길이 60"
+                          },
+                          "ahi_nmn_pr_tp_cd": {
+                            "type": "string",
+                            "description": "현물호가유형코드 / 길이 2"
+                          },
+                          "ahi_nmn_pr_tp_cd_nm": {
+                            "type": "string",
+                            "description": "현물호가유형코드명_IO / 길이 20"
+                          },
+                          "bkg_orr_can_yn": {
+                            "type": "string",
+                            "description": "예약주문취소여부 / 길이 1"
+                          },
+                          "orr_can_dit_nm": {
+                            "type": "string",
+                            "description": "주문취소구분명_IO / 길이 50"
+                          },
+                          "fc_stop_orr_bse_pr": {
+                            "type": "number",
+                            "format": "double",
+                            "description": "외화STOP주문기준가격 / 길이 15.6"
+                          },
+                          "orr_pr": {
+                            "type": "number",
+                            "format": "double",
+                            "description": "주문가격 / 길이 15.6"
+                          },
+                          "orr_qty": {
+                            "type": "integer",
+                            "format": "int64",
+                            "description": "주문수량 / 길이 18"
+                          },
+                          "cns_dit_cd": {
+                            "type": "string",
+                            "description": "체결구분코드_IO / 길이 1"
+                          },
+                          "cns_dit_cd_nm": {
+                            "type": "string",
+                            "description": "체결구분코드명_IO / 길이 20"
+                          },
+                          "cns_pr": {
+                            "type": "number",
+                            "format": "double",
+                            "description": "체결가격 / 길이 15.3"
+                          },
+                          "cns_qty": {
+                            "type": "integer",
+                            "format": "int64",
+                            "description": "체결수량 / 길이 18"
+                          },
+                          "orr_cpl_yn": {
+                            "type": "string",
+                            "description": "주문완료여부 / 길이 1"
+                          },
+                          "ost_pcs_cd": {
+                            "type": "string",
+                            "description": "처리코드 / 길이 1"
+                          },
+                          "pcs_msg_cts": {
+                            "type": "string",
+                            "description": "처리메시지내용 / 길이 300"
+                          },
+                          "acl_cns_qty": {
+                            "type": "integer",
+                            "format": "int64",
+                            "description": "누적체결수량 / 길이 18"
+                          },
+                          "rmn_qty": {
+                            "type": "integer",
+                            "format": "int64",
+                            "description": "잔여수량_IO / 길이 18"
+                          }
+                        }
+                      }
+                    },
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -2066,8 +2291,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -2282,8 +2510,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -2437,8 +2668,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -2594,8 +2828,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -2661,7 +2898,7 @@
                           "type": "string",
                           "description": "종목코드 / 길이 15"
                         },
-                        "kor_name": {
+                        "iem_nm": {
                           "type": "string",
                           "description": "종목명 / 길이 40"
                         },
@@ -3092,7 +3329,7 @@
                         },
                         "marketperiod_cls": {
                           "type": "string",
-                          "description": "현재시장구분 / 길이 1"
+                          "description": "현재시장구분 / 길이 1 / 0.프리마켓\n1.정규장\n2.애프터마켓\n3.주간거래"
                         },
                         "normal_trdprc": {
                           "type": "number",
@@ -3135,8 +3372,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -3290,8 +3530,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -3402,7 +3645,7 @@
                             "type": "string",
                             "description": "종목코드 / 길이 15"
                           },
-                          "kor_name": {
+                          "iem_nm": {
                             "type": "string",
                             "description": "종목명 / 길이 40"
                           },
@@ -3624,15 +3867,18 @@
                             "description": "저가 / 길이 17"
                           },
                           "close_prc": {
-                            "type": "string",
+                            "type": "number",
+                            "format": "float",
                             "description": "종가 / 길이 17"
                           },
                           "movolume": {
-                            "type": "string",
+                            "type": "integer",
+                            "format": "int64",
                             "description": "변동거래량 / 길이 15"
                           },
                           "movalue": {
-                            "type": "string",
+                            "type": "number",
+                            "format": "float",
                             "description": "변동거래대금 / 길이 17"
                           },
                           "netchng_cls": {
@@ -3646,8 +3892,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -3758,7 +4007,7 @@
                           "type": "string",
                           "description": "SYMBOL / 길이 14"
                         },
-                        "hts_kor_isnm": {
+                        "iem_nm": {
                           "type": "string",
                           "description": "종목명 / 길이 40"
                         },
@@ -3884,8 +4133,11 @@
                         }
                       }
                     },
-                    "message": {
-                      "$ref": "#/components/schemas/Message"
+                    "rsp_cd": {
+                      "type": "string"
+                    },
+                    "rsp_msg": {
+                      "type": "string"
                     }
                   }
                 }
@@ -3915,7 +4167,7 @@
     "protocol": {
       "transport": "WebSocket",
       "connection": "wss://{host}:{port}/websocket 로 접속 후 구독 메시지 전송. 경로 /websocket 은 필수(호스트:포트만으로는 연결되지 않음).",
-      "auth": "메시지 header 의 token 필드에 access token(POST /oauth2/token) 전달. REST 와 달리 Authorization/x-client-id/x-client-secret 헤더는 미사용.",
+      "auth": "메시지 header 의 token 필드에 access token(POST /oauth2/token) 전달. REST 와 달리 Authorization 헤더는 미사용.",
       "subscribe_message": {
         "header": {
           "token": "{access_token}",
@@ -3926,7 +4178,7 @@
           "tr_key": "<구독키>"
         }
       },
-      "unsubscribe": "동일 메시지에서 tr_type 을 '2' 로 전송",
+      "unsubscribe": "동일 메시지에서 tr_type 을 '2' 로 전송 · 등록/해제 응답 body.tr_key = 현재 등록 목록 전체",
       "tr_type": {
         "1": "등록(구독)",
         "2": "해제"
@@ -3951,7 +4203,7 @@
         "해외 시세": "7080",
         "체결·주문내역 통보(국내·해외 전부)": "7070",
         "모의투자(국내·해외 공용)": "17070",
-        "note": "포트는 국내/해외가 아니라 시세/통보로 갈립니다. 통보 채널(d0 d1 d2 d3 de dj dk dv dn)은 국내·해외 모두 7070 입니다. 통보를 7080 으로 보내면 rsp_cd=WSS10006 \"허용되지 않는 tr_cd 입니다.\" 가 반환됩니다."
+        "note": "포트는 국내/해외가 아니라 시세/통보로 갈립니다. 통보 채널(d0 d1 d2 d3 de dj dk dv dn, 모의는 dv·dn 제외)은 국내·해외 모두 7070 입니다. 통보를 7080 으로 보내면 rsp_cd=WSS10006 \"허용되지 않는 tr_cd 입니다.\" 가 반환됩니다."
       },
       "tls": "실거래 WebSocket(:7070·:7080)은 서버가 중간 CA 를 보내지 않아 Python OpenSSL 기본 검증이 실패합니다(curl·Windows schannel 은 자동 보완되어 성공). 해결: pip install truststore 후 truststore.SSLContext 사용(OS 신뢰 저장소 활용)."
     },
@@ -4489,33 +4741,17 @@
     "schemas": {
       "Message": {
         "type": "object",
-        "description": "공통 응답 메시지 봉투",
         "properties": {
-          "msg_code": {
-            "type": "string"
+          "rsp_cd": {
+            "type": "string",
+            "description": "응답코드"
           },
-          "usr_msg": {
-            "type": "string"
-          },
-          "msg_lv_code": {
-            "type": "string"
-          },
-          "dvlp_msg_yn": {
-            "type": "string"
-          },
-          "svc_nm": {
-            "type": "string"
-          },
-          "func_nm": {
-            "type": "string"
-          },
-          "line_no": {
-            "type": "string"
-          },
-          "dvlp_msg": {
-            "type": "string"
+          "rsp_msg": {
+            "type": "string",
+            "description": "응답메시지"
           }
-        }
+        },
+        "description": "응답 상태 봉투 (응답 최상위)"
       }
     }
   },
@@ -4540,11 +4776,11 @@
     ]
   },
   "x-response-status": {
-    "note": "업무 성공 판정: HTTP 200 이어도 업무 오류일 수 있습니다. rsp_cd(응답코드)·rsp_msg(응답메시지)를 함께 확인하세요. rsp_cd 를 단일 코드(예: 00000)와 비교해 판정하지 마세요 — 정상 응답코드는 한 가지가 아니며 API 마다 다릅니다. ① 기대한 응답 블록(Output_N)에 값이 있는지 확인 → ② rsp_msg 문구가 완료를 뜻하는지 확인 → ③ rsp_cd 는 로그·문의용으로 보관. 조회 결과 0건과 오류는 다르므로 rsp_msg 로 구분하세요."
+    "note": "업무 성공 판정: HTTP 200 이어도 업무 오류일 수 있습니다. rsp_cd(응답코드)·rsp_msg(응답메시지)를 함께 확인하세요. rsp_cd 를 단일 코드(예: 00000)와 비교해 판정하지 마세요 — 정상 응답코드는 한 가지가 아니며 API 마다 다릅니다. ① 기대한 응답 블록(Output_N)에 값이 있는지 확인 → ② rsp_msg 문구가 완료를 뜻하는지 확인 → ③ rsp_cd 는 로그·문의용으로 보관. 조회 결과 0건과 오류는 다르므로 rsp_msg 로 구분하세요. 오류코드: https://www.nhplug.com/testbed-howto"
   },
   "x-rate-limits": {
-    "rest": "초당 5회 수준. 초과 시 오류 응답이 반환됩니다.",
+    "rest": "1초당 최대 5건. 초과 시 오류 응답이 반환됩니다.",
     "on_exceed": "즉시 재시도하지 말고 호출 간격을 늘리세요(예: 0.2초 이상). 유량 초과는 토큰 문제가 아니므로 토큰을 재발급하지 마세요(재발급은 401 일 때만).",
-    "websocket": "동시 2개 채널까지 허용, 채널당 최대 30건 구독."
+    "websocket": "AppKey당 세션 2개 · 세션당 등록 30건(tr_cd+tr_key 1쌍=1건)."
   }
 }
