@@ -137,7 +137,7 @@ export function registerTools(server: McpServer, config: Config): void {
     {
       operationId: z.string().describe("호출할 operationId"),
       input: z
-        .record(z.any())
+        .record(z.string(), z.any())
         .describe("Input_0 에 들어갈 파라미터 객체 (예: { iem_cd: '005930', market_cd: 'KRX' })"),
       cts: z.string().optional().describe("연속조회(페이지네이션) 키. 목록 조회 다음 페이지에 사용."),
     },
