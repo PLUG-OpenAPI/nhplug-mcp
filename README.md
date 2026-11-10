@@ -77,6 +77,7 @@ Claude Desktop 설정 파일 `claude_desktop_config.json` 을 엽니다.
 
 - **가장 쉬운 방법**: Claude Desktop → **설정(Settings)** → **개발자(Developer)** → **Edit Config** 버튼.
 - 직접 열기 — **Windows**: `%APPDATA%\Claude\claude_desktop_config.json` · **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+  ⚠️ 설치 방식에 따라 실제 경로가 다를 수 있습니다. 고쳐도 반영되지 않으면 위 **Edit Config** 버튼으로 연 파일을 고치세요.
 
 아래 내용을 붙여넣습니다. (방법 A · GitHub npx 기준)
 
@@ -188,7 +189,7 @@ API·필드는 동일하고 **접속 도메인만 다릅니다.** 위 예시는 
 Claude 에 붙이기 전에, API 서버 접근·인증이 정상인지 로컬에서 먼저 확인할 수 있습니다.
 
 ```bash
-# .env 에 APP_KEY / APP_SECRET / BASE_URL 을 채운 뒤
+# .env 에 NHPLUG_APP_KEY / NHPLUG_APP_SECRET 을 채운 뒤 (.env.example 참고)
 node scripts/selftest.mjs
 ```
 
@@ -228,8 +229,8 @@ npm run sync:specs krstock gbstock    # 지정 자산 받기(신규 추가)
 
 ```
 specs/
-  krstock.openapi.json   ← 현재 포함
-  gbstock.openapi.json   ← 추가 시 해외주식 자동 노출
+  krstock.openapi.json   ← 현재 포함 (국내주식)
+  gbstock.openapi.json   ← 현재 포함 (해외주식)
   krfuture.openapi.json  ← 추가 시 국내파생 자동 노출
 ```
 
@@ -245,7 +246,7 @@ specs/
 |---|---|
 | [`src/index.ts`](src/index.ts) | MCP 서버 진입점 — 도구 등록·요청 처리 |
 | [`src/tools.ts`](src/tools.ts) | 제공 도구 정의(`list_apis`·`describe_api`·`call_api` 등) |
-| [`src/client.ts`](src/client.ts) | REST 호출 · `Input_0` 봉투 · `rsp_cd` 판정 |
+| [`src/client.ts`](src/client.ts) | REST 호출 · `Input_0` 봉투 · 오류 메시지 추출 (업무 판정 없음 — 응답 그대로 전달) |
 | [`src/auth.ts`](src/auth.ts) | 토큰 발급·캐시(24h) |
 | [`src/config.ts`](src/config.ts) | 환경변수 로드 · **호스트 가드**(오타 차단) |
 | [`src/spec.ts`](src/spec.ts) | 번들 `openapi.json` 파싱 |
