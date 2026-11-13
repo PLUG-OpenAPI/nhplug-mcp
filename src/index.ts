@@ -19,7 +19,7 @@ async function main() {
 
   // stdout 은 MCP 프로토콜 전용이므로 로그는 stderr 로만 출력
   console.error(
-    `[nhplug-mcp] 시작됨 · baseUrl=${config.baseUrl} · trading=${config.enableTrading ? "ON" : "OFF"}`
+    `[nhplug-mcp] 시작됨 · baseUrl=${config.baseUrl} · 조회 전용(주문 실행 없음)`
   );
 }
 

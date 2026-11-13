@@ -10,15 +10,15 @@
 
 | 하고 싶은 일 | 방법 | 시작 |
 |---|---|---|
-| 대화로 시세·잔고 조회 (코딩 불필요) | **이 저장소 (MCP)** | Claude 설정에 `npx` 한 줄 |
+| 대화로 시세·잔고 조회 (코딩 불필요) | **이 저장소 (MCP)** | Claude·ChatGPT 데스크톱 앱에 등록 ([3번](#3-ai-앱에-연결)) |
 | 내 프로그램에 넣기 (자동매매) | [Python SDK](https://pypi.org/project/nhplug/) | `pip install nhplug` |
 | 예제 보며 배우기 | [nhplug-sdk](https://github.com/PLUG-OpenAPI/nhplug-sdk) | `git clone` |
 
-NH투자증권 Open API 를 **Claude Desktop** 등 MCP 클라이언트에서 바로 사용할 수 있게 해주는 로컬 MCP 서버입니다. 국내주식(krstock)·해외주식(gbstock) 자산군의 시세·조회·주문 API 를 Claude 가 도구로 호출합니다.
+NH투자증권 Open API 를 **Claude Desktop · ChatGPT 데스크톱** 등 MCP 클라이언트에서 바로 사용할 수 있게 해주는 로컬 MCP 서버입니다. 국내주식(krstock)·해외주식(gbstock) 자산군의 시세·조회 API 를 AI 가 도구로 호출합니다.
 
 - 인증 · 토큰 발급 · 헤더 · `Input_0` 봉투 처리를 서버가 자동으로 대신합니다.
 - **REST 53개 + 실시간 27채널**(국내주식 34·21 / 해외주식 19·6)을 몇 개의 **메타 도구**로 노출해, 도구가 많아 성능이 떨어지는 문제를 피합니다.
-- 주문(거래) API 는 **기본 비활성**이며, 명시적으로 켠 경우에만 사용됩니다.
+- 🔒 **조회 전용입니다 — 주문(매수·매도·정정·취소)은 실행하지 않습니다.** 주문은 [nhplug-sdk](https://github.com/PLUG-OpenAPI/nhplug-sdk) 코드로 합니다(6번).
 
 > 현재 버전은 **국내주식(krstock)·해외주식(gbstock)** 자산군을 포함합니다. 다른 자산군은 `specs/` 폴더에 openapi.json 을 추가하면 확장됩니다(맨 아래 참고).
 
@@ -43,20 +43,20 @@ NH투자증권 Open API 를 **Claude Desktop** 등 MCP 클라이언트에서 바
 
 ### 방법 A — npx로 GitHub에서 바로 실행 (권장, 설치 불필요)
 
-별도 다운로드·빌드 없이 Claude 설정 한 줄이면 됩니다. 고객용 설정에 아래 `command`/`args` 를 씁니다(전체 설정은 3번).
+별도 다운로드·빌드 없이 AI 앱 설정에 한 줄이면 됩니다. 아래 `command`/`args` 를 씁니다(앱별 전체 설정은 3번).
 
 ```json
 "command": "npx",
 "args": ["-y", "github:PLUG-OpenAPI/nhplug-mcp"]
 ```
 
-> **첫 실행 예열(권장):** npx 는 첫 실행 때 GitHub 에서 받아 빌드하느라 1분 정도 걸립니다. Claude 가 기다리다 실패하지 않도록, 터미널에서 한 번 미리 실행해 두면 좋습니다:
+> **첫 실행 예열(권장):** npx 는 첫 실행 때 GitHub 에서 받아 빌드하느라 1분 정도 걸립니다. AI 앱이 기다리다 실패하지 않도록, 터미널에서 한 번 미리 실행해 두면 좋습니다:
 > ```powershell
 > npx -y github:PLUG-OpenAPI/nhplug-mcp
 > ```
-> `[nhplug-mcp] 시작됨 ...` 로그가 뜨면 `Ctrl + C` 로 종료. 이후 Claude 실행이 빨라집니다.
+> `[nhplug-mcp] 시작됨 ...` 로그가 뜨면 `Ctrl + C` 로 종료. 이후 앱에서 실행이 빨라집니다.
 >
-> **업데이트 반영:** npx 는 받은 코드를 캐시합니다. 새 버전을 받으려면 `npm cache clean --force` 후 Claude 재시작.
+> **업데이트 반영:** npx 는 받은 코드를 캐시합니다. 새 버전을 받으려면 `npm cache clean --force` 후 AI 앱을 재시작하세요.
 
 ### 방법 B — git clone 후 로컬 빌드
 
@@ -67,11 +67,23 @@ npm install
 npm run build
 ```
 
-빌드가 끝나면 `dist/index.js` 가 생성됩니다. 이 경로를 Claude 설정에 `"command": "node", "args": ["<경로>/dist/index.js"]` 로 등록합니다.
+빌드가 끝나면 `dist/index.js` 가 생성됩니다. AI 앱 설정의 실행 명령을 `node`, 인자를 `<경로>/dist/index.js` 로 등록합니다.
 
 ---
 
-## 3. Claude Desktop 연결
+## 3. AI 앱에 연결
+
+같은 서버·같은 키를 앱마다 등록하는 방식만 다릅니다. 쓰는 앱의 절만 보시면 됩니다.
+
+| 앱 | 등록 방법 | 키 입력 위치 |
+|---|---|---|
+| [Claude Desktop](#3-1-claude-desktop) | 설정 파일(JSON)에 붙여넣기 | JSON 의 `env` |
+| [ChatGPT 데스크톱](#3-2-chatgpt-데스크톱-앱) | 앱 설정 화면에서 입력 | 화면의 「환경 변수」 칸 |
+
+> 🔐 **앱키·시크릿은 설정에만 넣으세요.** 대화창에 붙여넣으면 대화 기록에 평문으로 남습니다.
+> 두 앱 모두 설정 파일에 **평문으로 저장**하므로, PC 를 여러 사람이 쓴다면 주의하세요.
+
+### 3-1. Claude Desktop
 
 Claude Desktop 설정 파일 `claude_desktop_config.json` 을 엽니다.
 
@@ -99,11 +111,64 @@ Claude Desktop 설정 파일 `claude_desktop_config.json` 을 엽니다.
 
 저장 후 **Claude Desktop 을 완전히 종료(트레이 포함)했다가 다시 실행**하면 `nhplug` 도구가 나타납니다.
 
-> **N2 고객**은 위 `env` 에 두 줄을 n2plug 로 추가하세요: `"NHPLUG_BASE_URL": "https://api.n2plug.com:8443"`, `"NHPLUG_AUTH_URL": "https://api.n2plug.com:8443"`. (개발·검증은 BASE_URL 을 `moapi.n2plug.com`, AUTH_URL 은 `api.n2plug.com` 유지)
+**확인**: 대화창에 **"삼성전자 현재가 알려줘"** 라고 입력하세요. 도구 사용 허락을 묻는 창이 뜨고, 허용하면 시세가 나옵니다.
+도구가 보이지 않으면 **설정 → 개발자** 화면에서 `nhplug` 서버 상태와 로그를 확인할 수 있습니다.
+
+> **N2 고객**은 위 `env` 의 `NHPLUG_BASE_URL` 값을 `"https://api.n2plug.com:8443"` 으로 **바꾸고**, `"NHPLUG_AUTH_URL": "https://api.n2plug.com:8443"` 한 줄을 **추가**하세요. (같은 이름을 두 번 쓰면 안 됩니다. 개발·검증은 BASE_URL 만 `moapi.n2plug.com` 으로, AUTH_URL 은 `api.n2plug.com` 유지)
 
 > **JSON 주의:** 항목 사이엔 콤마(`,`), 마지막 항목 뒤엔 콤마 없음. Windows 경로의 `\` 는 `\\` 로 두 개씩. 이미 다른 서버가 있으면 `"nhplug": { ... }` 블록만 `mcpServers` 안에 추가하세요.
 >
 > 방법 B(로컬 빌드)를 쓰면 `command` 를 `"node"`, `args` 를 `["C:\\경로\\nhplug-mcp\\dist\\index.js"]` 로 바꾸면 됩니다. 키는 설정의 `env` 대신 저장소 폴더의 `.env` 파일(`.env.example` 참고)로 넣어도 됩니다.
+
+### 3-2. ChatGPT 데스크톱 앱
+
+> ⚠️ **데스크톱 앱에서만 됩니다.** 웹(chatgpt.com)·모바일은 내 PC 에서 실행하는 MCP 를 연결할 수 없습니다.
+> 준비물은 Claude 와 같습니다 — **Node.js 18 이상**(1번 사전 요건).
+
+1. ChatGPT 데스크톱 → **설정** → **플러그인** → 상단 **MCP** 탭
+2. 오른쪽 위 **추가** 에서 MCP 서버를 추가하면 **「맞춤형 MCP에 연결」** 화면이 열립니다.
+3. 아래처럼 입력합니다. **인자는 한 칸에 하나씩** 넣습니다(`+ 인자 추가`).
+
+   | 칸 | 입력 |
+   |---|---|
+   | 이름 | `nhplug` |
+   | 유형 | **STDIO** |
+   | 실행 명령 | `npx` |
+   | 인자 | ① `-y` ② `github:PLUG-OpenAPI/nhplug-mcp` |
+   | 환경 변수 (키 / 값) | ① `NHPLUG_APP_KEY` / 발급받은 앱키 ② `NHPLUG_APP_SECRET` / 발급받은 시크릿 |
+   | 환경 변수 패스스루 · 작업 중인 디렉토리 | 비워 둡니다 |
+
+4. 저장한 뒤 **새 대화**를 열고 입력창에 **`/mcp`** 를 입력합니다. 목록에 `nhplug` 가 보이면 연결된 것입니다.
+5. **"삼성전자 현재가 알려줘"** 라고 물어보세요.
+
+> **N2 고객**은 환경 변수에 `NHPLUG_BASE_URL` = `https://api.n2plug.com:8443`, `NHPLUG_AUTH_URL` = `https://api.n2plug.com:8443` 두 줄을 추가하세요.
+
+<details>
+<summary>설정 파일로 직접 넣기 · 키를 파일에 저장하지 않는 방법</summary>
+
+위 화면의 내용은 `%USERPROFILE%\.codex\config.toml` 에 저장됩니다(macOS·Linux `~/.codex/config.toml`).
+Codex CLI·IDE 확장도 같은 파일을 쓰므로, 아래를 직접 넣어도 같은 결과입니다.
+
+```toml
+[mcp_servers.nhplug]
+command = "npx"
+args = ["-y", "github:PLUG-OpenAPI/nhplug-mcp"]
+
+[mcp_servers.nhplug.env]
+NHPLUG_APP_KEY = "발급받은_APP_KEY"
+NHPLUG_APP_SECRET = "발급받은_APP_SECRET"
+```
+
+**키를 이 파일에 남기고 싶지 않다면** 「환경 변수」 대신 **「환경 변수 패스스루」** 칸에 이름만(`NHPLUG_APP_KEY`, `NHPLUG_APP_SECRET`) 넣고,
+값은 운영체제 사용자 환경변수로 등록합니다(파일의 `env_vars = ["NHPLUG_APP_KEY", "NHPLUG_APP_SECRET"]` 와 같음).
+Windows 는 PowerShell 에서 아래를 실행한 뒤 **ChatGPT 를 완전히 종료했다가 다시 실행**하세요.
+
+```powershell
+[Environment]::SetEnvironmentVariable("NHPLUG_APP_KEY", "발급받은_APP_KEY", "User")
+[Environment]::SetEnvironmentVariable("NHPLUG_APP_SECRET", "발급받은_APP_SECRET", "User")
+```
+
+</details>
 
 ---
 
@@ -115,8 +180,7 @@ Claude Desktop 설정 파일 `claude_desktop_config.json` 을 엽니다.
 | `NHPLUG_APP_SECRET` | ✅ | 발급받은 앱시크릿 |
 | `NHPLUG_BASE_URL` | | 호출 대상 REST Base URL. 기본값 `https://api.nhplug.com:8443` (운영). 교육·시뮬레이션은 `https://moapi.nhplug.com:8443` |
 | `NHPLUG_AUTH_URL` | | 토큰 발급 URL. 기본 `https://api.nhplug.com:8443` (운영 전용 — moapi 미제공). 보통 그대로 둡니다 |
-| `NHPLUG_ENABLE_TRADING` | | `true` 일 때만 주문(거래) 도구 노출. 기본 `false` |
-| `NHPLUG_DEFAULT_ACCOUNT` | | 잔고/주문 단축 도구에서 계좌번호 생략 시 사용 |
+| `NHPLUG_DEFAULT_ACCOUNT` | | 잔고 단축 도구에서 계좌번호 생략 시 사용 |
 | `NHPLUG_ALLOW_HOSTS` | | 사내 검증 서버 등 **허용 호스트 추가**(쉼표 구분). 보통 설정하지 않습니다 |
 
 > 🔒 `NHPLUG_BASE_URL`·`NHPLUG_AUTH_URL` 은 **허용된 호스트만** 통과합니다
@@ -130,7 +194,7 @@ Claude Desktop 설정 파일 `claude_desktop_config.json` 을 엽니다.
 | 🔴 실거래·운영 (Live) — 기본 | `https://api.nhplug.com:8443` |
 | 🟢 모의투자 (Mock) — 교육이수·시뮬레이션 테스트 | `https://moapi.nhplug.com:8443` |
 
-> 접근토큰(`/oauth2/token`)은 **운영(api) 전용**입니다(모의투자 미제공). 호출을 `moapi` 로 하더라도 토큰은 항상 `api` 에서 발급됩니다(`NHPLUG_AUTH_URL`, 기본 api). MCP 는 Claude 정책상 주문을 실행하지 않으므로, 기본이 운영이어도 **조회·시세만** 수행합니다.
+> 접근토큰(`/oauth2/token`)은 **운영(api) 전용**입니다(모의투자 미제공). 호출을 `moapi` 로 하더라도 토큰은 항상 `api` 에서 발급됩니다(`NHPLUG_AUTH_URL`, 기본 api). 이 MCP 는 **주문을 실행하지 않으므로** 기본이 운영이어도 **조회·시세만** 수행합니다.
 
 ### 브랜드(도메인) — 나무(Namuh) / N2
 
@@ -170,23 +234,22 @@ API·필드는 동일하고 **접속 도메인만 다릅니다.** 위 예시는 
 
 ## 6. 주문(거래)에 대하여 ⚠️
 
-> **중요 — 대화형 AI 는 실제 주문을 대신 체결하지 않습니다.**
-> Claude 등 AI 어시스턴트는 안전정책상 사용자를 대신해 증권 주문을 실행하지 않습니다. 이는 MCP 설정(`NHPLUG_ENABLE_TRADING`)이나 환경과 무관한 **모델 자체의 동작**이라, 서버에서 끌 수 없습니다.
->
-> 따라서 이 MCP 는 **시세·계좌 조회, 분석, 주문 파라미터 준비**까지 담당하고, **실제 매수/매도 실행은 코드로** 하세요:
-> - 파이썬 개발·자동매매: [`nhplug-sdk`](https://github.com/PLUG-OpenAPI/nhplug-sdk)
-> - 주문 API 단발 테스트(사람이 직접 실행): `node scripts/order_test.mjs --account <계좌> --code 005930 --qty 1 --price 70000 --confirm`
+> 🔒 **이 MCP 는 조회 전용입니다. 주문(매수·매도·정정·취소)은 어떤 설정으로도 실행하지 않습니다.**
+> AI 앱(Claude·ChatGPT)이나 도구 승인 설정과 무관하게 **서버가 주문 호출을 거부**합니다.
 
-`NHPLUG_ENABLE_TRADING=true` 설정은 주문 API 를 **도구 목록에 노출**만 합니다(설계·검증용). 실행은 위 코드 경로를 사용하세요.
+- 주문 API 는 `list_apis` 목록에 나오지 않고, `call_api` 로 부르면 거부됩니다.
+- 대신 **주문 준비**는 할 수 있습니다 — `describe_api` 로 주문 API 의 입력 형식을 확인하고, 시세·잔고·가능수량을 조회해 주문 파라미터를 정리하세요.
+- **실제 매수·매도는 코드로** 실행하세요. 반드시 **모의투자(`moapi`)** 에서 먼저 검증하세요.
+  - 파이썬 개발·자동매매: [`nhplug-sdk`](https://github.com/PLUG-OpenAPI/nhplug-sdk)
+  - 주문 API 단발 테스트(사람이 터미널에서 직접 실행, MCP 와 무관): `node scripts/order_test.mjs --account <계좌> --code 005930 --qty 1 --price 70000 --confirm`
 
-- 기본값 `false` 이면 주문 API 는 `list_apis` 에 표시되지 않고 `call_api` 로도 거부됩니다.
-- 주문 관련 작업은 반드시 **모의투자 환경(`moapi`)** 에서 충분히 검증 후 진행하세요.
+> 예전 버전의 `NHPLUG_ENABLE_TRADING` 설정은 **없어졌습니다.** 남아 있어도 무시되며, 서버가 시작할 때 그렇게 알려줍니다.
 
 ---
 
 ## 7. 연결 검증 (self-test)
 
-Claude 에 붙이기 전에, API 서버 접근·인증이 정상인지 로컬에서 먼저 확인할 수 있습니다.
+AI 앱에 붙이기 전에, API 서버 접근·인증이 정상인지 로컬에서 먼저 확인할 수 있습니다(저장소를 clone 한 경우).
 
 ```bash
 # .env 에 NHPLUG_APP_KEY / NHPLUG_APP_SECRET 을 채운 뒤 (.env.example 참고)
@@ -207,10 +270,11 @@ node scripts/selftest.mjs
 | `IGW40043 유효하지 않은 token` | 캐시된 토큰 만료·무효. **자동으로 재발급 후 1회 재시도**하므로 대개 그대로 성공. 반복되면 키·환경 확인 |
 | 응답에 `rsp_cd`·`rsp_msg` 가 보임 | **정상입니다.** 이 MCP 는 업무 성공/실패를 판정하지 않고 서버 응답을 **그대로** 전달합니다. `rsp_msg` 문장을 읽고 원하는 결과인지 판단하세요 — 같은 `rsp_cd` 가 API 마다 정상일 수도 오류일 수도 있어 코드값으로는 판정할 수 없습니다 |
 | `[rate_limit] IGW42902 …` | 호출 유량 초과(실측 초당 5회 수준). **자동 재시도하지 않습니다** — 잠시 후 다시 요청하세요 |
-| Claude 에 도구가 안 보임 | 설정 저장 후 Claude Desktop **완전 종료 후 재시작** |
-| 주문 도구가 안 보임 | 의도된 동작. `NHPLUG_ENABLE_TRADING=true` 필요 |
+| Claude 에 도구가 안 보임 | 설정 저장 후 Claude Desktop **완전 종료 후 재시작**. **설정 → 개발자** 에서 서버 상태·로그 확인 |
+| ChatGPT `/mcp` 에 `nhplug` 가 없음 | 새 대화에서 다시 확인 · 인자가 **한 칸에 하나씩** 들어갔는지 확인 · 첫 실행은 빌드로 1분가량 걸림(2번 예열 참고) |
+| 주문 API 가 목록에 없음 · 호출이 거부됨 | **의도된 동작**입니다(조회 전용). 주문은 nhplug-sdk 코드로 실행하세요(6번) |
 
-로그는 표준오류(stderr)로 출력됩니다: `[nhplug-mcp] 시작됨 · baseUrl=... · trading=...`
+로그는 표준오류(stderr)로 출력됩니다: `[nhplug-mcp] 시작됨 · baseUrl=... · 조회 전용(주문 실행 없음)`
 
 ---
 

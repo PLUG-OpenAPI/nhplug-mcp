@@ -4,6 +4,12 @@ import type { Config } from "./config.js";
 import { callRest } from "./client.js";
 import { loadOperations, findOperation, listDomains } from "./spec.js";
 
+/** 🔴 이 MCP 는 조회 전용이다 — 주문(매수·매도·정정·취소)은 어떤 설정으로도 실행하지 않는다. */
+const ORDER_NOTE =
+  "이 MCP 는 주문을 실행하지 않습니다(조회 전용). 주문 API 의 입력 형식은 describe_api 로 확인할 수 있고, " +
+  "실제 주문은 nhplug-sdk(https://github.com/PLUG-OpenAPI/nhplug-sdk) 코드로 실행하세요. " +
+  "반드시 모의투자(moapi)에서 먼저 검증하세요.";
+
 function textResult(obj: unknown) {
   return {
     content: [
@@ -65,8 +71,7 @@ export function registerTools(server: McpServer, config: Config): void {
         .describe("summary/operationId/path 부분일치 키워드."),
     },
     async ({ domain, category, keyword }) => {
-      let ops = loadOperations();
-      if (!config.enableTrading) ops = ops.filter((o) => !o.isTrading);
+      let ops = loadOperations().filter((o) => !o.isTrading);   // 주문 API 는 실행할 수 없으므로 목록에서 뺀다
       if (domain) ops = ops.filter((o) => o.domain === domain);
       if (category) ops = ops.filter((o) => o.category.includes(category));
       if (keyword) {
@@ -84,25 +89,16 @@ export function registerTools(server: McpServer, config: Config): void {
         domain: o.domain,
         category: o.category,
         path: o.path,
-        trading: o.isTrading,
       }));
-      const result: Record<string, unknown> = {
+      return textResult({
         count: list.length,
         domains: listDomains(),
-        trading_enabled: config.enableTrading,
         apis: list,
-      };
-      if (!config.enableTrading) {
-        const hidden = loadOperations().filter((o) => o.isTrading).length;
-        result.trading_locked = {
-          hidden_count: hidden,
-          how_to_enable:
-            "주문(매수/매도/정정/취소) API 는 안전을 위해 기본 비활성 상태이며 목록에서 숨겨져 있습니다. " +
-            "사용하려면 MCP 설정(env)에 NHPLUG_ENABLE_TRADING=true 를 추가한 뒤 Claude Desktop 을 완전히 종료했다가 다시 실행하세요. " +
-            "실제 주문이 체결될 수 있으니 반드시 모의투자 환경에서 충분히 검증한 뒤 사용하세요.",
-        };
-      }
-      return textResult(result);
+        order_apis: {
+          hidden_count: loadOperations().filter((o) => o.isTrading).length,
+          note: ORDER_NOTE,
+        },
+      });
     }
   );
 
@@ -123,9 +119,10 @@ export function registerTools(server: McpServer, config: Config): void {
         category: op.category,
         method: op.method,
         path: op.path,
-        trading: op.isTrading,
         input_fields: op.inputFields,
-        note: "call_api 의 input 인자에 위 필드들을 담아 { 필드명: 값 } 형태로 전달하세요. 응답은 Output_0(및 Output_1 등)로 반환됩니다.",
+        note: op.isTrading
+          ? ORDER_NOTE
+          : "call_api 의 input 인자에 위 필드들을 담아 { 필드명: 값 } 형태로 전달하세요. 응답은 Output_0(및 Output_1 등)로 반환됩니다.",
       });
     }
   );
@@ -133,7 +130,7 @@ export function registerTools(server: McpServer, config: Config): void {
   // ── 메타 도구 3: 실제 호출 ──────────────────────────────────────────
   server.tool(
     "call_api",
-    "operationId 와 입력값으로 NH Open API 를 실제 호출합니다. 인증/헤더/Input_0 봉투는 자동 처리됩니다. 주문(거래) API 는 서버가 거래 활성화 모드(NHPLUG_ENABLE_TRADING=true)일 때만 호출됩니다.",
+    "operationId 와 입력값으로 NH Open API 를 실제 호출합니다(시세·조회 전용). 인증/헤더/Input_0 봉투는 자동 처리됩니다. 주문(매수·매도·정정·취소) API 는 호출할 수 없습니다.",
     {
       operationId: z.string().describe("호출할 operationId"),
       input: z
@@ -144,10 +141,9 @@ export function registerTools(server: McpServer, config: Config): void {
     async ({ operationId, input, cts }) => {
       const op = findOperation(operationId);
       if (!op) return errorResult(`operationId '${operationId}' 를 찾을 수 없습니다. list_apis 로 확인하세요.`);
-      if (op.isTrading && !config.enableTrading) {
-        return errorResult(
-          `'${operationId}' 는 주문(거래) API 입니다. 안전을 위해 기본 비활성 상태입니다. 실행하려면 서버 환경변수 NHPLUG_ENABLE_TRADING=true 로 설정 후 재시작하세요.`
-        );
+      // 🔴 주문은 어떤 설정으로도 실행하지 않는다(조회 전용 MCP). 우회 스위치를 두지 말 것.
+      if (op.isTrading) {
+        return errorResult(`'${operationId}' 는 주문 API 입니다. ${ORDER_NOTE}`);
       }
       try {
         const res = await callRest(config, op.path, input ?? {}, cts);

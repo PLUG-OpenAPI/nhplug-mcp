@@ -14,7 +14,6 @@ export interface Config {
   appSecret: string;
   baseUrl: string;
   authUrl: string;
-  enableTrading: boolean;
   defaultAccount: string;
 }
 
@@ -84,7 +83,14 @@ function validateUrl(raw: string, name: string): string {
 }
 
 export function loadConfig(): Config {
-  const enable = (process.env.NHPLUG_ENABLE_TRADING ?? "false").trim().toLowerCase();
+  // 🔴 이 MCP 는 주문을 실행하지 않는다(조회 전용). 예전 스위치 NHPLUG_ENABLE_TRADING 은 없어졌다.
+  //    값을 넣어 두어도 무시되므로, 켰다고 착각하지 않게 기동 시 알린다(stdout 은 프로토콜 전용 → stderr).
+  if ((process.env.NHPLUG_ENABLE_TRADING ?? "").trim()) {
+    console.error(
+      "[nhplug-mcp] NHPLUG_ENABLE_TRADING 은 더 이상 쓰지 않습니다 — 이 MCP 는 주문을 실행하지 않습니다(설정 무시). " +
+        "주문은 nhplug-sdk 코드로 실행하세요."
+    );
+  }
   return {
     // NHPLUG_ 접두 변수를 우선 사용하되, 접두 없는 APP_KEY/APP_SECRET 도 허용
     appKey: required("NHPLUG_APP_KEY", process.env.NHPLUG_APP_KEY ?? process.env.APP_KEY),
@@ -103,7 +109,6 @@ export function loadConfig(): Config {
       process.env.NHPLUG_AUTH_URL ?? "https://api.nhplug.com:8443",
       "NHPLUG_AUTH_URL"
     ),
-    enableTrading: enable === "true" || enable === "1" || enable === "yes",
     defaultAccount: (process.env.NHPLUG_DEFAULT_ACCOUNT ?? "").trim(),
   };
 }
